@@ -1,11 +1,7 @@
-// pretty unpretty code all here... 
-// just proof I guess that I can still JavaScript my way out of a browser.
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { LineChart, Line, ResponsiveContainer, YAxis } from "recharts";
 
-// KEYBOARD LAYOUTS
-// watch me start things off by hardcoding everything. 
-// because your mama...
+// -- KEYBOARD LAYOUTS --
 const LAYOUTS = {
   qwerty: {
     name: "QWERTY",
@@ -54,11 +50,7 @@ const LAYOUTS = {
   }
 };
 
-//  WORD LISTS 
-// Benford’s Law but for words...
-// this is supposed to work for all languages...
-// TODO: fine and add words from other languages.
-// TODO: better yet, make it a dynamic list (based on what???)
+// -- WORD LISTS --
 const WORD_LISTS = {
   "English (UK)": "the be to of and a in that have i it for not on with he as you do at this but his by from they we say her she or an will my one all would there their what so up out if about who get which go me when make can like time no just him know take people into year your good some could them see other than then now look only come its over think also back after use two how our work first well way even new want because any these give day most us great between need large under never should very through world still must before found here thing many right being another much three number water question always each national important different something thought possible together children without development government community problem system programme company information technology experience change performance understanding significant environment management production research education international following particular everything available political economic application organisation responsibility traditional breakfast strength beautiful practice structure establish challenge knowledge previous character situation demonstrate recognise themselves behaviour colour favour labour neighbour honour endeavour analyse catalogue centre fibre litre metre theatre defence licence offence pretence advise organise specialise realise emphasise apologise characterise summarise criticise advertise compromise exercise surprise otherwise enterprise promise purpose course source force service office notice evidence silence distance importance difference conference reference influence presence independence audience consequence intelligence science patience existence instance assistance appearance insurance resistance assurance circumstance maintenance accordance significance surveillance grievance tolerance substance endurance ignorance compliance acceptance admittance abundance reluctance attendance resemblance interference perseverance acquaintance inheritance temperance furtherance utterance disturbance forbearance remembrance observance continuance".split(" "),
   "French": "le la de un une et est il elle que ne pas en au du des les dans pour qui ce sur se son tout avec mais comme aussi que leur bien lui sans fait plus deux peut meme alors nous rien encore tous quand pendant dire cela moins depuis avec savoir venir homme monde temps vie main jour femme pays bon grand petit nouveau faire aller voir vouloir donner prendre trouver parler entre premier chose fois dernier long peu jeune beau vieux haut noir blanc gros fort droit ancien seul propre ici rien toujours tant assez chaque jamais vers point loin dessus vraiment tard trop ensemble penser comprendre devenir croire mettre sentir ouvrir montrer garder tomber revenir entendre passer partir suivre tenir porter rester perdre lever finir poser servir paraitre sembler commencer jouer sortir vivre ecrire entrer lire manger dormir courir mourir".split(" "),
@@ -67,10 +59,7 @@ const WORD_LISTS = {
   "Portuguese": "de a o que e do da em um para com nao uma os no se na por mais as dos como mas ao ele das tem seu sua ou quando muito nos ja eu tambem so pelo pela ate isso ela entre depois sem mesmo aos seus quem nas meu esse eles voce essa num nem suas minha ter sido tinha eram muito depois anos governo dia tempo alguns vez conta pode parte sobre ser fazer grande ainda casa mundo homem estado forma novo fim grupo pais caso coisa cada cidade porque ano pessoa trabalho vezes problema durante sempre dizer dar bem mesmo outro aqui onde ficar ir vir querer poder dever saber ver deixar parecer passar chegar levar seguir encontrar falar pensar olhar perguntar".split(" ")
 };
 
-// SPECIAL CHAR EXERCISES
-// because these are what make typing suck...
-// esp when you are quickly trying to make stuff work for passwords
-// you did not hear it from me...
+// -- SPECIAL CHAR EXERCISES --
 const SPECIAL_CHAR_SETS = [
   'price: $49.99 (save 20%) -- limited offer!',
   'email: user@domain.com; cc: admin@host.org',
@@ -98,31 +87,66 @@ const SPECIAL_CHAR_SETS = [
   '@media (min-width: 768px) { .col { width: 50%; } }',
   'assert(result != null, "Expected non-null value");',
   'Math.floor(Math.random() * (max - min + 1)) + min',
-  'switch (key) { case "a": break; default: return; }'
+  'switch (key) { case "a": break; default: return; }',
+  'const re = /^[a-z0-9._%+-]+@[a-z]+\\.[a-z]{2,}$/;',
+  'try { await fetch(url); } catch (e) { log(e); }',
+  'for (let i = 0; i < arr.length; i++) { sum += arr[i]; }',
+  'obj = { ...defaults, ...overrides, id: uuid() };'
 ];
 
-// FALLBACK TEXTS
-// Imagine you are on a flight, and too poor to buy addl internet
-// but still want to type faster when you land
-// than you could when you took off...
-// TODO: Add more here, for more languages...
+// -- FALLBACK TEXTS --
 const FALLBACK_TEXTS = {
   wikipedia: [
-    "The history of computing is longer than the history of computing hardware and modern computing technology and includes the history of methods intended for pen and paper or for chalk and slate, with or without the aid of tables. The timeline of computing presents events in the history of computing organised by year and grouped into six topic areas: predictions and concepts, first use and inventions, hardware systems and processors, operating systems, programming languages, and new application areas.",
-    "A neural network is a network or circuit of biological neurons, or in a modern sense, an artificial neural network composed of artificial neurons or nodes. Thus a neural network is either a biological neural network, made up of biological neurons, or an artificial neural network used for solving artificial intelligence problems. The connections of the biological neuron are modelled in artificial neural networks as weights between nodes.",
-    "The ocean covers approximately seventy percent of the surface of the Earth. It is divided into several principal oceans and smaller seas. More than half of this area is over three thousand metres deep. Average oceanic salinity is around thirty five parts per thousand, and nearly all seawater has a salinity in the range of thirty to thirty eight parts per thousand."
+    "The history of computing is longer than the history of computing hardware and modern computing technology and includes the history of methods intended for pen and paper or for chalk and slate, with or without the aid of tables. The timeline of computing presents events in the history of computing organised by year and grouped into six topic areas.",
+    "A neural network is a network or circuit of biological neurons, or in a modern sense, an artificial neural network composed of artificial neurons or nodes. Thus a neural network is either a biological neural network, made up of biological neurons, or an artificial neural network used for solving artificial intelligence problems.",
+    "The ocean covers approximately seventy percent of the surface of the Earth. It is divided into several principal oceans and smaller seas. More than half of this area is over three thousand metres deep. Average oceanic salinity is around thirty five parts per thousand.",
+    "An algorithm is a finite sequence of well-defined instructions, typically used to solve a class of specific problems or to perform a computation. Algorithms are used as specifications for performing calculations and data processing. More advanced algorithms can use conditionals to divert the code execution through various routes and deduce valid inferences.",
+    "Typography is the art and technique of arranging type to make written language legible, readable and appealing when displayed. The arrangement of type involves selecting typefaces, point sizes, line lengths, line spacing and letter spacing, as well as adjusting the space between pairs of letters."
   ],
   code: {
-    python: 'def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)\n\ndef binary_search(arr, target):\n    low, high = 0, len(arr) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1',
-    javascript: 'function debounce(fn, delay) {\n  let timer = null;\n  return function(...args) {\n    clearTimeout(timer);\n    timer = setTimeout(() => {\n      fn.apply(this, args);\n    }, delay);\n  };\n}\n\nfunction deepClone(obj) {\n  if (obj === null || typeof obj !== "object") {\n    return obj;\n  }\n  const clone = Array.isArray(obj) ? [] : {};\n  for (const key in obj) {\n    if (obj.hasOwnProperty(key)) {\n      clone[key] = deepClone(obj[key]);\n    }\n  }\n  return clone;\n}',
-    typescript: 'interface TreeNode<T> {\n  value: T;\n  left: TreeNode<T> | null;\n  right: TreeNode<T> | null;\n}\n\nfunction inorder<T>(node: TreeNode<T> | null): T[] {\n  if (!node) return [];\n  return [\n    ...inorder(node.left),\n    node.value,\n    ...inorder(node.right)\n  ];\n}\n\nfunction insert<T>(root: TreeNode<T> | null, val: T): TreeNode<T> {\n  if (!root) return { value: val, left: null, right: null };\n  if (val < root.value) root.left = insert(root.left, val);\n  else root.right = insert(root.right, val);\n  return root;\n}',
-    rust: 'fn fibonacci(n: u32) -> u64 {\n    if n <= 1 {\n        return n as u64;\n    }\n    let mut a: u64 = 0;\n    let mut b: u64 = 1;\n    for _ in 2..=n {\n        let temp = a + b;\n        a = b;\n        b = temp;\n    }\n    b\n}\n\nfn is_prime(n: u64) -> bool {\n    if n < 2 { return false; }\n    if n == 2 || n == 3 { return true; }\n    if n % 2 == 0 || n % 3 == 0 { return false; }\n    let mut i = 5;\n    while i * i <= n {\n        if n % i == 0 || n % (i + 2) == 0 { return false; }\n        i += 6;\n    }\n    true\n}',
-    go: 'func mergeSort(arr []int) []int {\n\tif len(arr) <= 1 {\n\t\treturn arr\n\t}\n\tmid := len(arr) / 2\n\tleft := mergeSort(arr[:mid])\n\tright := mergeSort(arr[mid:])\n\treturn merge(left, right)\n}\n\nfunc merge(left, right []int) []int {\n\tresult := make([]int, 0, len(left)+len(right))\n\ti, j := 0, 0\n\tfor i < len(left) && j < len(right) {\n\t\tif left[i] <= right[j] {\n\t\t\tresult = append(result, left[i])\n\t\t\ti++\n\t\t} else {\n\t\t\tresult = append(result, right[j])\n\t\t\tj++\n\t\t}\n\t}\n\tresult = append(result, left[i:]...)\n\tresult = append(result, right[j:]...)\n\treturn result\n}'
+    python: 'def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)\n\ndef binary_search(arr, target):\n    low, high = 0, len(arr) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1\n\ndef merge_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    mid = len(arr) // 2\n    left = merge_sort(arr[:mid])\n    right = merge_sort(arr[mid:])\n    return merge(left, right)\n\ndef merge(left, right):\n    result = []\n    i = j = 0\n    while i < len(left) and j < len(right):\n        if left[i] <= right[j]:\n            result.append(left[i])\n            i += 1\n        else:\n            result.append(right[j])\n            j += 1\n    result.extend(left[i:])\n    result.extend(right[j:])\n    return result',
+    javascript: 'function debounce(fn, delay) {\n  let timer = null;\n  return function(...args) {\n    clearTimeout(timer);\n    timer = setTimeout(() => {\n      fn.apply(this, args);\n    }, delay);\n  };\n}\n\nfunction deepClone(obj) {\n  if (obj === null || typeof obj !== "object") {\n    return obj;\n  }\n  const clone = Array.isArray(obj) ? [] : {};\n  for (const key in obj) {\n    if (obj.hasOwnProperty(key)) {\n      clone[key] = deepClone(obj[key]);\n    }\n  }\n  return clone;\n}\n\nfunction throttle(fn, limit) {\n  let inThrottle = false;\n  return function(...args) {\n    if (!inThrottle) {\n      fn.apply(this, args);\n      inThrottle = true;\n      setTimeout(() => { inThrottle = false; }, limit);\n    }\n  };\n}',
+    typescript: 'interface TreeNode<T> {\n  value: T;\n  left: TreeNode<T> | null;\n  right: TreeNode<T> | null;\n}\n\nfunction inorder<T>(node: TreeNode<T> | null): T[] {\n  if (!node) return [];\n  return [\n    ...inorder(node.left),\n    node.value,\n    ...inorder(node.right)\n  ];\n}\n\nfunction insert<T>(root: TreeNode<T> | null, val: T): TreeNode<T> {\n  if (!root) return { value: val, left: null, right: null };\n  if (val < root.value) root.left = insert(root.left, val);\n  else root.right = insert(root.right, val);\n  return root;\n}\n\nfunction height<T>(node: TreeNode<T> | null): number {\n  if (!node) return 0;\n  return 1 + Math.max(height(node.left), height(node.right));\n}',
+    rust: 'fn fibonacci(n: u32) -> u64 {\n    if n <= 1 {\n        return n as u64;\n    }\n    let mut a: u64 = 0;\n    let mut b: u64 = 1;\n    for _ in 2..=n {\n        let temp = a + b;\n        a = b;\n        b = temp;\n    }\n    b\n}\n\nfn is_prime(n: u64) -> bool {\n    if n < 2 { return false; }\n    if n == 2 || n == 3 { return true; }\n    if n % 2 == 0 || n % 3 == 0 { return false; }\n    let mut i = 5;\n    while i * i <= n {\n        if n % i == 0 || n % (i + 2) == 0 { return false; }\n        i += 6;\n    }\n    true\n}\n\nfn gcd(a: u64, b: u64) -> u64 {\n    if b == 0 { a } else { gcd(b, a % b) }\n}',
+    go: 'func mergeSort(arr []int) []int {\n\tif len(arr) <= 1 {\n\t\treturn arr\n\t}\n\tmid := len(arr) / 2\n\tleft := mergeSort(arr[:mid])\n\tright := mergeSort(arr[mid:])\n\treturn merge(left, right)\n}\n\nfunc merge(left, right []int) []int {\n\tresult := make([]int, 0, len(left)+len(right))\n\ti, j := 0, 0\n\tfor i < len(left) && j < len(right) {\n\t\tif left[i] <= right[j] {\n\t\t\tresult = append(result, left[i])\n\t\t\ti++\n\t\t} else {\n\t\t\tresult = append(result, right[j])\n\t\t\tj++\n\t\t}\n\t}\n\tresult = append(result, left[i:]...)\n\tresult = append(result, right[j:]...)\n\treturn result\n}\n\nfunc binarySearch(arr []int, target int) int {\n\tlo, hi := 0, len(arr)-1\n\tfor lo <= hi {\n\t\tmid := (lo + hi) / 2\n\t\tif arr[mid] == target {\n\t\t\treturn mid\n\t\t} else if arr[mid] < target {\n\t\t\tlo = mid + 1\n\t\t} else {\n\t\t\thi = mid - 1\n\t\t}\n\t}\n\treturn -1\n}'
   }
 };
 
-// UTILITIES
-// ...worship my nuts.
+// -- TOOLTIP COMPONENT --
+function Tip({ text }) {
+  const [show, setShow] = useState(false);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const ref = useRef(null);
+  const handleEnter = () => {
+    if (ref.current) {
+      const r = ref.current.getBoundingClientRect();
+      setPos({ x: r.left, y: r.bottom + 4 });
+    }
+    setShow(true);
+  };
+  return (
+    <>
+      <span ref={ref} onMouseEnter={handleEnter} onMouseLeave={() => setShow(false)}
+        style={{
+          display: "inline-flex", alignItems: "center", justifyContent: "center",
+          width: 14, height: 14, borderRadius: "50%", fontSize: 9, fontWeight: 700,
+          color: "#6e7681", border: "1px solid #30363d", cursor: "help",
+          marginLeft: 4, verticalAlign: "middle", lineHeight: 1, flexShrink: 0
+        }}>i</span>
+      {show && (
+        <div style={{
+          position: "fixed", left: Math.min(pos.x, window.innerWidth - 260), top: pos.y,
+          zIndex: 9999, background: "#1c2128", border: "1px solid #30363d", borderRadius: 4,
+          padding: "6px 10px", fontSize: 11, color: "#c9d1d9", maxWidth: 250,
+          lineHeight: 1.4, fontWeight: 400, fontFamily: "'JetBrains Mono', monospace",
+          pointerEvents: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.4)"
+        }}>{text}</div>
+      )}
+    </>
+  );
+}
+
+// -- UTILITIES --
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -131,7 +155,7 @@ function shuffle(arr) {
   return arr;
 }
 
-const ALPHA = /^[a-z]+$/;
+const ALPHA_RE = /^[a-z]+$/;
 
 function updateNgramData(prev, text, pos, isError) {
   const updated = { ...prev };
@@ -146,20 +170,10 @@ function updateNgramData(prev, text, pos, isError) {
   return updated;
 }
 
-// TODO: pay more attention when writing code
-// TODO: do it please
 function updateAlphaSpeeds(prev, times) {
-  // called with the full keystroke times array
-  // computes running n-gram speed data for alpha-only sequences
-  // we process only the tail (new entries since last update)
   if (times.length < 2) return prev;
   const updated = { ...prev };
-  // only look at last keystroke pair
   const idx = times.length - 1;
-  const curr = times[idx];
-  const delta = curr.time - times[idx - 1].time;
-  if (delta > 2000 || delta < 10) return updated;
-
   for (let n = 2; n <= 4; n++) {
     if (idx < n - 1) continue;
     let gram = "";
@@ -167,9 +181,13 @@ function updateAlphaSpeeds(prev, times) {
     let totalDelta = 0;
     for (let k = idx - n + 1; k <= idx; k++) {
       const ch = times[k].char.toLowerCase();
-      if (!ALPHA.test(ch)) { valid = false; break; }
+      if (!ALPHA_RE.test(ch)) { valid = false; break; }
       gram += ch;
-      if (k > idx - n + 1) totalDelta += times[k].time - times[k - 1].time;
+      if (k > idx - n + 1) {
+        const d = times[k].time - times[k - 1].time;
+        if (d > 2000 || d < 10) { valid = false; break; }
+        totalDelta += d;
+      }
     }
     if (!valid || gram.length !== n) continue;
     if (!updated[gram]) updated[gram] = { totalMs: 0, count: 0 };
@@ -188,8 +206,7 @@ function getWeakNgrams(ngramData, minAttempts, limit) {
 
 function generateAdaptiveText(ngramData) {
   const weakNgrams = getWeakNgrams(ngramData, 3, 10);
-  // watch me write polite messages...
-  if (weakNgrams.length === 0) return "Keep practising to build your weakness profile. The system needs more typing data to generate targeted exercises for you.";
+  if (weakNgrams.length === 0) return "Keep practising to build your weakness profile. The system needs more typing data to generate targeted exercises for you. Try Wikipedia or Common Words mode first.";
   const allWords = WORD_LISTS["English (UK)"];
   const practiceWords = [];
   for (const { ngram } of weakNgrams) {
@@ -201,12 +218,11 @@ function generateAdaptiveText(ngramData) {
   shuffle(unique);
   let text = "";
   let i = 0;
-  while (text.length < 300) { text += unique[i % unique.length] + " "; i++; if (i > 200) break; }
+  while (text.length < 600) { text += unique[i % unique.length] + " "; i++; if (i > 400) break; }
   return text.trim();
 }
 
-function wrapToLines(text, lineCount, charsPerLine) {
-  // for prose modes: wrap text into lines of approximately charsPerLine chars, return lineCount lines
+function wrapToLines(text, charsPerLine) {
   const words = text.split(/\s+/);
   const lines = [];
   let current = "";
@@ -219,90 +235,137 @@ function wrapToLines(text, lineCount, charsPerLine) {
     }
   }
   if (current.length > 0) lines.push(current);
-  return lines.slice(0, lineCount).join("\n");
+  return lines;
 }
 
 function generateCommonWordsText(language, count, lineCount) {
   const words = WORD_LISTS[language] || WORD_LISTS["English (UK)"];
   const pool = words.slice(0, Math.min(count, words.length));
-  // generate enough words for the requested lines (roughly 10 words per line)
-  const needed = lineCount * 10;
+  const needed = lineCount * 12;
   const selected = [];
   for (let i = 0; i < needed; i++) selected.push(pool[Math.floor(Math.random() * pool.length)]);
-  const raw = selected.join(" ");
-  return wrapToLines(raw, lineCount, 65);
-}
-
-function generateSpecialCharText(lineCount) {
-  return shuffle([...SPECIAL_CHAR_SETS]).slice(0, Math.min(lineCount, SPECIAL_CHAR_SETS.length)).join("\n");
-}
-
-function truncateToLines(text, lineCount) {
-  const lines = text.split("\n");
+  const lines = wrapToLines(selected.join(" "), 65);
   return lines.slice(0, lineCount).join("\n");
 }
 
-// grab the summary from a random wikipedia page
-// TODO: test - what happens when I select 100 lines and the summary is less than 100 lines?
-async function fetchWikipedia() {
-  try {
-    const res = await fetch("https://en.wikipedia.org/api/rest_v1/page/random/summary");
-    if (!res.ok) throw new Error("fail");
-    const data = await res.json();
-    if ((data.extract || "").length < 80) throw new Error("short");
-    return data.extract;
-  } catch {
-    return FALLBACK_TEXTS.wikipedia[Math.floor(Math.random() * 3)];
+function generateSpecialCharText(lineCount) {
+  const pool = [...SPECIAL_CHAR_SETS];
+  const result = [];
+  while (result.length < lineCount) {
+    shuffle(pool);
+    for (const s of pool) {
+      result.push(s);
+      if (result.length >= lineCount) break;
+    }
   }
+  return result.slice(0, lineCount).join("\n");
 }
 
-// TODO: test - test and fix the same thing as wikipedia
-// TODO: ability to select different languages
-// TODO: can we tie it to TIOBE or sth? 
-// So the non-vibe-code old skool ones can still practice syntax for any language (or at least most popular ones or upcoming ones)?
-async function fetchGithubCode(language) {
+// fetch multiple wikipedia summaries until we have enough lines
+async function fetchWikipediaLines(targetLines) {
+  const collected = [];
+  const maxFetches = Math.min(Math.ceil(targetLines / 3), 8);
+  let fallbackIdx = 0;
+
+  for (let attempt = 0; attempt < maxFetches; attempt++) {
+    try {
+      const res = await fetch("https://en.wikipedia.org/api/rest_v1/page/random/summary");
+      if (!res.ok) throw new Error("fail");
+      const data = await res.json();
+      const extract = (data.extract || "").trim();
+      if (extract.length >= 40) collected.push(extract);
+    } catch {
+      if (fallbackIdx < FALLBACK_TEXTS.wikipedia.length) {
+        collected.push(FALLBACK_TEXTS.wikipedia[fallbackIdx]);
+        fallbackIdx++;
+      }
+    }
+    const currentLines = wrapToLines(collected.join(" "), 65);
+    if (currentLines.length >= targetLines) break;
+  }
+
+  if (collected.length === 0) collected.push(FALLBACK_TEXTS.wikipedia[0]);
+  const lines = wrapToLines(collected.join(" "), 65);
+  return lines.slice(0, targetLines).join("\n");
+}
+
+// fetch github code, aiming for at least targetLines
+async function fetchGithubCodeLines(language, targetLines) {
+  const ext = { python: "py", javascript: "js", typescript: "ts", rust: "rs", go: "go" };
+  const fileExt = ext[language] || "py";
+
   try {
-    const ext = { python: "py", javascript: "js", typescript: "ts", rust: "rs", go: "go" };
     const r1 = await fetch(`https://api.github.com/search/repositories?q=language:${language}+stars:>500&sort=stars&per_page=10`);
     if (!r1.ok) throw new Error("search");
     const d1 = await r1.json();
     if (!d1.items || d1.items.length === 0) throw new Error("empty");
-    const repo = d1.items[Math.floor(Math.random() * d1.items.length)];
-    const r2 = await fetch(`https://api.github.com/repos/${repo.full_name}/git/trees/${repo.default_branch}?recursive=1`);
-    if (!r2.ok) throw new Error("tree");
-    const d2 = await r2.json();
-    const files = (d2.tree || []).filter(f => f.type === "blob" && f.path.endsWith("." + (ext[language] || "py")) && f.size > 200 && f.size < 8000);
-    if (files.length === 0) throw new Error("nofiles");
-    const file = files[Math.floor(Math.random() * files.length)];
-    const r3 = await fetch(`https://api.github.com/repos/${repo.full_name}/contents/${file.path}`);
-    if (!r3.ok) throw new Error("content");
-    const d3 = await r3.json();
-    const decoded = atob(d3.content.replace(/\n/g, ""));
-    return { text: decoded, source: `${repo.full_name}/${file.path}` };
+
+    const collectedLines = [];
+    const triedRepos = new Set();
+
+    for (let attempt = 0; attempt < 4 && collectedLines.length < targetLines; attempt++) {
+      const repo = d1.items[Math.floor(Math.random() * d1.items.length)];
+      if (triedRepos.has(repo.full_name)) continue;
+      triedRepos.add(repo.full_name);
+
+      try {
+        const r2 = await fetch(`https://api.github.com/repos/${repo.full_name}/git/trees/${repo.default_branch}?recursive=1`);
+        if (!r2.ok) continue;
+        const d2 = await r2.json();
+        const files = (d2.tree || []).filter(f => f.type === "blob" && f.path.endsWith("." + fileExt) && f.size > 200 && f.size < 15000);
+        if (files.length === 0) continue;
+
+        shuffle(files);
+        for (const file of files.slice(0, 3)) {
+          if (collectedLines.length >= targetLines) break;
+          try {
+            const r3 = await fetch(`https://api.github.com/repos/${repo.full_name}/contents/${file.path}`);
+            if (!r3.ok) continue;
+            const d3 = await r3.json();
+            const decoded = atob(d3.content.replace(/\n/g, ""));
+            const fileLines = decoded.split("\n");
+            if (collectedLines.length > 0) collectedLines.push("");
+            collectedLines.push("// " + file.path);
+            collectedLines.push(...fileLines);
+          } catch { continue; }
+        }
+      } catch { continue; }
+    }
+
+    if (collectedLines.length === 0) throw new Error("nodata");
+    const source = triedRepos.size > 0 ? [...triedRepos][0] : "github";
+    return { text: collectedLines.slice(0, targetLines).join("\n"), source };
   } catch {
-    return { text: FALLBACK_TEXTS.code[language] || FALLBACK_TEXTS.code.python, source: "fallback" };
+    const code = FALLBACK_TEXTS.code[language] || FALLBACK_TEXTS.code.python;
+    const lines = code.split("\n");
+    while (lines.length < targetLines) {
+      lines.push("");
+      const extra = (FALLBACK_TEXTS.code[language] || FALLBACK_TEXTS.code.python).split("\n");
+      lines.push(...extra);
+    }
+    return { text: lines.slice(0, targetLines).join("\n"), source: "fallback" };
   }
 }
 
-//  ANALYTICS 
+// -- ANALYTICS --
 const FINGER_LABELS = { L4: "L Pinky", L3: "L Ring", L2: "L Middle", L1: "L Index", R1: "R Index", R2: "R Middle", R3: "R Ring", R4: "R Pinky", T0: "Thumb" };
 
-function computeFingerStats(charAccuracy, layout) {
+function computeFingerStats(ca, layout) {
   const fm = LAYOUTS[layout].fingerMap;
-  const stats = {};
-  for (const [ch, data] of Object.entries(charAccuracy)) {
-    const finger = fm[ch.toLowerCase()] || fm[ch];
-    if (!finger) continue;
-    if (!stats[finger]) stats[finger] = { correct: 0, total: 0 };
-    stats[finger].correct += data.correct;
-    stats[finger].total += data.total;
+  const s = {};
+  for (const [ch, d] of Object.entries(ca)) {
+    const f = fm[ch.toLowerCase()] || fm[ch];
+    if (!f) continue;
+    if (!s[f]) s[f] = { correct: 0, total: 0 };
+    s[f].correct += d.correct;
+    s[f].total += d.total;
   }
-  return stats;
+  return s;
 }
 
-function computeHandStats(fingerStats) {
+function computeHandStats(fs) {
   const h = { Left: { correct: 0, total: 0 }, Right: { correct: 0, total: 0 } };
-  for (const [f, d] of Object.entries(fingerStats)) {
+  for (const [f, d] of Object.entries(fs)) {
     if (f === "T0") continue;
     const side = f.startsWith("L") ? "Left" : "Right";
     h[side].correct += d.correct;
@@ -311,39 +374,18 @@ function computeHandStats(fingerStats) {
   return h;
 }
 
-function computeRowStats(charAccuracy, layout) {
+function computeRowStats(ca, layout) {
   const rows = LAYOUTS[layout].rows;
   const labels = ["Number", "Top", "Home", "Bottom"];
-  const stats = {};
-  for (const l of labels) stats[l] = { correct: 0, total: 0 };
-  for (const [ch, data] of Object.entries(charAccuracy)) {
+  const s = {};
+  for (const l of labels) s[l] = { correct: 0, total: 0 };
+  for (const [ch, data] of Object.entries(ca)) {
     const lower = ch.toLowerCase();
     let ri = -1;
     for (let i = 0; i < rows.length; i++) { if (rows[i].includes(lower)) { ri = i; break; } }
-    if (ri >= 0 && ri < labels.length) {
-      stats[labels[ri]].correct += data.correct;
-      stats[labels[ri]].total += data.total;
-    }
+    if (ri >= 0 && ri < labels.length) { s[labels[ri]].correct += data.correct; s[labels[ri]].total += data.total; }
   }
-  return stats;
-}
-
-function computeBigramSpeeds(times) {
-  const bg = {};
-  for (let i = 1; i < times.length; i++) {
-    const delta = times[i].time - times[i - 1].time;
-    if (delta > 2000 || delta < 10) continue;
-    const key = (times[i - 1].char + times[i].char).toLowerCase();
-    if (key.includes("\n") || key.includes("\t")) continue;
-    if (!bg[key]) bg[key] = [];
-    bg[key].push(delta);
-  }
-  const avgs = {};
-  for (const [k, v] of Object.entries(bg)) {
-    if (v.length < 2) continue;
-    avgs[k] = Math.round(v.reduce((a, b) => a + b, 0) / v.length);
-  }
-  return avgs;
+  return s;
 }
 
 function getKeyErrorRates(ngramData) {
@@ -360,17 +402,17 @@ function getKeyErrorRates(ngramData) {
 
 function getSlowestAlphaNgrams(alphaSpeeds, n, limit) {
   return Object.entries(alphaSpeeds)
-    .filter(([gram, d]) => gram.length === n && d.count >= 3)
-    .map(([gram, d]) => ({ gram, avg: Math.round(d.totalMs / d.count), count: d.count }))
+    .filter(([g, d]) => g.length === n && d.count >= 3)
+    .map(([g, d]) => ({ gram: g, avg: Math.round(d.totalMs / d.count), count: d.count }))
     .sort((a, b) => b.avg - a.avg)
     .slice(0, limit || 8);
 }
 
-//  SUB-COMPONENTS 
+// -- SUB-COMPONENTS --
 function KeyboardHeatmap({ layout, ngramData }) {
   const ld = LAYOUTS[layout];
   const ke = getKeyErrorRates(ngramData);
-  const color = (key) => {
+  const kc = (key) => {
     const d = ke[key];
     if (!d || d.attempts < 2) return "rgba(255,255,255,0.06)";
     const r = d.errors / d.attempts;
@@ -381,15 +423,13 @@ function KeyboardHeatmap({ layout, ngramData }) {
   };
   return (
     <div style={{ marginTop: 12 }}>
-      <div style={{ fontSize: 10, color: "#8b949e", marginBottom: 5, letterSpacing: "0.06em" }}>KEY ACCURACY ({ld.name})</div>
+      <div style={{ fontSize: 10, color: "#8b949e", marginBottom: 5, letterSpacing: "0.06em", display: "flex", alignItems: "center" }}>
+        KEY ACCURACY ({ld.name})<Tip text="Heatmap of per-key error rates based on 2-gram data. Green = above 90% accuracy. Yellow = 80-90%. Red = below 80%. Grey = insufficient data (fewer than 2 attempts)." />
+      </div>
       {ld.rows.map((row, ri) => (
         <div key={ri} style={{ display: "flex", gap: 2, marginBottom: 2, paddingLeft: ri * 8 }}>
           {row.map((k) => (
-            <div key={k} style={{
-              width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center",
-              borderRadius: 2, fontSize: 8, fontFamily: "'JetBrains Mono', monospace", color: "#c9d1d9",
-              background: color(k), border: "1px solid rgba(255,255,255,0.06)"
-            }}>{k}</div>
+            <div key={k} style={{ width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 2, fontSize: 8, fontFamily: "'JetBrains Mono', monospace", color: "#c9d1d9", background: kc(k), border: "1px solid rgba(255,255,255,0.06)" }}>{k}</div>
           ))}
         </div>
       ))}
@@ -402,42 +442,57 @@ function KeyboardHeatmap({ layout, ngramData }) {
   );
 }
 
-// Sigh!
-// Watch me write HTML and fail
-// Question all my life choices...
-// Is it me or is browser life still cumbersome and boring in 2026???
-// Fuck this for not being easy to code...
-// half the HTML / Javascript ecosystem is basically busy apologizing for how cumbersome and unpredictable HTML+CSS+JS outcomes are for all the various targets.
-// It's actually worse than trying to target C programs for multiple platforms...
-// I have to stop ranting.
-function LivePanel({ keystrokes, errors, startTime, cursorPos, text, currentStreak, bestStreak, wpmHistory }) {
+function LivePanel({ keystrokes, errors, startTime, cursorPos, text, currentStreak, bestStreak, wpmHistory, sessionHistory }) {
   const elapsed = startTime ? (Date.now() - startTime) / 60000 : 0;
   const wpm = elapsed > 0 ? Math.round((cursorPos / 5) / elapsed) : 0;
   const rawWpm = elapsed > 0 ? Math.round((keystrokes / 5) / elapsed) : 0;
   const accuracy = keystrokes > 0 ? ((keystrokes - errors) / keystrokes * 100).toFixed(1) : "100.0";
   const progress = text.length > 0 ? (cursorPos / text.length * 100).toFixed(0) : 0;
-  const L = { fontSize: 10, color: "#8b949e", letterSpacing: "0.05em" };
+  const L = { fontSize: 10, color: "#8b949e", letterSpacing: "0.05em", display: "flex", alignItems: "center" };
   const V = { fontSize: 22, fontWeight: 700, color: "#e6edf3", fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.2 };
   return (
     <div>
-      <div style={{ marginBottom: 10 }}><div style={L}>WPM</div><div style={V}>{wpm}</div><div style={{ fontSize: 10, color: "#6e7681" }}>raw: {rawWpm}</div></div>
-      <div style={{ marginBottom: 10 }}><div style={L}>ACCURACY</div><div style={{ ...V, color: parseFloat(accuracy) > 95 ? "#3fb950" : parseFloat(accuracy) > 85 ? "#d29922" : "#f85149" }}>{accuracy}%</div></div>
-      <div style={{ marginBottom: 10 }}><div style={L}>ERRORS</div><div style={{ ...V, fontSize: 16 }}>{errors}</div></div>
-      <div style={{ marginBottom: 10 }}><div style={L}>STREAK</div><div style={{ ...V, fontSize: 16 }}>{currentStreak}</div><div style={{ fontSize: 10, color: "#6e7681" }}>best: {bestStreak}</div></div>
       <div style={{ marginBottom: 10 }}>
-        <div style={L}>PROGRESS</div>
+        <div style={L}>WPM<Tip text="Words per minute. Calculated as (characters typed / 5) / minutes elapsed. Only counts characters at or before the cursor position, so backspaced characters reduce this." /></div>
+        <div style={V}>{wpm}</div>
+        <div style={{ fontSize: 10, color: "#6e7681" }}>raw: {rawWpm}</div>
+      </div>
+      <div style={{ marginBottom: 10 }}>
+        <div style={L}>ACCURACY<Tip text="Percentage of keystrokes that matched the target character. Formula: (total keystrokes - errors) / total keystrokes. Backspace does not count as a keystroke." /></div>
+        <div style={{ ...V, color: parseFloat(accuracy) > 95 ? "#3fb950" : parseFloat(accuracy) > 85 ? "#d29922" : "#f85149" }}>{accuracy}%</div>
+      </div>
+      <div style={{ marginBottom: 10 }}>
+        <div style={L}>ERRORS<Tip text="Total number of keystrokes where the typed character did not match the expected character." /></div>
+        <div style={{ ...V, fontSize: 16 }}>{errors}</div>
+      </div>
+      <div style={{ marginBottom: 10 }}>
+        <div style={L}>STREAK<Tip text="Current consecutive correct keystrokes. Resets to zero on any error. Best streak is the longest run across the current page session." /></div>
+        <div style={{ ...V, fontSize: 16 }}>{currentStreak}</div>
+        <div style={{ fontSize: 10, color: "#6e7681" }}>best: {bestStreak}</div>
+      </div>
+      <div style={{ marginBottom: 10 }}>
+        <div style={L}>PROGRESS<Tip text="How far through the current text. Characters typed / total characters." /></div>
         <div style={{ width: "100%", height: 3, background: "rgba(255,255,255,0.08)", borderRadius: 2, marginTop: 4 }}>
           <div style={{ width: `${progress}%`, height: "100%", background: "#58a6ff", borderRadius: 2, transition: "width 0.15s" }} />
         </div>
         <div style={{ fontSize: 10, color: "#6e7681" }}>{cursorPos}/{text.length}</div>
       </div>
       {wpmHistory.length > 3 && (
-        <div style={{ marginTop: 6 }}><div style={L}>WPM TREND</div>
+        <div style={{ marginTop: 6 }}>
+          <div style={L}>WPM TREND<Tip text="WPM sampled every 2 seconds during the current text." /></div>
           <div style={{ height: 42, marginTop: 4 }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={wpmHistory}><YAxis hide domain={["dataMin - 5", "dataMax + 5"]} /><Line type="monotone" dataKey="wpm" stroke="#58a6ff" strokeWidth={1.5} dot={false} /></LineChart>
             </ResponsiveContainer>
           </div>
+        </div>
+      )}
+      {sessionHistory.length > 0 && (
+        <div style={{ marginTop: 12 }}>
+          <div style={{ ...L, marginBottom: 4 }}>SESSION LOG<Tip text="History of completed texts in this page session. Persists across auto-loads. Can be saved to JSON and reloaded later." /></div>
+          {sessionHistory.slice(-6).reverse().map((s, i) => (
+            <div key={i} style={{ fontSize: 10, color: "#6e7681", marginBottom: 2 }}>{s.time} / {s.mode} / {s.wpm}wpm / {s.accuracy}% / {s.chars}ch</div>
+          ))}
         </div>
       )}
     </div>
@@ -447,12 +502,13 @@ function LivePanel({ keystrokes, errors, startTime, cursorPos, text, currentStre
 function WeakPanel({ ngramData, wordErrors }) {
   const wn = getWeakNgrams(ngramData, 3, 10);
   const ww = Object.entries(wordErrors).filter(([_, d]) => d.attempts >= 2).map(([w, d]) => ({ w, ...d, rate: d.errors / d.attempts })).sort((a, b) => b.rate - a.rate).slice(0, 8);
-  if (wn.length === 0 && ww.length === 0) return <div style={{ fontSize: 11, color: "#6e7681" }}>Weakness data appears as you type.</div>;
+  if (wn.length === 0 && ww.length === 0) return <div style={{ fontSize: 11, color: "#6e7681" }}>Weakness data appears as you type. Persists across texts.</div>;
+  const HL = { fontSize: 10, color: "#8b949e", marginBottom: 4, letterSpacing: "0.05em", display: "flex", alignItems: "center" };
   return (
     <div>
       {wn.length > 0 && (
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 10, color: "#8b949e", marginBottom: 4, letterSpacing: "0.05em" }}>WEAK SEQUENCES</div>
+          <div style={HL}>WEAK SEQUENCES<Tip text="N-grams (2-5 characters) with the highest error rates. Minimum 3 attempts to appear. Underscore represents space. This data persists across texts and can be used by Adaptive Practice mode." /></div>
           {wn.map(({ ngram, rate, attempts, errors }) => (
             <div key={ngram} style={{ display: "flex", justifyContent: "space-between", marginBottom: 2, fontSize: 11 }}>
               <code style={{ fontFamily: "'JetBrains Mono', monospace", background: "rgba(255,255,255,0.06)", padding: "0 4px", borderRadius: 2, color: "#e6edf3", fontSize: 11 }}>{ngram.replace(/ /g, "_")}</code>
@@ -463,7 +519,7 @@ function WeakPanel({ ngramData, wordErrors }) {
       )}
       {ww.length > 0 && (
         <div>
-          <div style={{ fontSize: 10, color: "#8b949e", marginBottom: 4, letterSpacing: "0.05em" }}>WEAK WORDS</div>
+          <div style={HL}>WEAK WORDS<Tip text="Words where at least one character was mistyped. Sorted by error rate. Minimum 2 attempts to appear." /></div>
           {ww.map(({ w, rate, attempts, errors }) => (
             <div key={w} style={{ display: "flex", justifyContent: "space-between", marginBottom: 2, fontSize: 11 }}>
               <span style={{ color: "#e6edf3", fontFamily: "'JetBrains Mono', monospace" }}>{w}</span>
@@ -480,10 +536,7 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSp
   const fingerStats = computeFingerStats(charAccuracy, layout);
   const handStats = computeHandStats(fingerStats);
   const rowStats = computeRowStats(charAccuracy, layout);
-  const bigramSpeeds = computeBigramSpeeds(keystrokeTimes);
-  const slowBigrams = Object.entries(bigramSpeeds).sort((a, b) => b[1] - a[1]).slice(0, 8);
   const worstChars = Object.entries(charAccuracy).filter(([_, d]) => d.total >= 3).map(([ch, d]) => ({ ch, rate: d.correct / d.total, total: d.total })).sort((a, b) => a.rate - b.rate).slice(0, 8);
-
   const slowAlpha2 = getSlowestAlphaNgrams(alphaSpeeds, 2, 8);
   const slowAlpha3 = getSlowestAlphaNgrams(alphaSpeeds, 3, 6);
   const slowAlpha4 = getSlowestAlphaNgrams(alphaSpeeds, 4, 5);
@@ -495,91 +548,56 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSp
     return { mean: m.toFixed(0), sd: sd.toFixed(1), cv: m > 0 ? (sd / m * 100).toFixed(0) : "0" };
   })() : null;
 
-  const hasData = Object.keys(fingerStats).length > 0 || worstChars.length > 0;
-  if (!hasData && slowAlpha2.length === 0) return <div style={{ fontSize: 11, color: "#6e7681" }}>Detailed analytics appear after typing begins.</div>;
+  const hasData = Object.keys(fingerStats).length > 0 || worstChars.length > 0 || slowAlpha2.length > 0;
+  if (!hasData) return <div style={{ fontSize: 11, color: "#6e7681" }}>Detailed analytics appear after typing begins.</div>;
 
   const pct = (c, t) => t > 0 ? (c / t * 100).toFixed(1) + "%" : "n/a";
   const pc = (c, t) => { if (t === 0) return "#6e7681"; const r = c / t; return r > 0.95 ? "#3fb950" : r > 0.85 ? "#d29922" : "#f85149"; };
-  const SL = { fontSize: 10, color: "#8b949e", marginBottom: 4, letterSpacing: "0.05em" };
+  const HL = { fontSize: 10, color: "#8b949e", marginBottom: 4, letterSpacing: "0.05em", display: "flex", alignItems: "center" };
   const SR = { display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 2 };
   const SM = { marginBottom: 12 };
-  const msColor = (ms) => ms > 400 ? "#f85149" : ms > 250 ? "#d29922" : "#3fb950";
-  const gramCode = { fontFamily: "'JetBrains Mono', monospace", background: "rgba(255,255,255,0.06)", padding: "0 4px", borderRadius: 2, color: "#e6edf3" };
+  const mc = (ms) => ms > 400 ? "#f85149" : ms > 250 ? "#d29922" : "#3fb950";
+  const gc = { fontFamily: "'JetBrains Mono', monospace", background: "rgba(255,255,255,0.06)", padding: "0 4px", borderRadius: 2, color: "#e6edf3" };
 
   return (
     <div>
       {Object.keys(handStats).length > 0 && (
-        <div style={SM}>
-          <div style={SL}>PER HAND</div>
-          {Object.entries(handStats).map(([h, d]) => (
-            <div key={h} style={SR}><span style={{ color: "#c9d1d9" }}>{h}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>
-          ))}
+        <div style={SM}><div style={HL}>PER HAND<Tip text="Accuracy broken down by left vs right hand, based on which finger is assigned to each key in the selected layout." /></div>
+          {Object.entries(handStats).map(([h, d]) => (<div key={h} style={SR}><span style={{ color: "#c9d1d9" }}>{h}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>))}
         </div>
       )}
       {Object.keys(fingerStats).length > 0 && (
-        <div style={SM}>
-          <div style={SL}>PER FINGER</div>
-          {["L4", "L3", "L2", "L1", "R1", "R2", "R3", "R4"].map(f => {
-            const d = fingerStats[f];
-            if (!d) return null;
-            return <div key={f} style={SR}><span style={{ color: "#c9d1d9" }}>{FINGER_LABELS[f]}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>;
-          })}
+        <div style={SM}><div style={HL}>PER FINGER<Tip text="Accuracy per finger. L4 = left pinky, R1 = right index, etc. Based on the standard touch-typing finger assignments for the selected layout." /></div>
+          {["L4", "L3", "L2", "L1", "R1", "R2", "R3", "R4"].map(f => { const d = fingerStats[f]; if (!d) return null; return <div key={f} style={SR}><span style={{ color: "#c9d1d9" }}>{FINGER_LABELS[f]}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>; })}
         </div>
       )}
       {Object.entries(rowStats).some(([_, d]) => d.total > 0) && (
-        <div style={SM}>
-          <div style={SL}>PER ROW</div>
-          {Object.entries(rowStats).filter(([_, d]) => d.total > 0).map(([r, d]) => (
-            <div key={r} style={SR}><span style={{ color: "#c9d1d9" }}>{r}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>
-          ))}
+        <div style={SM}><div style={HL}>PER ROW<Tip text="Accuracy per keyboard row. Number row is the top, then Top (QWERTY), Home (ASDF), Bottom (ZXCV)." /></div>
+          {Object.entries(rowStats).filter(([_, d]) => d.total > 0).map(([r, d]) => (<div key={r} style={SR}><span style={{ color: "#c9d1d9" }}>{r}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>))}
         </div>
       )}
       {worstChars.length > 0 && (
-        <div style={SM}>
-          <div style={SL}>WEAKEST CHARACTERS</div>
-          {worstChars.map(({ ch, rate, total }) => (
-            <div key={ch} style={SR}>
-              <code style={gramCode}>{ch === " " ? "space" : ch}</code>
-              <span style={{ color: pc(rate, 1) }}>{(rate * 100).toFixed(0)}% ({total})</span>
-            </div>
-          ))}
-        </div>
-      )}
-      {slowBigrams.length > 0 && (
-        <div style={SM}>
-          <div style={SL}>SLOWEST BIGRAMS (all, avg ms)</div>
-          {slowBigrams.map(([bg, ms]) => (
-            <div key={bg} style={SR}><code style={gramCode}>{bg.replace(/ /g, "_")}</code><span style={{ color: msColor(ms) }}>{ms}ms</span></div>
-          ))}
+        <div style={SM}><div style={HL}>WEAKEST CHARACTERS<Tip text="Individual characters with the lowest accuracy. Minimum 3 attempts to appear. Includes letters, numbers, and symbols." /></div>
+          {worstChars.map(({ ch, rate, total }) => (<div key={ch} style={SR}><code style={gc}>{ch === " " ? "space" : ch}</code><span style={{ color: pc(rate, 1) }}>{(rate * 100).toFixed(0)}% ({total})</span></div>))}
         </div>
       )}
       {slowAlpha2.length > 0 && (
-        <div style={SM}>
-          <div style={SL}>SLOWEST ALPHA 2-GRAMS (avg ms)</div>
-          {slowAlpha2.map(({ gram, avg, count }) => (
-            <div key={gram} style={SR}><code style={gramCode}>{gram}</code><span style={{ color: msColor(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>
-          ))}
+        <div style={SM}><div style={HL}>SLOWEST ALPHA 2-GRAMS<Tip text="Slowest letter-only bigrams by average inter-key time in milliseconds. Only a-z characters. Excludes numbers, symbols, space. Minimum 3 occurrences. This isolates pure typing fluency from symbol-reaching overhead." /></div>
+          {slowAlpha2.map(({ gram, avg, count }) => (<div key={gram} style={SR}><code style={gc}>{gram}</code><span style={{ color: mc(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>))}
         </div>
       )}
       {slowAlpha3.length > 0 && (
-        <div style={SM}>
-          <div style={SL}>SLOWEST ALPHA 3-GRAMS (avg ms)</div>
-          {slowAlpha3.map(({ gram, avg, count }) => (
-            <div key={gram} style={SR}><code style={gramCode}>{gram}</code><span style={{ color: msColor(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>
-          ))}
+        <div style={SM}><div style={HL}>SLOWEST ALPHA 3-GRAMS<Tip text="Slowest 3-letter sequences. Total time from first to last character. Only a-z. Helps identify awkward hand transitions and finger rolls." /></div>
+          {slowAlpha3.map(({ gram, avg, count }) => (<div key={gram} style={SR}><code style={gc}>{gram}</code><span style={{ color: mc(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>))}
         </div>
       )}
       {slowAlpha4.length > 0 && (
-        <div style={SM}>
-          <div style={SL}>SLOWEST ALPHA 4-GRAMS (avg ms)</div>
-          {slowAlpha4.map(({ gram, avg, count }) => (
-            <div key={gram} style={SR}><code style={gramCode}>{gram}</code><span style={{ color: msColor(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>
-          ))}
+        <div style={SM}><div style={HL}>SLOWEST ALPHA 4-GRAMS<Tip text="Slowest 4-letter sequences. Useful for spotting problematic word fragments and common suffixes (-tion, -ness, -ment) that slow you down." /></div>
+          {slowAlpha4.map(({ gram, avg, count }) => (<div key={gram} style={SR}><code style={gc}>{gram}</code><span style={{ color: mc(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>))}
         </div>
       )}
       {consistency && (
-        <div style={SM}>
-          <div style={SL}>CONSISTENCY</div>
+        <div style={SM}><div style={HL}>CONSISTENCY<Tip text="Statistical consistency of your WPM over the current text. Lower CV (coefficient of variation) means more consistent speed. CV below 15% is very consistent." /></div>
           <div style={{ fontSize: 11, color: "#c9d1d9" }}>Mean: {consistency.mean} wpm</div>
           <div style={{ fontSize: 11, color: "#c9d1d9" }}>Std dev: {consistency.sd}</div>
           <div style={{ fontSize: 11, color: "#c9d1d9" }}>CV: {consistency.cv}%</div>
@@ -589,8 +607,8 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSp
   );
 }
 
-//  MAIN 
-export default function TypingTutor() {
+// -- MAIN --
+export default function MarkTwain() {
   const [mode, setMode] = useState("wikipedia");
   const [layout, setLayout] = useState("qwerty");
   const [codeLang, setCodeLang] = useState("python");
@@ -618,21 +636,21 @@ export default function TypingTutor() {
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [sideTab, setSideTab] = useState("live");
   const [sessionHistory, setSessionHistory] = useState([]);
+  const [lastRunStats, setLastRunStats] = useState(null);
   const containerRef = useRef(null);
   const cursorRef = useRef(null);
   const wpmIntervalRef = useRef(null);
   const wordErrRef = useRef(false);
   const ksTimesRef = useRef([]);
   const cursorPosRef = useRef(0);
-  const autoLoadRef = useRef(false);
   const fileInputRef = useRef(null);
+  const loadTextRef = useRef(null);
+  const autoLoadTimerRef = useRef(null);
 
   useEffect(() => { cursorPosRef.current = cursorPos; }, [cursorPos]);
-  useEffect(() => { autoLoadRef.current = autoLoad; }, [autoLoad]);
 
-  // load text (only resets per-text state, preserves cross-session analytics)
-  const loadText = useCallback(async (forceMode) => {
-    const m = forceMode || mode;
+  const doLoadText = useCallback(async (forceMode, lc, ml, wl, wc, cl, ct, nd) => {
+    const m = forceMode || ml;
     setLoading(true);
     setIsComplete(false);
     setCursorPos(0);
@@ -647,22 +665,23 @@ export default function TypingTutor() {
 
     let newText = "";
     if (m === "wikipedia") {
-      const raw = await fetchWikipedia();
-      newText = wrapToLines(raw, lineCount, 65);
+      newText = await fetchWikipediaLines(lc);
     } else if (m === "github") {
-      const r = await fetchGithubCode(codeLang);
-      newText = truncateToLines(r.text, lineCount);
+      const r = await fetchGithubCodeLines(cl, lc);
+      newText = r.text;
       setCodeSource(r.source);
     } else if (m === "adaptive") {
-      const raw = generateAdaptiveText(ngramData);
-      newText = wrapToLines(raw, lineCount, 65);
+      const raw = generateAdaptiveText(nd);
+      const lines = wrapToLines(raw, 65);
+      newText = lines.slice(0, lc).join("\n");
     } else if (m === "custom") {
-      const raw = customText || "Type your custom text here.";
-      newText = truncateToLines(raw, lineCount);
+      const raw = ct || "Type your custom text here.";
+      const lines = raw.split("\n");
+      newText = lines.slice(0, lc).join("\n");
     } else if (m === "common-words") {
-      newText = generateCommonWordsText(wordsLang, wordsCount, lineCount);
+      newText = generateCommonWordsText(wl, wc, lc);
     } else if (m === "special-chars") {
-      newText = generateSpecialCharText(lineCount);
+      newText = generateSpecialCharText(lc);
     }
 
     newText = newText.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
@@ -670,7 +689,15 @@ export default function TypingTutor() {
     setText(newText);
     setCharStates(new Array(newText.length).fill("untyped"));
     setLoading(false);
-  }, [mode, codeLang, ngramData, customText, wordsLang, wordsCount, lineCount]);
+  }, []);
+
+  // wrapper that captures current state for doLoadText
+  const loadText = useCallback((forceMode) => {
+    return doLoadText(forceMode, lineCount, mode, wordsLang, wordsCount, codeLang, customText, ngramData);
+  }, [doLoadText, lineCount, mode, wordsLang, wordsCount, codeLang, customText, ngramData]);
+
+  // keep a ref to loadText for auto-load timer
+  useEffect(() => { loadTextRef.current = loadText; }, [loadText]);
 
   useEffect(() => { loadText(); }, []);
   useEffect(() => { if (cursorRef.current) cursorRef.current.scrollIntoView({ block: "center", behavior: "smooth" }); }, [cursorPos]);
@@ -685,13 +712,15 @@ export default function TypingTutor() {
     return () => clearInterval(wpmIntervalRef.current);
   }, [startTime, isComplete]);
 
-  // auto-load on completion
+  // auto-load: uses ref to avoid stale closure / effect cancellation
   useEffect(() => {
-    if (isComplete && autoLoadRef.current) {
-      const timer = setTimeout(() => { loadText(); }, 800);
-      return () => clearTimeout(timer);
+    if (isComplete && autoLoad) {
+      autoLoadTimerRef.current = setTimeout(() => {
+        if (loadTextRef.current) loadTextRef.current();
+      }, 2200);
     }
-  }, [isComplete, loadText]);
+    return () => { if (autoLoadTimerRef.current) clearTimeout(autoLoadTimerRef.current); };
+  }, [isComplete, autoLoad]);
 
   const getCurrentWord = useCallback((pos) => {
     if (pos <= 0 || pos > text.length) return null;
@@ -700,55 +729,49 @@ export default function TypingTutor() {
     return text.substring(start, pos).toLowerCase().replace(/[^a-z]/g, "");
   }, [text]);
 
-  // save session data as JSON
   const handleSave = useCallback(() => {
     const data = {
-      version: 1,
+      version: 2,
       savedAt: new Date().toISOString(),
-      ngramData,
-      wordErrors,
-      charAccuracy,
-      alphaSpeeds,
-      sessionHistory,
-      bestStreak,
-      layout,
+      ngramData, wordErrors, charAccuracy, alphaSpeeds, sessionHistory, bestStreak, layout,
       settings: { mode, codeLang, wordsLang, wordsCount, lineCount, autoLoad }
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "typing-tutor-session-" + new Date().toISOString().slice(0, 10) + ".json";
+    // a.download = "shauryashaurya-twain-typing-session-" + new Date().toISOString().slice(0, 10) + ".json";
+    const now = new Date();
+    const date = now.toISOString().slice(0, 10);
+    const time = now.toTimeString().slice(0, 8).replace(/:/g, "");
+    a.download = "Shaurya_Mark_Twain_Typing_Run_" + date + "_" + time + ".json";
     a.click();
     URL.revokeObjectURL(url);
   }, [ngramData, wordErrors, charAccuracy, alphaSpeeds, sessionHistory, bestStreak, layout, mode, codeLang, wordsLang, wordsCount, lineCount, autoLoad]);
 
-  // load session data from JSON
-  const handleLoad = useCallback((e) => {
+  const handleFileLoad = useCallback((e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
       try {
-        const data = JSON.parse(ev.target.result);
-        if (data.ngramData) setNgramData(data.ngramData);
-        if (data.wordErrors) setWordErrors(data.wordErrors);
-        if (data.charAccuracy) setCharAccuracy(data.charAccuracy);
-        if (data.alphaSpeeds) setAlphaSpeeds(data.alphaSpeeds);
-        if (data.sessionHistory) setSessionHistory(data.sessionHistory);
-        if (data.bestStreak) setBestStreak(data.bestStreak);
-        if (data.layout) setLayout(data.layout);
-        if (data.settings) {
-          if (data.settings.mode) setMode(data.settings.mode);
-          if (data.settings.codeLang) setCodeLang(data.settings.codeLang);
-          if (data.settings.wordsLang) setWordsLang(data.settings.wordsLang);
-          if (data.settings.wordsCount) setWordsCount(data.settings.wordsCount);
-          if (data.settings.lineCount) setLineCount(data.settings.lineCount);
-          if (data.settings.autoLoad !== undefined) setAutoLoad(data.settings.autoLoad);
+        const d = JSON.parse(ev.target.result);
+        if (d.ngramData) setNgramData(d.ngramData);
+        if (d.wordErrors) setWordErrors(d.wordErrors);
+        if (d.charAccuracy) setCharAccuracy(d.charAccuracy);
+        if (d.alphaSpeeds) setAlphaSpeeds(d.alphaSpeeds);
+        if (d.sessionHistory) setSessionHistory(d.sessionHistory);
+        if (d.bestStreak) setBestStreak(d.bestStreak);
+        if (d.layout) setLayout(d.layout);
+        if (d.settings) {
+          if (d.settings.mode) setMode(d.settings.mode);
+          if (d.settings.codeLang) setCodeLang(d.settings.codeLang);
+          if (d.settings.wordsLang) setWordsLang(d.settings.wordsLang);
+          if (d.settings.wordsCount) setWordsCount(d.settings.wordsCount);
+          if (d.settings.lineCount) setLineCount(d.settings.lineCount);
+          if (d.settings.autoLoad !== undefined) setAutoLoad(d.settings.autoLoad);
         }
-      } catch {
-        // silently ignore bad files
-      }
+      } catch { /* ignore bad files */ }
     };
     reader.readAsText(file);
     e.target.value = "";
@@ -756,38 +779,23 @@ export default function TypingTutor() {
 
   const handleKeyDown = useCallback((e) => {
     if (isComplete || loading || text.length === 0) return;
-
     if (e.key === "Backspace") {
       e.preventDefault();
-      if (cursorPos > 0) {
-        const np = cursorPos - 1;
-        setCursorPos(np);
-        setCharStates(prev => { const n = [...prev]; n[np] = "untyped"; return n; });
-      }
+      if (cursorPos > 0) { const np = cursorPos - 1; setCursorPos(np); setCharStates(prev => { const n = [...prev]; n[np] = "untyped"; return n; }); }
       return;
     }
-
     let inputChar = null;
     if (e.key === "Enter") { e.preventDefault(); inputChar = "\n"; }
     else if (e.key === "Tab") { e.preventDefault(); inputChar = (mode === "github" && cursorPos < text.length && text[cursorPos] === "\t") ? "\t" : " "; }
     else if (e.key.length === 1) { e.preventDefault(); inputChar = e.key; }
     if (inputChar === null) return;
-
     if (startTime === null) setStartTime(Date.now());
 
     const target = text[cursorPos];
     const ok = inputChar === target;
-
     ksTimesRef.current.push({ char: inputChar, time: Date.now() });
     setKeystrokes(prev => prev + 1);
-
-    // per-character accuracy (persists across texts)
-    setCharAccuracy(prev => {
-      const ex = prev[target] || { correct: 0, total: 0 };
-      return { ...prev, [target]: { correct: ex.correct + (ok ? 1 : 0), total: ex.total + 1 } };
-    });
-
-    // alpha-only speed n-grams (persists across texts)
+    setCharAccuracy(prev => { const ex = prev[target] || { correct: 0, total: 0 }; return { ...prev, [target]: { correct: ex.correct + (ok ? 1 : 0), total: ex.total + 1 } }; });
     setAlphaSpeeds(prev => updateAlphaSpeeds(prev, ksTimesRef.current));
 
     if (!ok) { setErrors(prev => prev + 1); wordErrRef.current = true; setCurrentStreak(0); }
@@ -800,10 +808,7 @@ export default function TypingTutor() {
     if ((np >= text.length || /\s/.test(text[np])) && /\S/.test(target)) {
       const w = getCurrentWord(np);
       if (w && w.length >= 2) {
-        setWordErrors(prev => {
-          const ex = prev[w] || { attempts: 0, errors: 0 };
-          return { ...prev, [w]: { attempts: ex.attempts + 1, errors: ex.errors + (wordErrRef.current ? 1 : 0) } };
-        });
+        setWordErrors(prev => { const ex = prev[w] || { attempts: 0, errors: 0 }; return { ...prev, [w]: { attempts: ex.attempts + 1, errors: ex.errors + (wordErrRef.current ? 1 : 0) } }; });
         wordErrRef.current = false;
       }
     }
@@ -817,52 +822,33 @@ export default function TypingTutor() {
       const totalKs = keystrokes + 1;
       const totalErr = errors + (ok ? 0 : 1);
       const facc = totalKs > 0 ? ((totalKs - totalErr) / totalKs * 100).toFixed(1) : "100.0";
-      setSessionHistory(prev => [...prev, { wpm: fwpm, accuracy: facc, mode, time: new Date().toLocaleTimeString(), chars: text.length }]);
+      const entry = { wpm: fwpm, accuracy: facc, mode, time: new Date().toLocaleTimeString(), chars: text.length, elapsed: el.toFixed(1), errors: totalErr };
+      setLastRunStats(entry);
+      setSessionHistory(prev => [...prev, entry]);
     }
   }, [cursorPos, text, isComplete, loading, startTime, mode, getCurrentWord, keystrokes, errors]);
 
   useEffect(() => { if (containerRef.current) containerRef.current.focus(); }, [text, loading]);
 
-  // le laddoo BC...
   const renderText = useMemo(() => {
     if (text.length === 0) return null;
-    const lines = [];
-    let cur = [];
+    const lines = []; let cur = [];
     for (let i = 0; i < text.length; i++) { cur.push(i); if (text[i] === "\n") { lines.push([...cur]); cur = []; } }
     if (cur.length > 0) lines.push(cur);
     return lines.map((lc, li) => (
       <div key={li} style={{ minHeight: "1.6em" }}>
         {lc.map(i => {
-          const ch = text[i];
-          const st = charStates[i] || "untyped";
-          const ic = i === cursorPos;
-          let col = "#3d4450";
-          if (st === "correct") col = "#e6edf3";
-          if (st === "incorrect") col = "#f85149";
+          const ch = text[i]; const st = charStates[i] || "untyped"; const ic = i === cursorPos;
+          let col = "#3d4450"; if (st === "correct") col = "#e6edf3"; if (st === "incorrect") col = "#f85149";
           const dc = ch === "\n" ? " " : ch === " " ? "\u00A0" : ch;
-          return (
-            <span key={i} ref={ic ? cursorRef : null} style={{
-              color: col, background: st === "incorrect" ? "rgba(248,81,73,0.15)" : "transparent",
-              borderLeft: ic ? "2px solid #58a6ff" : "2px solid transparent", paddingLeft: 1, transition: "color 0.05s"
-            }}>{dc}</span>
-          );
+          return (<span key={i} ref={ic ? cursorRef : null} style={{ color: col, background: st === "incorrect" ? "rgba(248,81,73,0.15)" : "transparent", borderLeft: ic ? "2px solid #58a6ff" : "2px solid transparent", paddingLeft: 1, transition: "color 0.05s" }}>{dc}</span>);
         })}
       </div>
     ));
   }, [text, charStates, cursorPos]);
 
-  const completionStats = useMemo(() => {
-    if (!isComplete || !startTime) return null;
-    const el = (Date.now() - startTime) / 60000;
-    return { wpm: Math.round((text.length / 5) / el), accuracy: keystrokes > 0 ? ((keystrokes - errors) / keystrokes * 100).toFixed(1) : "100.0", elapsed: el.toFixed(1), errors };
-  }, [isComplete, startTime, text, keystrokes, errors]);
-
   const isCode = mode === "github" || mode === "special-chars";
-  const tabSt = (a) => ({
-    padding: "4px 0", fontSize: 10, letterSpacing: "0.05em", cursor: "pointer",
-    color: a ? "#58a6ff" : "#6e7681", background: "none", border: "none",
-    borderBottom: a ? "1px solid #58a6ff" : "1px solid transparent", fontFamily: "inherit"
-  });
+  const tabSt = (a) => ({ padding: "4px 0", fontSize: 10, letterSpacing: "0.05em", cursor: "pointer", color: a ? "#58a6ff" : "#6e7681", background: "none", border: "none", borderBottom: a ? "1px solid #58a6ff" : "1px solid transparent", fontFamily: "inherit" });
 
   return (
     <div style={{ width: "100%", height: "100vh", background: "#0d1117", color: "#c9d1d9", fontFamily: "'JetBrains Mono', 'Fira Code', monospace", display: "flex", flexDirection: "column", overflow: "hidden" }}>
@@ -876,16 +862,17 @@ export default function TypingTutor() {
         .tp:hover{background:#388bfd}
         .tta{background:#0d1117;color:#c9d1d9;border:1px solid #30363d;border-radius:3px;padding:6px;font-size:12px;font-family:inherit;outline:none;resize:vertical;width:100%}
         .tta:focus{border-color:#58a6ff}
-        .tsp{background:#161b22;color:#c9d1d9;border:1px solid #30363d;border-radius:3px;padding:3px 4px;font-size:11px;font-family:inherit;outline:none;width:52px;text-align:center}
+        .tsp{background:#161b22;color:#c9d1d9;border:1px solid #30363d;border-radius:3px;padding:3px 4px;font-size:11px;font-family:inherit;outline:none;width:48px;text-align:center}
         .tsp:focus{border-color:#58a6ff}
         *::-webkit-scrollbar{width:6px}*::-webkit-scrollbar-track{background:transparent}*::-webkit-scrollbar-thumb{background:#30363d;border-radius:3px}
       `}</style>
 
-      <input type="file" ref={fileInputRef} accept=".json" style={{ display: "none" }} onChange={handleLoad} />
+      <input type="file" ref={fileInputRef} accept=".json" style={{ display: "none" }} onChange={handleFileLoad} />
 
-      {/* header row 1: mode, language selectors */}
+      {/* row 1 */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px", borderBottom: "1px solid #161b22", flexShrink: 0, flexWrap: "wrap" }}>
-        <span style={{ fontSize: 13, fontWeight: 700, color: "#e6edf3", marginRight: 4 }}>TYPING TUTOR</span>
+        <span style={{ fontSize: 13, fontWeight: 700, color: "#e6edf3", marginRight: 4 }}>MARK TWAIN</span>
+        <Tip text="Typing practice tool. Pick a mode, set line count, and start typing. Text appears dim; correct keystrokes turn white, errors turn red. Backspace to correct. All analytics persist across texts in a session." />
         <select className="ts" value={mode} onChange={e => { setMode(e.target.value); if (e.target.value === "custom") setShowCustomInput(true); }}>
           <option value="wikipedia">Wikipedia</option>
           <option value="github">Code (GitHub)</option>
@@ -894,6 +881,7 @@ export default function TypingTutor() {
           <option value="adaptive">Adaptive Practice</option>
           <option value="custom">Custom Text</option>
         </select>
+        <Tip text="Wikipedia: random article summaries (multiple fetched to fill lines). Code: files from popular GitHub repos. Common Words: frequent words in 5 languages. Special Characters: punctuation and symbol drills. Adaptive: words targeting your weakest n-grams. Custom: paste your own text." />
         {mode === "github" && (
           <select className="ts" value={codeLang} onChange={e => setCodeLang(e.target.value)}>
             <option value="python">Python</option><option value="javascript">JavaScript</option>
@@ -913,26 +901,29 @@ export default function TypingTutor() {
         <select className="ts" value={layout} onChange={e => setLayout(e.target.value)}>
           <option value="qwerty">QWERTY</option><option value="dvorak">Dvorak</option><option value="colemak">Colemak</option>
         </select>
+        <Tip text="Keyboard layout affects finger/hand/row analytics and the heatmap. Does not change what you type, only how stats are attributed." />
       </div>
 
-      {/* header row 2: lines, auto-load, actions */}
+      {/* row 2 */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 12px", borderBottom: "1px solid #21262d", flexShrink: 0, flexWrap: "wrap" }}>
         <label style={{ fontSize: 11, color: "#8b949e", display: "flex", alignItems: "center", gap: 4 }}>
-          Lines:
-          <input type="number" className="tsp" min={1} max={100} value={lineCount} onChange={e => { const v = parseInt(e.target.value, 10); if (v > 0 && v <= 100) setLineCount(v); }} />
+          Lines: <input type="number" className="tsp" min={1} max={100} value={lineCount} onChange={e => { const v = parseInt(e.target.value, 10); if (v > 0 && v <= 100) setLineCount(v); }} />
         </label>
+        <Tip text="Target number of lines to load. For Wikipedia, multiple summaries are fetched to reach this count. For GitHub, multiple files may be concatenated. Range: 1 to 100." />
         <label style={{ fontSize: 11, color: "#8b949e", display: "flex", alignItems: "center", gap: 4, cursor: "pointer" }}>
-          <input type="checkbox" checked={autoLoad} onChange={e => setAutoLoad(e.target.checked)}
-            style={{ accentColor: "#58a6ff", width: 13, height: 13, cursor: "pointer" }} />
+          <input type="checkbox" checked={autoLoad} onChange={e => setAutoLoad(e.target.checked)} style={{ accentColor: "#58a6ff", width: 13, height: 13, cursor: "pointer" }} />
           Auto-load
         </label>
+        <Tip text="When enabled, a new text loads automatically 2 seconds after you finish the current one. Stats for each completed text are logged to the session history. N-gram, word, and character data persists across auto-loads." />
         <div style={{ borderLeft: "1px solid #30363d", height: 16, margin: "0 2px" }} />
         <button className="tb tp" onClick={() => { setShowCustomInput(false); loadText(); }}>{loading ? "Loading..." : "New Text"}</button>
         {mode === "adaptive" && <button className="tb" onClick={() => loadText("adaptive")}>Refresh</button>}
         {mode === "custom" && <button className="tb" onClick={() => setShowCustomInput(!showCustomInput)}>{showCustomInput ? "Hide" : "Edit"}</button>}
         <div style={{ borderLeft: "1px solid #30363d", height: 16, margin: "0 2px" }} />
         <button className="tb" onClick={handleSave}>Save</button>
+        <Tip text="Download all session data as a JSON file: n-gram stats, word errors, character accuracy, alpha speed data, session history, and current settings." />
         <button className="tb" onClick={() => fileInputRef.current && fileInputRef.current.click()}>Load</button>
+        <Tip text="Load a previously saved JSON session file. Restores all analytics and settings. Does not clear existing data, it overwrites with the file contents." />
       </div>
 
       {showCustomInput && mode === "custom" && (
@@ -951,14 +942,17 @@ export default function TypingTutor() {
           {loading && <div style={{ color: "#6e7681", fontSize: 13 }}>Loading content...</div>}
           {!loading && text.length === 0 && <div style={{ color: "#6e7681", fontSize: 13 }}>Click "New Text" to begin.</div>}
           {!loading && text.length > 0 && !isComplete && renderText}
-          {isComplete && !autoLoad && completionStats && (
+          {isComplete && lastRunStats && (
             <div style={{ maxWidth: 480 }}>
-              <div style={{ fontSize: 18, fontWeight: 700, color: "#e6edf3", marginBottom: 16 }}>Session Complete</div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: "#e6edf3", marginBottom: 16 }}>
+                {autoLoad ? "Run Complete" : "Session Complete"}
+                {autoLoad && <span style={{ fontSize: 12, fontWeight: 400, color: "#6e7681", marginLeft: 12 }}>Next text in 2s...</span>}
+              </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
-                <div><div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em" }}>FINAL WPM</div><div style={{ fontSize: 30, fontWeight: 700, color: "#58a6ff", fontFamily: "'JetBrains Mono', monospace" }}>{completionStats.wpm}</div></div>
-                <div><div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em" }}>ACCURACY</div><div style={{ fontSize: 30, fontWeight: 700, color: parseFloat(completionStats.accuracy) > 95 ? "#3fb950" : "#d29922", fontFamily: "'JetBrains Mono', monospace" }}>{completionStats.accuracy}%</div></div>
-                <div><div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em" }}>ERRORS</div><div style={{ fontSize: 20, fontWeight: 700, color: completionStats.errors > 0 ? "#f85149" : "#3fb950", fontFamily: "'JetBrains Mono', monospace" }}>{completionStats.errors}</div></div>
-                <div><div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em" }}>TIME</div><div style={{ fontSize: 20, fontWeight: 700, color: "#e6edf3", fontFamily: "'JetBrains Mono', monospace" }}>{completionStats.elapsed}m</div></div>
+                <div><div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em" }}>FINAL WPM</div><div style={{ fontSize: 30, fontWeight: 700, color: "#58a6ff", fontFamily: "'JetBrains Mono', monospace" }}>{lastRunStats.wpm}</div></div>
+                <div><div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em" }}>ACCURACY</div><div style={{ fontSize: 30, fontWeight: 700, color: parseFloat(lastRunStats.accuracy) > 95 ? "#3fb950" : "#d29922", fontFamily: "'JetBrains Mono', monospace" }}>{lastRunStats.accuracy}%</div></div>
+                <div><div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em" }}>ERRORS</div><div style={{ fontSize: 20, fontWeight: 700, color: lastRunStats.errors > 0 ? "#f85149" : "#3fb950", fontFamily: "'JetBrains Mono', monospace" }}>{lastRunStats.errors}</div></div>
+                <div><div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em" }}>TIME</div><div style={{ fontSize: 20, fontWeight: 700, color: "#e6edf3", fontFamily: "'JetBrains Mono', monospace" }}>{lastRunStats.elapsed}m</div></div>
               </div>
               {wpmHistory.length > 3 && (
                 <div style={{ marginBottom: 20 }}>
@@ -968,22 +962,21 @@ export default function TypingTutor() {
                   </div>
                 </div>
               )}
-              {sessionHistory.length > 0 && (
+              {sessionHistory.length > 1 && (
                 <div style={{ marginBottom: 20 }}>
-                  <div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em", marginBottom: 6 }}>SESSION LOG</div>
-                  {sessionHistory.slice(-5).reverse().map((s, i) => (
-                    <div key={i} style={{ fontSize: 11, color: "#8b949e", marginBottom: 2 }}>{s.time} / {s.mode} / {s.wpm} wpm / {s.accuracy}% / {s.chars} ch</div>
+                  <div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em", marginBottom: 6 }}>RECENT RUNS</div>
+                  {sessionHistory.slice(-6).reverse().map((s, i) => (
+                    <div key={i} style={{ fontSize: 10, color: i === 0 ? "#e6edf3" : "#6e7681", marginBottom: 2, fontWeight: i === 0 ? 500 : 400 }}>{s.time} / {s.mode} / {s.wpm}wpm / {s.accuracy}% / {s.chars}ch / {s.elapsed}m</div>
                   ))}
                 </div>
               )}
-              <div style={{ display: "flex", gap: 6 }}>
-                <button className="tb tp" onClick={() => loadText()}>New Text</button>
-                <button className="tb" onClick={() => loadText("adaptive")}>Practice Weaknesses</button>
-              </div>
+              {!autoLoad && (
+                <div style={{ display: "flex", gap: 6 }}>
+                  <button className="tb tp" onClick={() => loadText()}>New Text</button>
+                  <button className="tb" onClick={() => loadText("adaptive")}>Practice Weaknesses</button>
+                </div>
+              )}
             </div>
-          )}
-          {isComplete && autoLoad && (
-            <div style={{ color: "#6e7681", fontSize: 13, textAlign: "center", marginTop: 40 }}>Loading next text...</div>
           )}
           {!loading && text.length > 0 && !isComplete && cursorPos === 0 && (
             <div style={{ position: "absolute", bottom: 12, left: 28, right: 28, fontSize: 11, color: "#484f58", textAlign: "center" }}>Click here and start typing. Backspace to correct.</div>
@@ -998,7 +991,7 @@ export default function TypingTutor() {
             <button style={tabSt(sideTab === "detail")} onClick={() => setSideTab("detail")}>DETAIL</button>
           </div>
           <div style={{ flex: 1, overflowY: "auto", padding: "10px 12px" }}>
-            {sideTab === "live" && <LivePanel keystrokes={keystrokes} errors={errors} startTime={startTime} cursorPos={cursorPos} text={text} currentStreak={currentStreak} bestStreak={bestStreak} wpmHistory={wpmHistory} />}
+            {sideTab === "live" && <LivePanel keystrokes={keystrokes} errors={errors} startTime={startTime} cursorPos={cursorPos} text={text} currentStreak={currentStreak} bestStreak={bestStreak} wpmHistory={wpmHistory} sessionHistory={sessionHistory} />}
             {sideTab === "weak" && <><WeakPanel ngramData={ngramData} wordErrors={wordErrors} /><KeyboardHeatmap layout={layout} ngramData={ngramData} /></>}
             {sideTab === "detail" && <DetailPanel charAccuracy={charAccuracy} keystrokeTimes={ksTimesRef.current} wpmHistory={wpmHistory} layout={layout} alphaSpeeds={alphaSpeeds} />}
           </div>

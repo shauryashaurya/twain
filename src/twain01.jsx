@@ -368,7 +368,7 @@ function WeaknessPanel({ ngramData, wordErrors }) {
   );
 }
 
-export default function TypingTutor() {
+export default function MarkTwain() {
   const [mode, setMode] = useState("wikipedia");
   const [layout, setLayout] = useState("qwerty");
   const [codeLang, setCodeLang] = useState("python");
