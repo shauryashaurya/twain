@@ -1,56 +1,64 @@
+// pretty unpretty code all here... 
+// just proof I guess that I can still JavaScript my way out of a browser.
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { LineChart, Line, ResponsiveContainer, YAxis } from "recharts";
 
-// -- KEYBOARD LAYOUTS --
+// KEYBOARD LAYOUTS
+// watch me start things off by hardcoding everything. 
+// because your mama...
 const LAYOUTS = {
   qwerty: {
     name: "QWERTY",
     rows: [
-      ["`","1","2","3","4","5","6","7","8","9","0","-","="],
-      ["q","w","e","r","t","y","u","i","o","p","[","]","\\"],
-      ["a","s","d","f","g","h","j","k","l",";","'"],
-      ["z","x","c","v","b","n","m",",",".","/"]
+      ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
+      ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\"],
+      ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'"],
+      ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"]
     ],
     fingerMap: {
-      "`":"L4","1":"L4","2":"L3","3":"L2","4":"L1","5":"L1","6":"R1","7":"R1","8":"R2","9":"R3","0":"R4","-":"R4","=":"R4",
-      q:"L4",w:"L3",e:"L2",r:"L1",t:"L1",y:"R1",u:"R1",i:"R2",o:"R3",p:"R4","[":"R4","]":"R4","\\":"R4",
-      a:"L4",s:"L3",d:"L2",f:"L1",g:"L1",h:"R1",j:"R1",k:"R2",l:"R3",";":"R4","'":"R4",
-      z:"L4",x:"L3",c:"L2",v:"L1",b:"L1",n:"R1",m:"R1",",":"R2",".":"R3","/":"R4"," ":"T0"
+      "`": "L4", "1": "L4", "2": "L3", "3": "L2", "4": "L1", "5": "L1", "6": "R1", "7": "R1", "8": "R2", "9": "R3", "0": "R4", "-": "R4", "=": "R4",
+      q: "L4", w: "L3", e: "L2", r: "L1", t: "L1", y: "R1", u: "R1", i: "R2", o: "R3", p: "R4", "[": "R4", "]": "R4", "\\": "R4",
+      a: "L4", s: "L3", d: "L2", f: "L1", g: "L1", h: "R1", j: "R1", k: "R2", l: "R3", ";": "R4", "'": "R4",
+      z: "L4", x: "L3", c: "L2", v: "L1", b: "L1", n: "R1", m: "R1", ",": "R2", ".": "R3", "/": "R4", " ": "T0"
     }
   },
   dvorak: {
     name: "Dvorak",
     rows: [
-      ["`","1","2","3","4","5","6","7","8","9","0","[","]"],
-      ["'",",",".","p","y","f","g","c","r","l","/","=","\\"],
-      ["a","o","e","u","i","d","h","t","n","s","-"],
-      [";","q","j","k","x","b","m","w","v","z"]
+      ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "[", "]"],
+      ["'", ",", ".", "p", "y", "f", "g", "c", "r", "l", "/", "=", "\\"],
+      ["a", "o", "e", "u", "i", "d", "h", "t", "n", "s", "-"],
+      [";", "q", "j", "k", "x", "b", "m", "w", "v", "z"]
     ],
     fingerMap: {
-      "`":"L4","1":"L4","2":"L3","3":"L2","4":"L1","5":"L1","6":"R1","7":"R1","8":"R2","9":"R3","0":"R4","[":"R4","]":"R4",
-      "'":"L4",",":"L3",".":"L2",p:"L1",y:"L1",f:"R1",g:"R1",c:"R2",r:"R3",l:"R4","/":"R4","=":"R4","\\":"R4",
-      a:"L4",o:"L3",e:"L2",u:"L1",i:"L1",d:"R1",h:"R1",t:"R2",n:"R3",s:"R4","-":"R4",
-      ";":"L4",q:"L3",j:"L2",k:"L1",x:"L1",b:"R1",m:"R1",w:"R2",v:"R3",z:"R4"," ":"T0"
+      "`": "L4", "1": "L4", "2": "L3", "3": "L2", "4": "L1", "5": "L1", "6": "R1", "7": "R1", "8": "R2", "9": "R3", "0": "R4", "[": "R4", "]": "R4",
+      "'": "L4", ",": "L3", ".": "L2", p: "L1", y: "L1", f: "R1", g: "R1", c: "R2", r: "R3", l: "R4", "/": "R4", "=": "R4", "\\": "R4",
+      a: "L4", o: "L3", e: "L2", u: "L1", i: "L1", d: "R1", h: "R1", t: "R2", n: "R3", s: "R4", "-": "R4",
+      ";": "L4", q: "L3", j: "L2", k: "L1", x: "L1", b: "R1", m: "R1", w: "R2", v: "R3", z: "R4", " ": "T0"
     }
   },
   colemak: {
     name: "Colemak",
     rows: [
-      ["`","1","2","3","4","5","6","7","8","9","0","-","="],
-      ["q","w","f","p","g","j","l","u","y",";","[","]","\\"],
-      ["a","r","s","t","d","h","n","e","i","o","'"],
-      ["z","x","c","v","b","k","m",",",".","/"]
+      ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
+      ["q", "w", "f", "p", "g", "j", "l", "u", "y", ";", "[", "]", "\\"],
+      ["a", "r", "s", "t", "d", "h", "n", "e", "i", "o", "'"],
+      ["z", "x", "c", "v", "b", "k", "m", ",", ".", "/"]
     ],
     fingerMap: {
-      "`":"L4","1":"L4","2":"L3","3":"L2","4":"L1","5":"L1","6":"R1","7":"R1","8":"R2","9":"R3","0":"R4","-":"R4","=":"R4",
-      q:"L4",w:"L3",f:"L2",p:"L1",g:"L1",j:"R1",l:"R1",u:"R2",y:"R3",";":"R4","[":"R4","]":"R4","\\":"R4",
-      a:"L4",r:"L3",s:"L2",t:"L1",d:"L1",h:"R1",n:"R1",e:"R2",i:"R3",o:"R4","'":"R4",
-      z:"L4",x:"L3",c:"L2",v:"L1",b:"L1",k:"R1",m:"R1",",":"R2",".":"R3","/":"R4"," ":"T0"
+      "`": "L4", "1": "L4", "2": "L3", "3": "L2", "4": "L1", "5": "L1", "6": "R1", "7": "R1", "8": "R2", "9": "R3", "0": "R4", "-": "R4", "=": "R4",
+      q: "L4", w: "L3", f: "L2", p: "L1", g: "L1", j: "R1", l: "R1", u: "R2", y: "R3", ";": "R4", "[": "R4", "]": "R4", "\\": "R4",
+      a: "L4", r: "L3", s: "L2", t: "L1", d: "L1", h: "R1", n: "R1", e: "R2", i: "R3", o: "R4", "'": "R4",
+      z: "L4", x: "L3", c: "L2", v: "L1", b: "L1", k: "R1", m: "R1", ",": "R2", ".": "R3", "/": "R4", " ": "T0"
     }
   }
 };
 
-// -- WORD LISTS --
+//  WORD LISTS 
+// Benford’s Law but for words...
+// this is supposed to work for all languages...
+// TODO: fine and add words from other languages.
+// TODO: better yet, make it a dynamic list (based on what???)
 const WORD_LISTS = {
   "English (UK)": "the be to of and a in that have i it for not on with he as you do at this but his by from they we say her she or an will my one all would there their what so up out if about who get which go me when make can like time no just him know take people into year your good some could them see other than then now look only come its over think also back after use two how our work first well way even new want because any these give day most us great between need large under never should very through world still must before found here thing many right being another much three number water question always each national important different something thought possible together children without development government community problem system programme company information technology experience change performance understanding significant environment management production research education international following particular everything available political economic application organisation responsibility traditional breakfast strength beautiful practice structure establish challenge knowledge previous character situation demonstrate recognise themselves behaviour colour favour labour neighbour honour endeavour analyse catalogue centre fibre litre metre theatre defence licence offence pretence advise organise specialise realise emphasise apologise characterise summarise criticise advertise compromise exercise surprise otherwise enterprise promise purpose course source force service office notice evidence silence distance importance difference conference reference influence presence independence audience consequence intelligence science patience existence instance assistance appearance insurance resistance assurance circumstance maintenance accordance significance surveillance grievance tolerance substance endurance ignorance compliance acceptance admittance abundance reluctance attendance resemblance interference perseverance acquaintance inheritance temperance furtherance utterance disturbance forbearance remembrance observance continuance".split(" "),
   "French": "le la de un une et est il elle que ne pas en au du des les dans pour qui ce sur se son tout avec mais comme aussi que leur bien lui sans fait plus deux peut meme alors nous rien encore tous quand pendant dire cela moins depuis avec savoir venir homme monde temps vie main jour femme pays bon grand petit nouveau faire aller voir vouloir donner prendre trouver parler entre premier chose fois dernier long peu jeune beau vieux haut noir blanc gros fort droit ancien seul propre ici rien toujours tant assez chaque jamais vers point loin dessus vraiment tard trop ensemble penser comprendre devenir croire mettre sentir ouvrir montrer garder tomber revenir entendre passer partir suivre tenir porter rester perdre lever finir poser servir paraitre sembler commencer jouer sortir vivre ecrire entrer lire manger dormir courir mourir".split(" "),
@@ -59,7 +67,10 @@ const WORD_LISTS = {
   "Portuguese": "de a o que e do da em um para com nao uma os no se na por mais as dos como mas ao ele das tem seu sua ou quando muito nos ja eu tambem so pelo pela ate isso ela entre depois sem mesmo aos seus quem nas meu esse eles voce essa num nem suas minha ter sido tinha eram muito depois anos governo dia tempo alguns vez conta pode parte sobre ser fazer grande ainda casa mundo homem estado forma novo fim grupo pais caso coisa cada cidade porque ano pessoa trabalho vezes problema durante sempre dizer dar bem mesmo outro aqui onde ficar ir vir querer poder dever saber ver deixar parecer passar chegar levar seguir encontrar falar pensar olhar perguntar".split(" ")
 };
 
-// -- SPECIAL CHAR EXERCISES --
+// SPECIAL CHAR EXERCISES
+// because these are what make typing suck...
+// esp when you are quickly trying to make stuff work for passwords
+// you did not hear it from me...
 const SPECIAL_CHAR_SETS = [
   'price: $49.99 (save 20%) -- limited offer!',
   'email: user@domain.com; cc: admin@host.org',
@@ -90,7 +101,11 @@ const SPECIAL_CHAR_SETS = [
   'switch (key) { case "a": break; default: return; }'
 ];
 
-// -- FALLBACK TEXTS --
+// FALLBACK TEXTS
+// Imagine you are on a flight, and too poor to buy addl internet
+// but still want to type faster when you land
+// than you could when you took off...
+// TODO: Add more here, for more languages...
 const FALLBACK_TEXTS = {
   wikipedia: [
     "The history of computing is longer than the history of computing hardware and modern computing technology and includes the history of methods intended for pen and paper or for chalk and slate, with or without the aid of tables. The timeline of computing presents events in the history of computing organised by year and grouped into six topic areas: predictions and concepts, first use and inventions, hardware systems and processors, operating systems, programming languages, and new application areas.",
@@ -106,7 +121,8 @@ const FALLBACK_TEXTS = {
   }
 };
 
-// -- UTILITIES --
+// UTILITIES
+// ...worship my nuts.
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -130,8 +146,11 @@ function updateNgramData(prev, text, pos, isError) {
   return updated;
 }
 
+// TODO: pay more attention when writing code
+// TODO: do it please
 function updateAlphaSpeeds(prev, times) {
-  // called with the full keystroke times array; computes running n-gram speed data for alpha-only sequences
+  // called with the full keystroke times array
+  // computes running n-gram speed data for alpha-only sequences
   // we process only the tail (new entries since last update)
   if (times.length < 2) return prev;
   const updated = { ...prev };
@@ -169,6 +188,7 @@ function getWeakNgrams(ngramData, minAttempts, limit) {
 
 function generateAdaptiveText(ngramData) {
   const weakNgrams = getWeakNgrams(ngramData, 3, 10);
+  // watch me write polite messages...
   if (weakNgrams.length === 0) return "Keep practising to build your weakness profile. The system needs more typing data to generate targeted exercises for you.";
   const allWords = WORD_LISTS["English (UK)"];
   const practiceWords = [];
@@ -222,6 +242,8 @@ function truncateToLines(text, lineCount) {
   return lines.slice(0, lineCount).join("\n");
 }
 
+// grab the summary from a random wikipedia page
+// TODO: test - what happens when I select 100 lines and the summary is less than 100 lines?
 async function fetchWikipedia() {
   try {
     const res = await fetch("https://en.wikipedia.org/api/rest_v1/page/random/summary");
@@ -234,6 +256,10 @@ async function fetchWikipedia() {
   }
 }
 
+// TODO: test - test and fix the same thing as wikipedia
+// TODO: ability to select different languages
+// TODO: can we tie it to TIOBE or sth? 
+// So the non-vibe-code old skool ones can still practice syntax for any language (or at least most popular ones or upcoming ones)?
 async function fetchGithubCode(language) {
   try {
     const ext = { python: "py", javascript: "js", typescript: "ts", rust: "rs", go: "go" };
@@ -258,7 +284,7 @@ async function fetchGithubCode(language) {
   }
 }
 
-// -- ANALYTICS --
+//  ANALYTICS 
 const FINGER_LABELS = { L4: "L Pinky", L3: "L Ring", L2: "L Middle", L1: "L Index", R1: "R Index", R2: "R Middle", R3: "R Ring", R4: "R Pinky", T0: "Thumb" };
 
 function computeFingerStats(charAccuracy, layout) {
@@ -340,7 +366,7 @@ function getSlowestAlphaNgrams(alphaSpeeds, n, limit) {
     .slice(0, limit || 8);
 }
 
-// -- SUB-COMPONENTS --
+//  SUB-COMPONENTS 
 function KeyboardHeatmap({ layout, ngramData }) {
   const ld = LAYOUTS[layout];
   const ke = getKeyErrorRates(ngramData);
@@ -376,6 +402,14 @@ function KeyboardHeatmap({ layout, ngramData }) {
   );
 }
 
+// Sigh!
+// Watch me write HTML and fail
+// Question all my life choices...
+// Is it me or is browser life still cumbersome and boring in 2026???
+// Fuck this for not being easy to code...
+// half the HTML / Javascript ecosystem is basically busy apologizing for how cumbersome and unpredictable HTML+CSS+JS outcomes are for all the various targets.
+// It's actually worse than trying to target C programs for multiple platforms...
+// I have to stop ranting.
 function LivePanel({ keystrokes, errors, startTime, cursorPos, text, currentStreak, bestStreak, wpmHistory }) {
   const elapsed = startTime ? (Date.now() - startTime) / 60000 : 0;
   const wpm = elapsed > 0 ? Math.round((cursorPos / 5) / elapsed) : 0;
@@ -485,7 +519,7 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSp
       {Object.keys(fingerStats).length > 0 && (
         <div style={SM}>
           <div style={SL}>PER FINGER</div>
-          {["L4","L3","L2","L1","R1","R2","R3","R4"].map(f => {
+          {["L4", "L3", "L2", "L1", "R1", "R2", "R3", "R4"].map(f => {
             const d = fingerStats[f];
             if (!d) return null;
             return <div key={f} style={SR}><span style={{ color: "#c9d1d9" }}>{FINGER_LABELS[f]}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>;
@@ -555,7 +589,7 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSp
   );
 }
 
-// -- MAIN --
+//  MAIN 
 export default function TypingTutor() {
   const [mode, setMode] = useState("wikipedia");
   const [layout, setLayout] = useState("qwerty");
@@ -789,6 +823,7 @@ export default function TypingTutor() {
 
   useEffect(() => { if (containerRef.current) containerRef.current.focus(); }, [text, loading]);
 
+  // le laddoo BC...
   const renderText = useMemo(() => {
     if (text.length === 0) return null;
     const lines = [];

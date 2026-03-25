@@ -1,7 +1,11 @@
+// pretty unpretty code all here... 
+// just proof I guess that I can still JavaScript my way out of a browser.
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { LineChart, Line, ResponsiveContainer, YAxis } from "recharts";
 
-// -- KEYBOARD LAYOUTS (full rows including number/symbol row) --
+// KEYBOARD LAYOUTS
+// watch me start things off by hardcoding everything. 
+// because your mama...
 const LAYOUTS = {
   qwerty: {
     name: "QWERTY",
@@ -15,12 +19,7 @@ const LAYOUTS = {
       "`": "L4", "1": "L4", "2": "L3", "3": "L2", "4": "L1", "5": "L1", "6": "R1", "7": "R1", "8": "R2", "9": "R3", "0": "R4", "-": "R4", "=": "R4",
       q: "L4", w: "L3", e: "L2", r: "L1", t: "L1", y: "R1", u: "R1", i: "R2", o: "R3", p: "R4", "[": "R4", "]": "R4", "\\": "R4",
       a: "L4", s: "L3", d: "L2", f: "L1", g: "L1", h: "R1", j: "R1", k: "R2", l: "R3", ";": "R4", "'": "R4",
-      z: "L4", x: "L3", c: "L2", v: "L1", b: "L1", n: "R1", m: "R1", ",": "R2", ".": "R3", "/": "R4",
-      " ": "T0"
-    },
-    shiftMap: {
-      "`": "~", "1": "!", "2": "@", "3": "#", "4": "$", "5": "%", "6": "^", "7": "&", "8": "*", "9": "(", "0": ")", "-": "_", "=": "+",
-      "[": "{", "]": "}", "\\": "|", ";": ":", "'": "\"", ",": "<", ".": ">", "/": "?"
+      z: "L4", x: "L3", c: "L2", v: "L1", b: "L1", n: "R1", m: "R1", ",": "R2", ".": "R3", "/": "R4", " ": "T0"
     }
   },
   dvorak: {
@@ -35,12 +34,7 @@ const LAYOUTS = {
       "`": "L4", "1": "L4", "2": "L3", "3": "L2", "4": "L1", "5": "L1", "6": "R1", "7": "R1", "8": "R2", "9": "R3", "0": "R4", "[": "R4", "]": "R4",
       "'": "L4", ",": "L3", ".": "L2", p: "L1", y: "L1", f: "R1", g: "R1", c: "R2", r: "R3", l: "R4", "/": "R4", "=": "R4", "\\": "R4",
       a: "L4", o: "L3", e: "L2", u: "L1", i: "L1", d: "R1", h: "R1", t: "R2", n: "R3", s: "R4", "-": "R4",
-      ";": "L4", q: "L3", j: "L2", k: "L1", x: "L1", b: "R1", m: "R1", w: "R2", v: "R3", z: "R4",
-      " ": "T0"
-    },
-    shiftMap: {
-      "`": "~", "1": "!", "2": "@", "3": "#", "4": "$", "5": "%", "6": "^", "7": "&", "8": "*", "9": "(", "0": ")",
-      "[": "{", "]": "}", "/": "?", "=": "+", "\\": "|", "-": "_", "'": "\"", ",": "<", ".": ">", ";": ":"
+      ";": "L4", q: "L3", j: "L2", k: "L1", x: "L1", b: "R1", m: "R1", w: "R2", v: "R3", z: "R4", " ": "T0"
     }
   },
   colemak: {
@@ -55,17 +49,16 @@ const LAYOUTS = {
       "`": "L4", "1": "L4", "2": "L3", "3": "L2", "4": "L1", "5": "L1", "6": "R1", "7": "R1", "8": "R2", "9": "R3", "0": "R4", "-": "R4", "=": "R4",
       q: "L4", w: "L3", f: "L2", p: "L1", g: "L1", j: "R1", l: "R1", u: "R2", y: "R3", ";": "R4", "[": "R4", "]": "R4", "\\": "R4",
       a: "L4", r: "L3", s: "L2", t: "L1", d: "L1", h: "R1", n: "R1", e: "R2", i: "R3", o: "R4", "'": "R4",
-      z: "L4", x: "L3", c: "L2", v: "L1", b: "L1", k: "R1", m: "R1", ",": "R2", ".": "R3", "/": "R4",
-      " ": "T0"
-    },
-    shiftMap: {
-      "`": "~", "1": "!", "2": "@", "3": "#", "4": "$", "5": "%", "6": "^", "7": "&", "8": "*", "9": "(", "0": ")", "-": "_", "=": "+",
-      "[": "{", "]": "}", "\\": "|", ";": ":", "'": "\"", ",": "<", ".": ">", "/": "?"
+      z: "L4", x: "L3", c: "L2", v: "L1", b: "L1", k: "R1", m: "R1", ",": "R2", ".": "R3", "/": "R4", " ": "T0"
     }
   }
 };
 
-// -- COMMON WORD LISTS --
+//  WORD LISTS 
+// Benford’s Law but for words...
+// this is supposed to work for all languages...
+// TODO: fine and add words from other languages.
+// TODO: better yet, make it a dynamic list (based on what???)
 const WORD_LISTS = {
   "English (UK)": "the be to of and a in that have i it for not on with he as you do at this but his by from they we say her she or an will my one all would there their what so up out if about who get which go me when make can like time no just him know take people into year your good some could them see other than then now look only come its over think also back after use two how our work first well way even new want because any these give day most us great between need large under never should very through world still must before found here thing many right being another much three number water question always each national important different something thought possible together children without development government community problem system programme company information technology experience change performance understanding significant environment management production research education international following particular everything available political economic application organisation responsibility traditional breakfast strength beautiful practice structure establish challenge knowledge previous character situation demonstrate recognise themselves behaviour colour favour labour neighbour honour endeavour analyse catalogue centre fibre litre metre theatre defence licence offence pretence advise organise specialise realise emphasise apologise characterise summarise criticise advertise compromise exercise surprise otherwise enterprise promise purpose course source force service office notice evidence silence distance importance difference conference reference influence presence independence audience consequence intelligence science patience existence instance assistance appearance insurance resistance assurance circumstance maintenance accordance significance surveillance grievance tolerance substance endurance ignorance compliance acceptance admittance abundance reluctance attendance resemblance interference perseverance acquaintance inheritance temperance furtherance utterance disturbance forbearance remembrance observance continuance".split(" "),
   "French": "le la de un une et est il elle que ne pas en au du des les dans pour qui ce sur se son tout avec mais comme aussi que leur bien lui sans fait plus deux peut meme alors nous rien encore tous quand pendant dire cela moins depuis avec savoir venir homme monde temps vie main jour femme pays bon grand petit nouveau faire aller voir vouloir donner prendre trouver parler entre premier chose fois dernier long peu jeune beau vieux haut noir blanc gros fort droit ancien seul propre ici rien toujours tant assez chaque jamais vers point loin dessus vraiment tard trop ensemble penser comprendre devenir croire mettre sentir ouvrir montrer garder tomber revenir entendre passer partir suivre tenir porter rester perdre lever finir poser servir paraitre sembler commencer jouer sortir vivre ecrire entrer lire manger dormir courir mourir".split(" "),
@@ -74,7 +67,10 @@ const WORD_LISTS = {
   "Portuguese": "de a o que e do da em um para com nao uma os no se na por mais as dos como mas ao ele das tem seu sua ou quando muito nos ja eu tambem so pelo pela ate isso ela entre depois sem mesmo aos seus quem nas meu esse eles voce essa num nem suas minha ter sido tinha eram muito depois anos governo dia tempo alguns vez conta pode parte sobre ser fazer grande ainda casa mundo homem estado forma novo fim grupo pais caso coisa cada cidade porque ano pessoa trabalho vezes problema durante sempre dizer dar bem mesmo outro aqui onde ficar ir vir querer poder dever saber ver deixar parecer passar chegar levar seguir encontrar falar pensar olhar perguntar".split(" ")
 };
 
-// -- SPECIAL CHARACTER EXERCISES --
+// SPECIAL CHAR EXERCISES
+// because these are what make typing suck...
+// esp when you are quickly trying to make stuff work for passwords
+// you did not hear it from me...
 const SPECIAL_CHAR_SETS = [
   'price: $49.99 (save 20%) -- limited offer!',
   'email: user@domain.com; cc: admin@host.org',
@@ -105,7 +101,11 @@ const SPECIAL_CHAR_SETS = [
   'switch (key) { case "a": break; default: return; }'
 ];
 
-// -- FALLBACK TEXTS --
+// FALLBACK TEXTS
+// Imagine you are on a flight, and too poor to buy addl internet
+// but still want to type faster when you land
+// than you could when you took off...
+// TODO: Add more here, for more languages...
 const FALLBACK_TEXTS = {
   wikipedia: [
     "The history of computing is longer than the history of computing hardware and modern computing technology and includes the history of methods intended for pen and paper or for chalk and slate, with or without the aid of tables. The timeline of computing presents events in the history of computing organised by year and grouped into six topic areas: predictions and concepts, first use and inventions, hardware systems and processors, operating systems, programming languages, and new application areas.",
@@ -121,7 +121,8 @@ const FALLBACK_TEXTS = {
   }
 };
 
-// -- UTILITIES --
+// UTILITIES
+// ...worship my nuts.
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -129,6 +130,8 @@ function shuffle(arr) {
   }
   return arr;
 }
+
+const ALPHA = /^[a-z]+$/;
 
 function updateNgramData(prev, text, pos, isError) {
   const updated = { ...prev };
@@ -143,6 +146,38 @@ function updateNgramData(prev, text, pos, isError) {
   return updated;
 }
 
+// TODO: pay more attention when writing code
+// TODO: do it please
+function updateAlphaSpeeds(prev, times) {
+  // called with the full keystroke times array
+  // computes running n-gram speed data for alpha-only sequences
+  // we process only the tail (new entries since last update)
+  if (times.length < 2) return prev;
+  const updated = { ...prev };
+  // only look at last keystroke pair
+  const idx = times.length - 1;
+  const curr = times[idx];
+  const delta = curr.time - times[idx - 1].time;
+  if (delta > 2000 || delta < 10) return updated;
+
+  for (let n = 2; n <= 4; n++) {
+    if (idx < n - 1) continue;
+    let gram = "";
+    let valid = true;
+    let totalDelta = 0;
+    for (let k = idx - n + 1; k <= idx; k++) {
+      const ch = times[k].char.toLowerCase();
+      if (!ALPHA.test(ch)) { valid = false; break; }
+      gram += ch;
+      if (k > idx - n + 1) totalDelta += times[k].time - times[k - 1].time;
+    }
+    if (!valid || gram.length !== n) continue;
+    if (!updated[gram]) updated[gram] = { totalMs: 0, count: 0 };
+    updated[gram] = { totalMs: updated[gram].totalMs + totalDelta, count: updated[gram].count + 1 };
+  }
+  return updated;
+}
+
 function getWeakNgrams(ngramData, minAttempts, limit) {
   return Object.entries(ngramData)
     .filter(([_, d]) => d.attempts >= (minAttempts || 3))
@@ -153,6 +188,7 @@ function getWeakNgrams(ngramData, minAttempts, limit) {
 
 function generateAdaptiveText(ngramData) {
   const weakNgrams = getWeakNgrams(ngramData, 3, 10);
+  // watch me write polite messages...
   if (weakNgrams.length === 0) return "Keep practising to build your weakness profile. The system needs more typing data to generate targeted exercises for you.";
   const allWords = WORD_LISTS["English (UK)"];
   const practiceWords = [];
@@ -160,9 +196,7 @@ function generateAdaptiveText(ngramData) {
     const matching = allWords.filter(w => w.includes(ngram));
     practiceWords.push(...matching.slice(0, 4));
   }
-  if (practiceWords.length === 0) {
-    return shuffle(weakNgrams.map(w => w.ngram)).join(" ").repeat(5).trim();
-  }
+  if (practiceWords.length === 0) return shuffle(weakNgrams.map(w => w.ngram)).join(" ").repeat(5).trim();
   const unique = [...new Set(practiceWords)];
   shuffle(unique);
   let text = "";
@@ -171,18 +205,45 @@ function generateAdaptiveText(ngramData) {
   return text.trim();
 }
 
-function generateCommonWordsText(language, count) {
+function wrapToLines(text, lineCount, charsPerLine) {
+  // for prose modes: wrap text into lines of approximately charsPerLine chars, return lineCount lines
+  const words = text.split(/\s+/);
+  const lines = [];
+  let current = "";
+  for (const w of words) {
+    if (current.length > 0 && current.length + 1 + w.length > charsPerLine) {
+      lines.push(current);
+      current = w;
+    } else {
+      current = current.length > 0 ? current + " " + w : w;
+    }
+  }
+  if (current.length > 0) lines.push(current);
+  return lines.slice(0, lineCount).join("\n");
+}
+
+function generateCommonWordsText(language, count, lineCount) {
   const words = WORD_LISTS[language] || WORD_LISTS["English (UK)"];
   const pool = words.slice(0, Math.min(count, words.length));
+  // generate enough words for the requested lines (roughly 10 words per line)
+  const needed = lineCount * 10;
   const selected = [];
-  for (let i = 0; i < Math.min(count, 80); i++) selected.push(pool[Math.floor(Math.random() * pool.length)]);
-  return selected.join(" ");
+  for (let i = 0; i < needed; i++) selected.push(pool[Math.floor(Math.random() * pool.length)]);
+  const raw = selected.join(" ");
+  return wrapToLines(raw, lineCount, 65);
 }
 
-function generateSpecialCharText() {
-  return shuffle([...SPECIAL_CHAR_SETS]).slice(0, 6).join("\n");
+function generateSpecialCharText(lineCount) {
+  return shuffle([...SPECIAL_CHAR_SETS]).slice(0, Math.min(lineCount, SPECIAL_CHAR_SETS.length)).join("\n");
 }
 
+function truncateToLines(text, lineCount) {
+  const lines = text.split("\n");
+  return lines.slice(0, lineCount).join("\n");
+}
+
+// grab the summary from a random wikipedia page
+// TODO: test - what happens when I select 100 lines and the summary is less than 100 lines?
 async function fetchWikipedia() {
   try {
     const res = await fetch("https://en.wikipedia.org/api/rest_v1/page/random/summary");
@@ -195,6 +256,10 @@ async function fetchWikipedia() {
   }
 }
 
+// TODO: test - test and fix the same thing as wikipedia
+// TODO: ability to select different languages
+// TODO: can we tie it to TIOBE or sth? 
+// So the non-vibe-code old skool ones can still practice syntax for any language (or at least most popular ones or upcoming ones)?
 async function fetchGithubCode(language) {
   try {
     const ext = { python: "py", javascript: "js", typescript: "ts", rust: "rs", go: "go" };
@@ -206,20 +271,20 @@ async function fetchGithubCode(language) {
     const r2 = await fetch(`https://api.github.com/repos/${repo.full_name}/git/trees/${repo.default_branch}?recursive=1`);
     if (!r2.ok) throw new Error("tree");
     const d2 = await r2.json();
-    const files = (d2.tree || []).filter(f => f.type === "blob" && f.path.endsWith("." + (ext[language] || "py")) && f.size > 200 && f.size < 5000);
+    const files = (d2.tree || []).filter(f => f.type === "blob" && f.path.endsWith("." + (ext[language] || "py")) && f.size > 200 && f.size < 8000);
     if (files.length === 0) throw new Error("nofiles");
     const file = files[Math.floor(Math.random() * files.length)];
     const r3 = await fetch(`https://api.github.com/repos/${repo.full_name}/contents/${file.path}`);
     if (!r3.ok) throw new Error("content");
     const d3 = await r3.json();
     const decoded = atob(d3.content.replace(/\n/g, ""));
-    return { text: decoded.split("\n").slice(0, 30).join("\n"), source: `${repo.full_name}/${file.path}` };
+    return { text: decoded, source: `${repo.full_name}/${file.path}` };
   } catch {
     return { text: FALLBACK_TEXTS.code[language] || FALLBACK_TEXTS.code.python, source: "fallback" };
   }
 }
 
-// -- ANALYTICS --
+//  ANALYTICS 
 const FINGER_LABELS = { L4: "L Pinky", L3: "L Ring", L2: "L Middle", L1: "L Index", R1: "R Index", R2: "R Middle", R3: "R Ring", R4: "R Pinky", T0: "Thumb" };
 
 function computeFingerStats(charAccuracy, layout) {
@@ -293,7 +358,15 @@ function getKeyErrorRates(ngramData) {
   return kd;
 }
 
-// -- SUB-COMPONENTS --
+function getSlowestAlphaNgrams(alphaSpeeds, n, limit) {
+  return Object.entries(alphaSpeeds)
+    .filter(([gram, d]) => gram.length === n && d.count >= 3)
+    .map(([gram, d]) => ({ gram, avg: Math.round(d.totalMs / d.count), count: d.count }))
+    .sort((a, b) => b.avg - a.avg)
+    .slice(0, limit || 8);
+}
+
+//  SUB-COMPONENTS 
 function KeyboardHeatmap({ layout, ngramData }) {
   const ld = LAYOUTS[layout];
   const ke = getKeyErrorRates(ngramData);
@@ -329,6 +402,14 @@ function KeyboardHeatmap({ layout, ngramData }) {
   );
 }
 
+// Sigh!
+// Watch me write HTML and fail
+// Question all my life choices...
+// Is it me or is browser life still cumbersome and boring in 2026???
+// Fuck this for not being easy to code...
+// half the HTML / Javascript ecosystem is basically busy apologizing for how cumbersome and unpredictable HTML+CSS+JS outcomes are for all the various targets.
+// It's actually worse than trying to target C programs for multiple platforms...
+// I have to stop ranting.
 function LivePanel({ keystrokes, errors, startTime, cursorPos, text, currentStreak, bestStreak, wpmHistory }) {
   const elapsed = startTime ? (Date.now() - startTime) / 60000 : 0;
   const wpm = elapsed > 0 ? Math.round((cursorPos / 5) / elapsed) : 0;
@@ -395,13 +476,17 @@ function WeakPanel({ ngramData, wordErrors }) {
   );
 }
 
-function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout }) {
+function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSpeeds }) {
   const fingerStats = computeFingerStats(charAccuracy, layout);
   const handStats = computeHandStats(fingerStats);
   const rowStats = computeRowStats(charAccuracy, layout);
   const bigramSpeeds = computeBigramSpeeds(keystrokeTimes);
   const slowBigrams = Object.entries(bigramSpeeds).sort((a, b) => b[1] - a[1]).slice(0, 8);
   const worstChars = Object.entries(charAccuracy).filter(([_, d]) => d.total >= 3).map(([ch, d]) => ({ ch, rate: d.correct / d.total, total: d.total })).sort((a, b) => a.rate - b.rate).slice(0, 8);
+
+  const slowAlpha2 = getSlowestAlphaNgrams(alphaSpeeds, 2, 8);
+  const slowAlpha3 = getSlowestAlphaNgrams(alphaSpeeds, 3, 6);
+  const slowAlpha4 = getSlowestAlphaNgrams(alphaSpeeds, 4, 5);
 
   const consistency = wpmHistory.length > 3 ? (() => {
     const v = wpmHistory.map(h => h.wpm);
@@ -411,42 +496,50 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout }) {
   })() : null;
 
   const hasData = Object.keys(fingerStats).length > 0 || worstChars.length > 0;
-  if (!hasData) return <div style={{ fontSize: 11, color: "#6e7681" }}>Detailed analytics appear after typing begins.</div>;
+  if (!hasData && slowAlpha2.length === 0) return <div style={{ fontSize: 11, color: "#6e7681" }}>Detailed analytics appear after typing begins.</div>;
 
   const pct = (c, t) => t > 0 ? (c / t * 100).toFixed(1) + "%" : "n/a";
   const pc = (c, t) => { if (t === 0) return "#6e7681"; const r = c / t; return r > 0.95 ? "#3fb950" : r > 0.85 ? "#d29922" : "#f85149"; };
   const SL = { fontSize: 10, color: "#8b949e", marginBottom: 4, letterSpacing: "0.05em" };
   const SR = { display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 2 };
   const SM = { marginBottom: 12 };
+  const msColor = (ms) => ms > 400 ? "#f85149" : ms > 250 ? "#d29922" : "#3fb950";
+  const gramCode = { fontFamily: "'JetBrains Mono', monospace", background: "rgba(255,255,255,0.06)", padding: "0 4px", borderRadius: 2, color: "#e6edf3" };
 
   return (
     <div>
-      <div style={SM}>
-        <div style={SL}>PER HAND</div>
-        {Object.entries(handStats).map(([h, d]) => (
-          <div key={h} style={SR}><span style={{ color: "#c9d1d9" }}>{h}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>
-        ))}
-      </div>
-      <div style={SM}>
-        <div style={SL}>PER FINGER</div>
-        {["L4", "L3", "L2", "L1", "R1", "R2", "R3", "R4"].map(f => {
-          const d = fingerStats[f];
-          if (!d) return null;
-          return <div key={f} style={SR}><span style={{ color: "#c9d1d9" }}>{FINGER_LABELS[f]}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>;
-        })}
-      </div>
-      <div style={SM}>
-        <div style={SL}>PER ROW</div>
-        {Object.entries(rowStats).filter(([_, d]) => d.total > 0).map(([r, d]) => (
-          <div key={r} style={SR}><span style={{ color: "#c9d1d9" }}>{r}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>
-        ))}
-      </div>
+      {Object.keys(handStats).length > 0 && (
+        <div style={SM}>
+          <div style={SL}>PER HAND</div>
+          {Object.entries(handStats).map(([h, d]) => (
+            <div key={h} style={SR}><span style={{ color: "#c9d1d9" }}>{h}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>
+          ))}
+        </div>
+      )}
+      {Object.keys(fingerStats).length > 0 && (
+        <div style={SM}>
+          <div style={SL}>PER FINGER</div>
+          {["L4", "L3", "L2", "L1", "R1", "R2", "R3", "R4"].map(f => {
+            const d = fingerStats[f];
+            if (!d) return null;
+            return <div key={f} style={SR}><span style={{ color: "#c9d1d9" }}>{FINGER_LABELS[f]}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>;
+          })}
+        </div>
+      )}
+      {Object.entries(rowStats).some(([_, d]) => d.total > 0) && (
+        <div style={SM}>
+          <div style={SL}>PER ROW</div>
+          {Object.entries(rowStats).filter(([_, d]) => d.total > 0).map(([r, d]) => (
+            <div key={r} style={SR}><span style={{ color: "#c9d1d9" }}>{r}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>
+          ))}
+        </div>
+      )}
       {worstChars.length > 0 && (
         <div style={SM}>
           <div style={SL}>WEAKEST CHARACTERS</div>
           {worstChars.map(({ ch, rate, total }) => (
             <div key={ch} style={SR}>
-              <code style={{ fontFamily: "'JetBrains Mono', monospace", background: "rgba(255,255,255,0.06)", padding: "0 4px", borderRadius: 2, color: "#e6edf3" }}>{ch === " " ? "space" : ch}</code>
+              <code style={gramCode}>{ch === " " ? "space" : ch}</code>
               <span style={{ color: pc(rate, 1) }}>{(rate * 100).toFixed(0)}% ({total})</span>
             </div>
           ))}
@@ -454,12 +547,33 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout }) {
       )}
       {slowBigrams.length > 0 && (
         <div style={SM}>
-          <div style={SL}>SLOWEST BIGRAMS (avg ms)</div>
+          <div style={SL}>SLOWEST BIGRAMS (all, avg ms)</div>
           {slowBigrams.map(([bg, ms]) => (
-            <div key={bg} style={SR}>
-              <code style={{ fontFamily: "'JetBrains Mono', monospace", background: "rgba(255,255,255,0.06)", padding: "0 4px", borderRadius: 2, color: "#e6edf3" }}>{bg.replace(/ /g, "_")}</code>
-              <span style={{ color: ms > 400 ? "#f85149" : ms > 250 ? "#d29922" : "#3fb950" }}>{ms}ms</span>
-            </div>
+            <div key={bg} style={SR}><code style={gramCode}>{bg.replace(/ /g, "_")}</code><span style={{ color: msColor(ms) }}>{ms}ms</span></div>
+          ))}
+        </div>
+      )}
+      {slowAlpha2.length > 0 && (
+        <div style={SM}>
+          <div style={SL}>SLOWEST ALPHA 2-GRAMS (avg ms)</div>
+          {slowAlpha2.map(({ gram, avg, count }) => (
+            <div key={gram} style={SR}><code style={gramCode}>{gram}</code><span style={{ color: msColor(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>
+          ))}
+        </div>
+      )}
+      {slowAlpha3.length > 0 && (
+        <div style={SM}>
+          <div style={SL}>SLOWEST ALPHA 3-GRAMS (avg ms)</div>
+          {slowAlpha3.map(({ gram, avg, count }) => (
+            <div key={gram} style={SR}><code style={gramCode}>{gram}</code><span style={{ color: msColor(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>
+          ))}
+        </div>
+      )}
+      {slowAlpha4.length > 0 && (
+        <div style={SM}>
+          <div style={SL}>SLOWEST ALPHA 4-GRAMS (avg ms)</div>
+          {slowAlpha4.map(({ gram, avg, count }) => (
+            <div key={gram} style={SR}><code style={gramCode}>{gram}</code><span style={{ color: msColor(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>
           ))}
         </div>
       )}
@@ -475,13 +589,15 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout }) {
   );
 }
 
-// -- MAIN --
+//  MAIN 
 export default function TypingTutor() {
   const [mode, setMode] = useState("wikipedia");
   const [layout, setLayout] = useState("qwerty");
   const [codeLang, setCodeLang] = useState("python");
   const [wordsLang, setWordsLang] = useState("English (UK)");
   const [wordsCount, setWordsCount] = useState(100);
+  const [lineCount, setLineCount] = useState(10);
+  const [autoLoad, setAutoLoad] = useState(false);
   const [text, setText] = useState("");
   const [charStates, setCharStates] = useState([]);
   const [cursorPos, setCursorPos] = useState(0);
@@ -493,6 +609,7 @@ export default function TypingTutor() {
   const [ngramData, setNgramData] = useState({});
   const [wordErrors, setWordErrors] = useState({});
   const [charAccuracy, setCharAccuracy] = useState({});
+  const [alphaSpeeds, setAlphaSpeeds] = useState({});
   const [isComplete, setIsComplete] = useState(false);
   const [loading, setLoading] = useState(false);
   const [wpmHistory, setWpmHistory] = useState([]);
@@ -507,9 +624,13 @@ export default function TypingTutor() {
   const wordErrRef = useRef(false);
   const ksTimesRef = useRef([]);
   const cursorPosRef = useRef(0);
+  const autoLoadRef = useRef(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => { cursorPosRef.current = cursorPos; }, [cursorPos]);
+  useEffect(() => { autoLoadRef.current = autoLoad; }, [autoLoad]);
 
+  // load text (only resets per-text state, preserves cross-session analytics)
   const loadText = useCallback(async (forceMode) => {
     const m = forceMode || mode;
     setLoading(true);
@@ -521,24 +642,35 @@ export default function TypingTutor() {
     setStartTime(null);
     setWpmHistory([]);
     setCodeSource("");
-    setCharAccuracy({});
     ksTimesRef.current = [];
     wordErrRef.current = false;
 
     let newText = "";
-    if (m === "wikipedia") newText = await fetchWikipedia();
-    else if (m === "github") { const r = await fetchGithubCode(codeLang); newText = r.text; setCodeSource(r.source); }
-    else if (m === "adaptive") newText = generateAdaptiveText(ngramData);
-    else if (m === "custom") newText = customText || "Type your custom text here.";
-    else if (m === "common-words") newText = generateCommonWordsText(wordsLang, wordsCount);
-    else if (m === "special-chars") newText = generateSpecialCharText();
+    if (m === "wikipedia") {
+      const raw = await fetchWikipedia();
+      newText = wrapToLines(raw, lineCount, 65);
+    } else if (m === "github") {
+      const r = await fetchGithubCode(codeLang);
+      newText = truncateToLines(r.text, lineCount);
+      setCodeSource(r.source);
+    } else if (m === "adaptive") {
+      const raw = generateAdaptiveText(ngramData);
+      newText = wrapToLines(raw, lineCount, 65);
+    } else if (m === "custom") {
+      const raw = customText || "Type your custom text here.";
+      newText = truncateToLines(raw, lineCount);
+    } else if (m === "common-words") {
+      newText = generateCommonWordsText(wordsLang, wordsCount, lineCount);
+    } else if (m === "special-chars") {
+      newText = generateSpecialCharText(lineCount);
+    }
 
     newText = newText.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
     if (m !== "github") newText = newText.replace(/\t/g, "    ");
     setText(newText);
     setCharStates(new Array(newText.length).fill("untyped"));
     setLoading(false);
-  }, [mode, codeLang, ngramData, customText, wordsLang, wordsCount]);
+  }, [mode, codeLang, ngramData, customText, wordsLang, wordsCount, lineCount]);
 
   useEffect(() => { loadText(); }, []);
   useEffect(() => { if (cursorRef.current) cursorRef.current.scrollIntoView({ block: "center", behavior: "smooth" }); }, [cursorPos]);
@@ -553,12 +685,74 @@ export default function TypingTutor() {
     return () => clearInterval(wpmIntervalRef.current);
   }, [startTime, isComplete]);
 
+  // auto-load on completion
+  useEffect(() => {
+    if (isComplete && autoLoadRef.current) {
+      const timer = setTimeout(() => { loadText(); }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [isComplete, loadText]);
+
   const getCurrentWord = useCallback((pos) => {
     if (pos <= 0 || pos > text.length) return null;
     let start = pos - 1;
     while (start > 0 && /\S/.test(text[start - 1])) start--;
     return text.substring(start, pos).toLowerCase().replace(/[^a-z]/g, "");
   }, [text]);
+
+  // save session data as JSON
+  const handleSave = useCallback(() => {
+    const data = {
+      version: 1,
+      savedAt: new Date().toISOString(),
+      ngramData,
+      wordErrors,
+      charAccuracy,
+      alphaSpeeds,
+      sessionHistory,
+      bestStreak,
+      layout,
+      settings: { mode, codeLang, wordsLang, wordsCount, lineCount, autoLoad }
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "typing-tutor-session-" + new Date().toISOString().slice(0, 10) + ".json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [ngramData, wordErrors, charAccuracy, alphaSpeeds, sessionHistory, bestStreak, layout, mode, codeLang, wordsLang, wordsCount, lineCount, autoLoad]);
+
+  // load session data from JSON
+  const handleLoad = useCallback((e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (data.ngramData) setNgramData(data.ngramData);
+        if (data.wordErrors) setWordErrors(data.wordErrors);
+        if (data.charAccuracy) setCharAccuracy(data.charAccuracy);
+        if (data.alphaSpeeds) setAlphaSpeeds(data.alphaSpeeds);
+        if (data.sessionHistory) setSessionHistory(data.sessionHistory);
+        if (data.bestStreak) setBestStreak(data.bestStreak);
+        if (data.layout) setLayout(data.layout);
+        if (data.settings) {
+          if (data.settings.mode) setMode(data.settings.mode);
+          if (data.settings.codeLang) setCodeLang(data.settings.codeLang);
+          if (data.settings.wordsLang) setWordsLang(data.settings.wordsLang);
+          if (data.settings.wordsCount) setWordsCount(data.settings.wordsCount);
+          if (data.settings.lineCount) setLineCount(data.settings.lineCount);
+          if (data.settings.autoLoad !== undefined) setAutoLoad(data.settings.autoLoad);
+        }
+      } catch {
+        // silently ignore bad files
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  }, []);
 
   const handleKeyDown = useCallback((e) => {
     if (isComplete || loading || text.length === 0) return;
@@ -586,10 +780,15 @@ export default function TypingTutor() {
 
     ksTimesRef.current.push({ char: inputChar, time: Date.now() });
     setKeystrokes(prev => prev + 1);
+
+    // per-character accuracy (persists across texts)
     setCharAccuracy(prev => {
       const ex = prev[target] || { correct: 0, total: 0 };
       return { ...prev, [target]: { correct: ex.correct + (ok ? 1 : 0), total: ex.total + 1 } };
     });
+
+    // alpha-only speed n-grams (persists across texts)
+    setAlphaSpeeds(prev => updateAlphaSpeeds(prev, ksTimesRef.current));
 
     if (!ok) { setErrors(prev => prev + 1); wordErrRef.current = true; setCurrentStreak(0); }
     else { setCurrentStreak(prev => { const n = prev + 1; setBestStreak(b => Math.max(b, n)); return n; }); }
@@ -624,6 +823,7 @@ export default function TypingTutor() {
 
   useEffect(() => { if (containerRef.current) containerRef.current.focus(); }, [text, loading]);
 
+  // le laddoo BC...
   const renderText = useMemo(() => {
     if (text.length === 0) return null;
     const lines = [];
@@ -676,11 +876,16 @@ export default function TypingTutor() {
         .tp:hover{background:#388bfd}
         .tta{background:#0d1117;color:#c9d1d9;border:1px solid #30363d;border-radius:3px;padding:6px;font-size:12px;font-family:inherit;outline:none;resize:vertical;width:100%}
         .tta:focus{border-color:#58a6ff}
+        .tsp{background:#161b22;color:#c9d1d9;border:1px solid #30363d;border-radius:3px;padding:3px 4px;font-size:11px;font-family:inherit;outline:none;width:52px;text-align:center}
+        .tsp:focus{border-color:#58a6ff}
         *::-webkit-scrollbar{width:6px}*::-webkit-scrollbar-track{background:transparent}*::-webkit-scrollbar-thumb{background:#30363d;border-radius:3px}
       `}</style>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 12px", borderBottom: "1px solid #21262d", flexShrink: 0, flexWrap: "wrap" }}>
-        <span style={{ fontSize: 13, fontWeight: 700, color: "#e6edf3", marginRight: 6 }}>TYPING TUTOR</span>
+      <input type="file" ref={fileInputRef} accept=".json" style={{ display: "none" }} onChange={handleLoad} />
+
+      {/* header row 1: mode, language selectors */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px", borderBottom: "1px solid #161b22", flexShrink: 0, flexWrap: "wrap" }}>
+        <span style={{ fontSize: 13, fontWeight: 700, color: "#e6edf3", marginRight: 4 }}>TYPING TUTOR</span>
         <select className="ts" value={mode} onChange={e => { setMode(e.target.value); if (e.target.value === "custom") setShowCustomInput(true); }}>
           <option value="wikipedia">Wikipedia</option>
           <option value="github">Code (GitHub)</option>
@@ -708,9 +913,26 @@ export default function TypingTutor() {
         <select className="ts" value={layout} onChange={e => setLayout(e.target.value)}>
           <option value="qwerty">QWERTY</option><option value="dvorak">Dvorak</option><option value="colemak">Colemak</option>
         </select>
+      </div>
+
+      {/* header row 2: lines, auto-load, actions */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 12px", borderBottom: "1px solid #21262d", flexShrink: 0, flexWrap: "wrap" }}>
+        <label style={{ fontSize: 11, color: "#8b949e", display: "flex", alignItems: "center", gap: 4 }}>
+          Lines:
+          <input type="number" className="tsp" min={1} max={100} value={lineCount} onChange={e => { const v = parseInt(e.target.value, 10); if (v > 0 && v <= 100) setLineCount(v); }} />
+        </label>
+        <label style={{ fontSize: 11, color: "#8b949e", display: "flex", alignItems: "center", gap: 4, cursor: "pointer" }}>
+          <input type="checkbox" checked={autoLoad} onChange={e => setAutoLoad(e.target.checked)}
+            style={{ accentColor: "#58a6ff", width: 13, height: 13, cursor: "pointer" }} />
+          Auto-load
+        </label>
+        <div style={{ borderLeft: "1px solid #30363d", height: 16, margin: "0 2px" }} />
         <button className="tb tp" onClick={() => { setShowCustomInput(false); loadText(); }}>{loading ? "Loading..." : "New Text"}</button>
         {mode === "adaptive" && <button className="tb" onClick={() => loadText("adaptive")}>Refresh</button>}
         {mode === "custom" && <button className="tb" onClick={() => setShowCustomInput(!showCustomInput)}>{showCustomInput ? "Hide" : "Edit"}</button>}
+        <div style={{ borderLeft: "1px solid #30363d", height: 16, margin: "0 2px" }} />
+        <button className="tb" onClick={handleSave}>Save</button>
+        <button className="tb" onClick={() => fileInputRef.current && fileInputRef.current.click()}>Load</button>
       </div>
 
       {showCustomInput && mode === "custom" && (
@@ -729,7 +951,7 @@ export default function TypingTutor() {
           {loading && <div style={{ color: "#6e7681", fontSize: 13 }}>Loading content...</div>}
           {!loading && text.length === 0 && <div style={{ color: "#6e7681", fontSize: 13 }}>Click "New Text" to begin.</div>}
           {!loading && text.length > 0 && !isComplete && renderText}
-          {isComplete && completionStats && (
+          {isComplete && !autoLoad && completionStats && (
             <div style={{ maxWidth: 480 }}>
               <div style={{ fontSize: 18, fontWeight: 700, color: "#e6edf3", marginBottom: 16 }}>Session Complete</div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
@@ -760,6 +982,9 @@ export default function TypingTutor() {
               </div>
             </div>
           )}
+          {isComplete && autoLoad && (
+            <div style={{ color: "#6e7681", fontSize: 13, textAlign: "center", marginTop: 40 }}>Loading next text...</div>
+          )}
           {!loading && text.length > 0 && !isComplete && cursorPos === 0 && (
             <div style={{ position: "absolute", bottom: 12, left: 28, right: 28, fontSize: 11, color: "#484f58", textAlign: "center" }}>Click here and start typing. Backspace to correct.</div>
           )}
@@ -775,7 +1000,7 @@ export default function TypingTutor() {
           <div style={{ flex: 1, overflowY: "auto", padding: "10px 12px" }}>
             {sideTab === "live" && <LivePanel keystrokes={keystrokes} errors={errors} startTime={startTime} cursorPos={cursorPos} text={text} currentStreak={currentStreak} bestStreak={bestStreak} wpmHistory={wpmHistory} />}
             {sideTab === "weak" && <><WeakPanel ngramData={ngramData} wordErrors={wordErrors} /><KeyboardHeatmap layout={layout} ngramData={ngramData} /></>}
-            {sideTab === "detail" && <DetailPanel charAccuracy={charAccuracy} keystrokeTimes={ksTimesRef.current} wpmHistory={wpmHistory} layout={layout} />}
+            {sideTab === "detail" && <DetailPanel charAccuracy={charAccuracy} keystrokeTimes={ksTimesRef.current} wpmHistory={wpmHistory} layout={layout} alphaSpeeds={alphaSpeeds} />}
           </div>
         </div>
       </div>
