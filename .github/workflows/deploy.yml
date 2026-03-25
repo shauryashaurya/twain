@@ -3,6 +3,12 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why are you deploying manually?"
+        required: false
+        type: string
 
 permissions:
   contents: read
