@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { LineChart, Line, ResponsiveContainer, YAxis } from "recharts";
 
-// -- KEYBOARD LAYOUTS --
+//  KEYBOARD LAYOUTS 
 const LAYOUTS = {
   qwerty: {
     name: "QWERTY",
@@ -50,16 +50,39 @@ const LAYOUTS = {
   }
 };
 
-// -- WORD LISTS --
-const WORD_LISTS = {
-  "English (UK)": "the be to of and a in that have i it for not on with he as you do at this but his by from they we say her she or an will my one all would there their what so up out if about who get which go me when make can like time no just him know take people into year your good some could them see other than then now look only come its over think also back after use two how our work first well way even new want because any these give day most us great between need large under never should very through world still must before found here thing many right being another much three number water question always each national important different something thought possible together children without development government community problem system programme company information technology experience change performance understanding significant environment management production research education international following particular everything available political economic application organisation responsibility traditional breakfast strength beautiful practice structure establish challenge knowledge previous character situation demonstrate recognise themselves behaviour colour favour labour neighbour honour endeavour analyse catalogue centre fibre litre metre theatre defence licence offence pretence advise organise specialise realise emphasise apologise characterise summarise criticise advertise compromise exercise surprise otherwise enterprise promise purpose course source force service office notice evidence silence distance importance difference conference reference influence presence independence audience consequence intelligence science patience existence instance assistance appearance insurance resistance assurance circumstance maintenance accordance significance surveillance grievance tolerance substance endurance ignorance compliance acceptance admittance abundance reluctance attendance resemblance interference perseverance acquaintance inheritance temperance furtherance utterance disturbance forbearance remembrance observance continuance".split(" "),
-  "French": "le la de un une et est il elle que ne pas en au du des les dans pour qui ce sur se son tout avec mais comme aussi que leur bien lui sans fait plus deux peut meme alors nous rien encore tous quand pendant dire cela moins depuis avec savoir venir homme monde temps vie main jour femme pays bon grand petit nouveau faire aller voir vouloir donner prendre trouver parler entre premier chose fois dernier long peu jeune beau vieux haut noir blanc gros fort droit ancien seul propre ici rien toujours tant assez chaque jamais vers point loin dessus vraiment tard trop ensemble penser comprendre devenir croire mettre sentir ouvrir montrer garder tomber revenir entendre passer partir suivre tenir porter rester perdre lever finir poser servir paraitre sembler commencer jouer sortir vivre ecrire entrer lire manger dormir courir mourir".split(" "),
-  "German": "der die das und in den von zu ist nicht ein mit auf sich des dem er es an werden aus einer hat auch als dass wie noch oder sein sind war bei nach schon nur so einem seine haben machen sehr dann wo aber diesem denn ganz diese wenn durch weil mehr immer wurde zwei bis gerade gegen einmal lassen alle etwas wissen wenig finden gut gross neu hier alt lang kurz schnell viel kommen gehen stehen bleiben leben sehen denken halten nehmen bringen sprechen lesen schreiben kennen sagen wollen brauchen arbeiten heissen spielen fahren laufen liegen schlafen tragen fallen wachsen ziehen reisen lernen kaufen suchen zeigen hoeren essen trinken beginnen verstehen helfen bekommen".split(" "),
-  "Spanish": "de la que el en y a los del se las por un una con no es al lo como mas pero sus le ya sobre este si muy ser todo entre cuando hay fue tan poco esta nada sus tiempo antes fue hombre mejor dia dos nuestro bien ella ahi eso ese algo primera vez decir pues estar muy gran parte mismo hacer poder tener dar solo haber otro deber creer hablar llevar dejar seguir encontrar llamar venir pensar salir volver tomar conocer vivir sentir parecer contar querer pasar deber saber poner decir donde casa vida mundo trabajo agua lado noche pueblo punto cierto pais gobierno mujer pueblo fin caso palabra forma problema gente lugar persona mano cosa padre madre hijo ojo cabeza mano cuerpo hombre tierra ciudad calle puerta camino".split(" "),
-  "Portuguese": "de a o que e do da em um para com nao uma os no se na por mais as dos como mas ao ele das tem seu sua ou quando muito nos ja eu tambem so pelo pela ate isso ela entre depois sem mesmo aos seus quem nas meu esse eles voce essa num nem suas minha ter sido tinha eram muito depois anos governo dia tempo alguns vez conta pode parte sobre ser fazer grande ainda casa mundo homem estado forma novo fim grupo pais caso coisa cada cidade porque ano pessoa trabalho vezes problema durante sempre dizer dar bem mesmo outro aqui onde ficar ir vir querer poder dever saber ver deixar parecer passar chegar levar seguir encontrar falar pensar olhar perguntar".split(" ")
+//  LANGUAGE CONFIG 
+const LANG_CONFIG = {
+  "English (UK)": { code: "en", file: "en.json" },
+  "French": { code: "fr", file: "fr.json" },
+  "German": { code: "de", file: "de.json" },
+  "Spanish": { code: "es", file: "es.json" },
+  "Portuguese": { code: "pt", file: "pt.json" }
 };
 
-// -- SPECIAL CHAR EXERCISES --
+//  BANDS 
+const BANDS = [
+  { id: 1, label: "Band 1: Basics", start: 0, end: 100 },
+  { id: 2, label: "Band 2: Daily", start: 100, end: 500 },
+  { id: 3, label: "Band 3: Fluent", start: 500, end: 1500 },
+  { id: 4, label: "Band 4: Pro", start: 1500, end: 3000 },
+  { id: 5, label: "Band 5: Expert", start: 3000, end: 5000 }
+];
+
+function getBandLabel(id) {
+  const b = BANDS.find(x => x.id === id);
+  return b ? b.label : "Band " + id;
+}
+
+//  INLINE FALLBACK WORD LISTS (used when JSON files unavailable) 
+const INLINE_WORDS = {
+  "English (UK)": "the be to of and a in that have i it for not on with he as you do at this but his by from they we say her she or an will my one all would there their what so up out if about who get which go me when make can like time no just him know take people into year your good some could them see other than then now look only come its over think also back after use two how our work first well way even new want because any these give day most us great between need large under never should very through world still must before found here thing many right being another much three number water question always each national important different something thought possible together children without development government community problem system programme company information technology experience change performance understanding significant environment management production research education international following particular everything available political economic application organisation responsibility traditional breakfast strength beautiful practice structure establish challenge knowledge previous character situation demonstrate recognise themselves behaviour colour favour labour neighbour honour endeavour analyse catalogue centre fibre litre metre theatre defence licence offence pretence advise organise specialise realise emphasise apologise characterise summarise criticise advertise compromise exercise surprise otherwise enterprise promise purpose course source force service office notice evidence silence distance importance difference conference reference influence presence independence audience consequence intelligence science patience existence instance assistance appearance insurance resistance assurance circumstance maintenance accordance significance surveillance grievance tolerance substance endurance ignorance compliance acceptance admittance abundance reluctance attendance resemblance interference perseverance acquaintance inheritance temperance furtherance utterance disturbance forbearance remembrance observance continuance".split(" "),
+  "French": "le la de un une et est il elle que ne pas en au du des les dans pour qui ce sur se son tout avec mais comme aussi leur bien lui sans fait plus deux peut meme alors nous rien encore tous quand pendant dire cela moins depuis savoir venir homme monde temps vie main jour femme pays bon grand petit nouveau faire aller voir vouloir donner prendre trouver parler entre premier chose fois dernier long peu jeune beau vieux haut noir blanc gros fort droit ancien seul propre ici toujours tant assez chaque jamais vers point loin dessus vraiment tard trop ensemble penser comprendre devenir croire mettre sentir ouvrir montrer garder tomber revenir entendre passer partir suivre tenir porter rester perdre lever finir poser servir paraitre sembler commencer jouer sortir vivre ecrire entrer lire manger dormir courir mourir".split(" "),
+  "German": "der die das und in den von zu ist nicht ein mit auf sich des dem er es an werden aus einer hat auch als dass wie noch oder sein sind war bei nach schon nur so einem seine haben machen sehr dann wo aber diesem denn ganz diese wenn durch weil mehr immer wurde zwei bis gerade gegen einmal lassen alle etwas wissen wenig finden gut gross neu hier alt lang kurz schnell viel kommen gehen stehen bleiben leben sehen denken halten nehmen bringen sprechen lesen schreiben kennen sagen wollen brauchen arbeiten heissen spielen fahren laufen liegen schlafen tragen fallen wachsen ziehen reisen lernen kaufen suchen zeigen hoeren essen trinken beginnen verstehen helfen bekommen".split(" "),
+  "Spanish": "de la que el en y a los del se las por un una con no es al lo como mas pero sus le ya sobre este si muy ser todo entre cuando hay fue tan poco esta nada tiempo antes hombre mejor dia dos nuestro bien ella ahi eso ese algo primera vez decir pues estar gran parte mismo hacer poder tener dar solo haber otro deber creer hablar llevar dejar seguir encontrar llamar venir pensar salir volver tomar conocer vivir sentir parecer contar querer pasar saber poner donde casa vida mundo trabajo agua lado noche pueblo punto cierto pais gobierno mujer fin caso palabra forma problema gente lugar persona mano cosa padre madre hijo ojo cabeza cuerpo tierra ciudad calle puerta camino".split(" "),
+  "Portuguese": "de a o que e do da em um para com nao uma os no se na por mais as dos como mas ao ele das tem seu sua ou quando muito nos ja eu tambem so pelo pela ate isso ela entre depois sem mesmo aos seus quem nas meu esse eles voce essa num nem suas minha ter sido tinha eram depois anos governo dia tempo alguns vez conta pode parte sobre ser fazer grande ainda casa mundo homem estado forma novo fim grupo pais caso coisa cada cidade porque ano pessoa trabalho vezes problema durante sempre dizer dar bem outro aqui onde ficar ir vir querer poder dever saber ver deixar parecer passar chegar levar seguir encontrar falar pensar olhar perguntar".split(" ")
+};
+
+//  SPECIAL CHAR EXERCISES 
 const SPECIAL_CHAR_SETS = [
   'price: $49.99 (save 20%) -- limited offer!',
   'email: user@domain.com; cc: admin@host.org',
@@ -94,59 +117,45 @@ const SPECIAL_CHAR_SETS = [
   'obj = { ...defaults, ...overrides, id: uuid() };'
 ];
 
-// -- FALLBACK TEXTS --
+//  FALLBACK TEXTS 
 const FALLBACK_TEXTS = {
   wikipedia: [
-    "The history of computing is longer than the history of computing hardware and modern computing technology and includes the history of methods intended for pen and paper or for chalk and slate, with or without the aid of tables. The timeline of computing presents events in the history of computing organised by year and grouped into six topic areas.",
-    "A neural network is a network or circuit of biological neurons, or in a modern sense, an artificial neural network composed of artificial neurons or nodes. Thus a neural network is either a biological neural network, made up of biological neurons, or an artificial neural network used for solving artificial intelligence problems.",
-    "The ocean covers approximately seventy percent of the surface of the Earth. It is divided into several principal oceans and smaller seas. More than half of this area is over three thousand metres deep. Average oceanic salinity is around thirty five parts per thousand.",
-    "An algorithm is a finite sequence of well-defined instructions, typically used to solve a class of specific problems or to perform a computation. Algorithms are used as specifications for performing calculations and data processing. More advanced algorithms can use conditionals to divert the code execution through various routes and deduce valid inferences.",
-    "Typography is the art and technique of arranging type to make written language legible, readable and appealing when displayed. The arrangement of type involves selecting typefaces, point sizes, line lengths, line spacing and letter spacing, as well as adjusting the space between pairs of letters."
+    "The history of computing is longer than the history of computing hardware and modern computing technology and includes the history of methods intended for pen and paper or for chalk and slate, with or without the aid of tables.",
+    "A neural network is a network or circuit of biological neurons, or in a modern sense, an artificial neural network composed of artificial neurons or nodes.",
+    "The ocean covers approximately seventy percent of the surface of the Earth. It is divided into several principal oceans and smaller seas.",
+    "An algorithm is a finite sequence of well-defined instructions, typically used to solve a class of specific problems or to perform a computation.",
+    "Typography is the art and technique of arranging type to make written language legible, readable and appealing when displayed."
   ],
   code: {
-    python: 'def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)\n\ndef binary_search(arr, target):\n    low, high = 0, len(arr) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1\n\ndef merge_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    mid = len(arr) // 2\n    left = merge_sort(arr[:mid])\n    right = merge_sort(arr[mid:])\n    return merge(left, right)\n\ndef merge(left, right):\n    result = []\n    i = j = 0\n    while i < len(left) and j < len(right):\n        if left[i] <= right[j]:\n            result.append(left[i])\n            i += 1\n        else:\n            result.append(right[j])\n            j += 1\n    result.extend(left[i:])\n    result.extend(right[j:])\n    return result',
+    python: 'def quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)\n\ndef binary_search(arr, target):\n    low, high = 0, len(arr) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1\n\ndef merge_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    mid = len(arr) // 2\n    left = merge_sort(arr[:mid])\n    right = merge_sort(arr[mid:])\n    return merge(left, right)',
     javascript: 'function debounce(fn, delay) {\n  let timer = null;\n  return function(...args) {\n    clearTimeout(timer);\n    timer = setTimeout(() => {\n      fn.apply(this, args);\n    }, delay);\n  };\n}\n\nfunction deepClone(obj) {\n  if (obj === null || typeof obj !== "object") {\n    return obj;\n  }\n  const clone = Array.isArray(obj) ? [] : {};\n  for (const key in obj) {\n    if (obj.hasOwnProperty(key)) {\n      clone[key] = deepClone(obj[key]);\n    }\n  }\n  return clone;\n}\n\nfunction throttle(fn, limit) {\n  let inThrottle = false;\n  return function(...args) {\n    if (!inThrottle) {\n      fn.apply(this, args);\n      inThrottle = true;\n      setTimeout(() => { inThrottle = false; }, limit);\n    }\n  };\n}',
-    typescript: 'interface TreeNode<T> {\n  value: T;\n  left: TreeNode<T> | null;\n  right: TreeNode<T> | null;\n}\n\nfunction inorder<T>(node: TreeNode<T> | null): T[] {\n  if (!node) return [];\n  return [\n    ...inorder(node.left),\n    node.value,\n    ...inorder(node.right)\n  ];\n}\n\nfunction insert<T>(root: TreeNode<T> | null, val: T): TreeNode<T> {\n  if (!root) return { value: val, left: null, right: null };\n  if (val < root.value) root.left = insert(root.left, val);\n  else root.right = insert(root.right, val);\n  return root;\n}\n\nfunction height<T>(node: TreeNode<T> | null): number {\n  if (!node) return 0;\n  return 1 + Math.max(height(node.left), height(node.right));\n}',
-    rust: 'fn fibonacci(n: u32) -> u64 {\n    if n <= 1 {\n        return n as u64;\n    }\n    let mut a: u64 = 0;\n    let mut b: u64 = 1;\n    for _ in 2..=n {\n        let temp = a + b;\n        a = b;\n        b = temp;\n    }\n    b\n}\n\nfn is_prime(n: u64) -> bool {\n    if n < 2 { return false; }\n    if n == 2 || n == 3 { return true; }\n    if n % 2 == 0 || n % 3 == 0 { return false; }\n    let mut i = 5;\n    while i * i <= n {\n        if n % i == 0 || n % (i + 2) == 0 { return false; }\n        i += 6;\n    }\n    true\n}\n\nfn gcd(a: u64, b: u64) -> u64 {\n    if b == 0 { a } else { gcd(b, a % b) }\n}',
-    go: 'func mergeSort(arr []int) []int {\n\tif len(arr) <= 1 {\n\t\treturn arr\n\t}\n\tmid := len(arr) / 2\n\tleft := mergeSort(arr[:mid])\n\tright := mergeSort(arr[mid:])\n\treturn merge(left, right)\n}\n\nfunc merge(left, right []int) []int {\n\tresult := make([]int, 0, len(left)+len(right))\n\ti, j := 0, 0\n\tfor i < len(left) && j < len(right) {\n\t\tif left[i] <= right[j] {\n\t\t\tresult = append(result, left[i])\n\t\t\ti++\n\t\t} else {\n\t\t\tresult = append(result, right[j])\n\t\t\tj++\n\t\t}\n\t}\n\tresult = append(result, left[i:]...)\n\tresult = append(result, right[j:]...)\n\treturn result\n}\n\nfunc binarySearch(arr []int, target int) int {\n\tlo, hi := 0, len(arr)-1\n\tfor lo <= hi {\n\t\tmid := (lo + hi) / 2\n\t\tif arr[mid] == target {\n\t\t\treturn mid\n\t\t} else if arr[mid] < target {\n\t\t\tlo = mid + 1\n\t\t} else {\n\t\t\thi = mid - 1\n\t\t}\n\t}\n\treturn -1\n}'
+    typescript: 'interface TreeNode<T> {\n  value: T;\n  left: TreeNode<T> | null;\n  right: TreeNode<T> | null;\n}\n\nfunction inorder<T>(node: TreeNode<T> | null): T[] {\n  if (!node) return [];\n  return [\n    ...inorder(node.left),\n    node.value,\n    ...inorder(node.right)\n  ];\n}\n\nfunction insert<T>(root: TreeNode<T> | null, val: T): TreeNode<T> {\n  if (!root) return { value: val, left: null, right: null };\n  if (val < root.value) root.left = insert(root.left, val);\n  else root.right = insert(root.right, val);\n  return root;\n}',
+    rust: 'fn fibonacci(n: u32) -> u64 {\n    if n <= 1 {\n        return n as u64;\n    }\n    let mut a: u64 = 0;\n    let mut b: u64 = 1;\n    for _ in 2..=n {\n        let temp = a + b;\n        a = b;\n        b = temp;\n    }\n    b\n}\n\nfn is_prime(n: u64) -> bool {\n    if n < 2 { return false; }\n    if n == 2 || n == 3 { return true; }\n    if n % 2 == 0 || n % 3 == 0 { return false; }\n    let mut i = 5;\n    while i * i <= n {\n        if n % i == 0 || n % (i + 2) == 0 { return false; }\n        i += 6;\n    }\n    true\n}',
+    go: 'func mergeSort(arr []int) []int {\n\tif len(arr) <= 1 {\n\t\treturn arr\n\t}\n\tmid := len(arr) / 2\n\tleft := mergeSort(arr[:mid])\n\tright := mergeSort(arr[mid:])\n\treturn merge(left, right)\n}\n\nfunc merge(left, right []int) []int {\n\tresult := make([]int, 0, len(left)+len(right))\n\ti, j := 0, 0\n\tfor i < len(left) && j < len(right) {\n\t\tif left[i] <= right[j] {\n\t\t\tresult = append(result, left[i])\n\t\t\ti++\n\t\t} else {\n\t\t\tresult = append(result, right[j])\n\t\t\tj++\n\t\t}\n\t}\n\tresult = append(result, left[i:]...)\n\tresult = append(result, right[j:]...)\n\treturn result\n}'
   }
 };
 
-// -- TOOLTIP COMPONENT --
+//  TOOLTIP 
 function Tip({ text }) {
   const [show, setShow] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
   const handleEnter = () => {
-    if (ref.current) {
-      const r = ref.current.getBoundingClientRect();
-      setPos({ x: r.left, y: r.bottom + 4 });
-    }
+    if (ref.current) { const r = ref.current.getBoundingClientRect(); setPos({ x: r.left, y: r.bottom + 4 }); }
     setShow(true);
   };
   return (
     <>
       <span ref={ref} onMouseEnter={handleEnter} onMouseLeave={() => setShow(false)}
-        style={{
-          display: "inline-flex", alignItems: "center", justifyContent: "center",
-          width: 14, height: 14, borderRadius: "50%", fontSize: 9, fontWeight: 700,
-          color: "#6e7681", border: "1px solid #30363d", cursor: "help",
-          marginLeft: 4, verticalAlign: "middle", lineHeight: 1, flexShrink: 0
-        }}>i</span>
+        style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 14, height: 14, borderRadius: "50%", fontSize: 9, fontWeight: 700, color: "#6e7681", border: "1px solid #30363d", cursor: "help", marginLeft: 4, verticalAlign: "middle", lineHeight: 1, flexShrink: 0 }}>i</span>
       {show && (
-        <div style={{
-          position: "fixed", left: Math.min(pos.x, window.innerWidth - 260), top: pos.y,
-          zIndex: 9999, background: "#1c2128", border: "1px solid #30363d", borderRadius: 4,
-          padding: "6px 10px", fontSize: 11, color: "#c9d1d9", maxWidth: 250,
-          lineHeight: 1.4, fontWeight: 400, fontFamily: "'JetBrains Mono', monospace",
-          pointerEvents: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.4)"
-        }}>{text}</div>
+        <div style={{ position: "fixed", left: Math.min(pos.x, window.innerWidth - 260), top: pos.y, zIndex: 9999, background: "#1c2128", border: "1px solid #30363d", borderRadius: 4, padding: "6px 10px", fontSize: 11, color: "#c9d1d9", maxWidth: 250, lineHeight: 1.4, fontWeight: 400, fontFamily: "'JetBrains Mono', monospace", pointerEvents: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.4)" }}>{text}</div>
       )}
     </>
   );
 }
 
-// -- UTILITIES --
+//  UTILITIES 
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -176,18 +185,12 @@ function updateAlphaSpeeds(prev, times) {
   const idx = times.length - 1;
   for (let n = 2; n <= 4; n++) {
     if (idx < n - 1) continue;
-    let gram = "";
-    let valid = true;
-    let totalDelta = 0;
+    let gram = ""; let valid = true; let totalDelta = 0;
     for (let k = idx - n + 1; k <= idx; k++) {
       const ch = times[k].char.toLowerCase();
       if (!ALPHA_RE.test(ch)) { valid = false; break; }
       gram += ch;
-      if (k > idx - n + 1) {
-        const d = times[k].time - times[k - 1].time;
-        if (d > 2000 || d < 10) { valid = false; break; }
-        totalDelta += d;
-      }
+      if (k > idx - n + 1) { const d = times[k].time - times[k - 1].time; if (d > 2000 || d < 10) { valid = false; break; } totalDelta += d; }
     }
     if (!valid || gram.length !== n) continue;
     if (!updated[gram]) updated[gram] = { totalMs: 0, count: 0 };
@@ -204,43 +207,51 @@ function getWeakNgrams(ngramData, minAttempts, limit) {
     .slice(0, limit || 15);
 }
 
-function generateAdaptiveText(ngramData) {
-  const weakNgrams = getWeakNgrams(ngramData, 3, 10);
-  if (weakNgrams.length === 0) return "Keep practising to build your weakness profile. The system needs more typing data to generate targeted exercises for you. Try Wikipedia or Common Words mode first.";
-  const allWords = WORD_LISTS["English (UK)"];
-  const practiceWords = [];
-  for (const { ngram } of weakNgrams) {
-    const matching = allWords.filter(w => w.includes(ngram));
-    practiceWords.push(...matching.slice(0, 4));
+//  WORD LIST LOADER 
+const wordListCache = {};
+
+async function loadWordList(lang) {
+  if (wordListCache[lang]) return wordListCache[lang];
+  const config = LANG_CONFIG[lang];
+  if (!config) return INLINE_WORDS[lang] || INLINE_WORDS["English (UK)"];
+  try {
+    const res = await fetch(`./words/${config.file}`);
+    if (!res.ok) throw new Error("fetch failed");
+    const words = await res.json();
+    wordListCache[lang] = words;
+    return words;
+  } catch {
+    return INLINE_WORDS[lang] || INLINE_WORDS["English (UK)"];
   }
-  if (practiceWords.length === 0) return shuffle(weakNgrams.map(w => w.ngram)).join(" ").repeat(5).trim();
-  const unique = [...new Set(practiceWords)];
-  shuffle(unique);
-  let text = "";
-  let i = 0;
-  while (text.length < 600) { text += unique[i % unique.length] + " "; i++; if (i > 400) break; }
-  return text.trim();
 }
 
+function getWordsForBand(words, bandId) {
+  const band = BANDS.find(b => b.id === bandId);
+  if (!band) return words.slice(0, 100);
+  let pool = words.slice(band.start, Math.min(band.end, words.length));
+  let fb = bandId;
+  while (pool.length === 0 && fb > 1) {
+    fb--;
+    const lower = BANDS.find(b => b.id === fb);
+    pool = words.slice(lower.start, Math.min(lower.end, words.length));
+  }
+  if (pool.length === 0) pool = words.slice(0, Math.min(100, words.length));
+  return pool;
+}
+
+//  TEXT GENERATORS 
 function wrapToLines(text, charsPerLine) {
   const words = text.split(/\s+/);
-  const lines = [];
-  let current = "";
+  const lines = []; let current = "";
   for (const w of words) {
-    if (current.length > 0 && current.length + 1 + w.length > charsPerLine) {
-      lines.push(current);
-      current = w;
-    } else {
-      current = current.length > 0 ? current + " " + w : w;
-    }
+    if (current.length > 0 && current.length + 1 + w.length > charsPerLine) { lines.push(current); current = w; }
+    else { current = current.length > 0 ? current + " " + w : w; }
   }
   if (current.length > 0) lines.push(current);
   return lines;
 }
 
-function generateCommonWordsText(language, count, lineCount) {
-  const words = WORD_LISTS[language] || WORD_LISTS["English (UK)"];
-  const pool = words.slice(0, Math.min(count, words.length));
+function generateBandText(pool, lineCount) {
   const needed = lineCount * 12;
   const selected = [];
   for (let i = 0; i < needed; i++) selected.push(pool[Math.floor(Math.random() * pool.length)]);
@@ -249,24 +260,31 @@ function generateCommonWordsText(language, count, lineCount) {
 }
 
 function generateSpecialCharText(lineCount) {
-  const pool = [...SPECIAL_CHAR_SETS];
-  const result = [];
-  while (result.length < lineCount) {
-    shuffle(pool);
-    for (const s of pool) {
-      result.push(s);
-      if (result.length >= lineCount) break;
-    }
-  }
+  const pool = [...SPECIAL_CHAR_SETS]; const result = [];
+  while (result.length < lineCount) { shuffle(pool); for (const s of pool) { result.push(s); if (result.length >= lineCount) break; } }
   return result.slice(0, lineCount).join("\n");
 }
 
-// fetch multiple wikipedia summaries until we have enough lines
+function generateAdaptiveText(ngramData, words) {
+  const weakNgrams = getWeakNgrams(ngramData, 3, 10);
+  if (weakNgrams.length === 0) return "Keep practising to build your weakness profile. The system needs more typing data to generate targeted exercises for you.";
+  const practiceWords = [];
+  for (const { ngram } of weakNgrams) {
+    const matching = words.filter(w => w.includes(ngram));
+    practiceWords.push(...matching.slice(0, 6));
+  }
+  if (practiceWords.length === 0) return shuffle(weakNgrams.map(w => w.ngram)).join(" ").repeat(5).trim();
+  const unique = [...new Set(practiceWords)];
+  shuffle(unique);
+  let text = ""; let i = 0;
+  while (text.length < 600) { text += unique[i % unique.length] + " "; i++; if (i > 400) break; }
+  return text.trim();
+}
+
 async function fetchWikipediaLines(targetLines) {
   const collected = [];
   const maxFetches = Math.min(Math.ceil(targetLines / 3), 8);
-  let fallbackIdx = 0;
-
+  let fi = 0;
   for (let attempt = 0; attempt < maxFetches; attempt++) {
     try {
       const res = await fetch("https://en.wikipedia.org/api/rest_v1/page/random/summary");
@@ -275,46 +293,33 @@ async function fetchWikipediaLines(targetLines) {
       const extract = (data.extract || "").trim();
       if (extract.length >= 40) collected.push(extract);
     } catch {
-      if (fallbackIdx < FALLBACK_TEXTS.wikipedia.length) {
-        collected.push(FALLBACK_TEXTS.wikipedia[fallbackIdx]);
-        fallbackIdx++;
-      }
+      if (fi < FALLBACK_TEXTS.wikipedia.length) { collected.push(FALLBACK_TEXTS.wikipedia[fi]); fi++; }
     }
-    const currentLines = wrapToLines(collected.join(" "), 65);
-    if (currentLines.length >= targetLines) break;
+    if (wrapToLines(collected.join(" "), 65).length >= targetLines) break;
   }
-
   if (collected.length === 0) collected.push(FALLBACK_TEXTS.wikipedia[0]);
-  const lines = wrapToLines(collected.join(" "), 65);
-  return lines.slice(0, targetLines).join("\n");
+  return wrapToLines(collected.join(" "), 65).slice(0, targetLines).join("\n");
 }
 
-// fetch github code, aiming for at least targetLines
 async function fetchGithubCodeLines(language, targetLines) {
   const ext = { python: "py", javascript: "js", typescript: "ts", rust: "rs", go: "go" };
   const fileExt = ext[language] || "py";
-
   try {
     const r1 = await fetch(`https://api.github.com/search/repositories?q=language:${language}+stars:>500&sort=stars&per_page=10`);
     if (!r1.ok) throw new Error("search");
     const d1 = await r1.json();
     if (!d1.items || d1.items.length === 0) throw new Error("empty");
-
-    const collectedLines = [];
-    const triedRepos = new Set();
-
+    const collectedLines = []; const tried = new Set();
     for (let attempt = 0; attempt < 4 && collectedLines.length < targetLines; attempt++) {
       const repo = d1.items[Math.floor(Math.random() * d1.items.length)];
-      if (triedRepos.has(repo.full_name)) continue;
-      triedRepos.add(repo.full_name);
-
+      if (tried.has(repo.full_name)) continue;
+      tried.add(repo.full_name);
       try {
         const r2 = await fetch(`https://api.github.com/repos/${repo.full_name}/git/trees/${repo.default_branch}?recursive=1`);
         if (!r2.ok) continue;
         const d2 = await r2.json();
         const files = (d2.tree || []).filter(f => f.type === "blob" && f.path.endsWith("." + fileExt) && f.size > 200 && f.size < 15000);
         if (files.length === 0) continue;
-
         shuffle(files);
         for (const file of files.slice(0, 3)) {
           if (collectedLines.length >= targetLines) break;
@@ -323,116 +328,59 @@ async function fetchGithubCodeLines(language, targetLines) {
             if (!r3.ok) continue;
             const d3 = await r3.json();
             const decoded = atob(d3.content.replace(/\n/g, ""));
-            const fileLines = decoded.split("\n");
             if (collectedLines.length > 0) collectedLines.push("");
             collectedLines.push("// " + file.path);
-            collectedLines.push(...fileLines);
+            collectedLines.push(...decoded.split("\n"));
           } catch { continue; }
         }
       } catch { continue; }
     }
-
     if (collectedLines.length === 0) throw new Error("nodata");
-    const source = triedRepos.size > 0 ? [...triedRepos][0] : "github";
-    return { text: collectedLines.slice(0, targetLines).join("\n"), source };
+    return { text: collectedLines.slice(0, targetLines).join("\n"), source: [...tried][0] || "github" };
   } catch {
     const code = FALLBACK_TEXTS.code[language] || FALLBACK_TEXTS.code.python;
     const lines = code.split("\n");
-    while (lines.length < targetLines) {
-      lines.push("");
-      const extra = (FALLBACK_TEXTS.code[language] || FALLBACK_TEXTS.code.python).split("\n");
-      lines.push(...extra);
-    }
+    while (lines.length < targetLines) { lines.push(""); lines.push(...(FALLBACK_TEXTS.code[language] || FALLBACK_TEXTS.code.python).split("\n")); }
     return { text: lines.slice(0, targetLines).join("\n"), source: "fallback" };
   }
 }
 
-// -- ANALYTICS --
+//  ANALYTICS 
 const FINGER_LABELS = { L4: "L Pinky", L3: "L Ring", L2: "L Middle", L1: "L Index", R1: "R Index", R2: "R Middle", R3: "R Ring", R4: "R Pinky", T0: "Thumb" };
 
 function computeFingerStats(ca, layout) {
-  const fm = LAYOUTS[layout].fingerMap;
-  const s = {};
-  for (const [ch, d] of Object.entries(ca)) {
-    const f = fm[ch.toLowerCase()] || fm[ch];
-    if (!f) continue;
-    if (!s[f]) s[f] = { correct: 0, total: 0 };
-    s[f].correct += d.correct;
-    s[f].total += d.total;
-  }
+  const fm = LAYOUTS[layout].fingerMap; const s = {};
+  for (const [ch, d] of Object.entries(ca)) { const f = fm[ch.toLowerCase()] || fm[ch]; if (!f) continue; if (!s[f]) s[f] = { correct: 0, total: 0 }; s[f].correct += d.correct; s[f].total += d.total; }
   return s;
 }
-
 function computeHandStats(fs) {
   const h = { Left: { correct: 0, total: 0 }, Right: { correct: 0, total: 0 } };
-  for (const [f, d] of Object.entries(fs)) {
-    if (f === "T0") continue;
-    const side = f.startsWith("L") ? "Left" : "Right";
-    h[side].correct += d.correct;
-    h[side].total += d.total;
-  }
+  for (const [f, d] of Object.entries(fs)) { if (f === "T0") continue; const side = f.startsWith("L") ? "Left" : "Right"; h[side].correct += d.correct; h[side].total += d.total; }
   return h;
 }
-
 function computeRowStats(ca, layout) {
-  const rows = LAYOUTS[layout].rows;
-  const labels = ["Number", "Top", "Home", "Bottom"];
-  const s = {};
+  const rows = LAYOUTS[layout].rows; const labels = ["Number", "Top", "Home", "Bottom"]; const s = {};
   for (const l of labels) s[l] = { correct: 0, total: 0 };
-  for (const [ch, data] of Object.entries(ca)) {
-    const lower = ch.toLowerCase();
-    let ri = -1;
-    for (let i = 0; i < rows.length; i++) { if (rows[i].includes(lower)) { ri = i; break; } }
-    if (ri >= 0 && ri < labels.length) { s[labels[ri]].correct += data.correct; s[labels[ri]].total += data.total; }
-  }
+  for (const [ch, data] of Object.entries(ca)) { const lower = ch.toLowerCase(); let ri = -1; for (let i = 0; i < rows.length; i++) { if (rows[i].includes(lower)) { ri = i; break; } } if (ri >= 0 && ri < labels.length) { s[labels[ri]].correct += data.correct; s[labels[ri]].total += data.total; } }
   return s;
 }
-
 function getKeyErrorRates(ngramData) {
   const kd = {};
-  for (const [ngram, d] of Object.entries(ngramData)) {
-    if (ngram.length !== 2) continue;
-    const ch = ngram[1];
-    if (!kd[ch]) kd[ch] = { attempts: 0, errors: 0 };
-    kd[ch].attempts += d.attempts;
-    kd[ch].errors += d.errors;
-  }
+  for (const [ngram, d] of Object.entries(ngramData)) { if (ngram.length !== 2) continue; const ch = ngram[1]; if (!kd[ch]) kd[ch] = { attempts: 0, errors: 0 }; kd[ch].attempts += d.attempts; kd[ch].errors += d.errors; }
   return kd;
 }
-
 function getSlowestAlphaNgrams(alphaSpeeds, n, limit) {
-  return Object.entries(alphaSpeeds)
-    .filter(([g, d]) => g.length === n && d.count >= 3)
-    .map(([g, d]) => ({ gram: g, avg: Math.round(d.totalMs / d.count), count: d.count }))
-    .sort((a, b) => b.avg - a.avg)
-    .slice(0, limit || 8);
+  return Object.entries(alphaSpeeds).filter(([g, d]) => g.length === n && d.count >= 3).map(([g, d]) => ({ gram: g, avg: Math.round(d.totalMs / d.count), count: d.count })).sort((a, b) => b.avg - a.avg).slice(0, limit || 8);
 }
 
-// -- SUB-COMPONENTS --
+//  SUB-COMPONENTS 
 function KeyboardHeatmap({ layout, ngramData }) {
-  const ld = LAYOUTS[layout];
-  const ke = getKeyErrorRates(ngramData);
-  const kc = (key) => {
-    const d = ke[key];
-    if (!d || d.attempts < 2) return "rgba(255,255,255,0.06)";
-    const r = d.errors / d.attempts;
-    if (r > 0.4) return "rgba(248,81,73,0.6)";
-    if (r > 0.2) return "rgba(248,81,73,0.35)";
-    if (r > 0.1) return "rgba(210,153,34,0.35)";
-    return "rgba(63,185,80,0.25)";
-  };
+  const ld = LAYOUTS[layout]; const ke = getKeyErrorRates(ngramData);
+  const kc = (key) => { const d = ke[key]; if (!d || d.attempts < 2) return "rgba(255,255,255,0.06)"; const r = d.errors / d.attempts; if (r > 0.4) return "rgba(248,81,73,0.6)"; if (r > 0.2) return "rgba(248,81,73,0.35)"; if (r > 0.1) return "rgba(210,153,34,0.35)"; return "rgba(63,185,80,0.25)"; };
   return (
     <div style={{ marginTop: 12 }}>
-      <div style={{ fontSize: 10, color: "#8b949e", marginBottom: 5, letterSpacing: "0.06em", display: "flex", alignItems: "center" }}>
-        KEY ACCURACY ({ld.name})<Tip text="Heatmap of per-key error rates based on 2-gram data. Green = above 90% accuracy. Yellow = 80-90%. Red = below 80%. Grey = insufficient data (fewer than 2 attempts)." />
-      </div>
-      {ld.rows.map((row, ri) => (
-        <div key={ri} style={{ display: "flex", gap: 2, marginBottom: 2, paddingLeft: ri * 8 }}>
-          {row.map((k) => (
-            <div key={k} style={{ width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 2, fontSize: 8, fontFamily: "'JetBrains Mono', monospace", color: "#c9d1d9", background: kc(k), border: "1px solid rgba(255,255,255,0.06)" }}>{k}</div>
-          ))}
-        </div>
-      ))}
+      <div style={{ fontSize: 10, color: "#8b949e", marginBottom: 5, letterSpacing: "0.06em", display: "flex", alignItems: "center" }}>KEY ACCURACY ({ld.name})<Tip text="Heatmap of per-key error rates. Green = above 90%. Yellow = 80-90%. Red = below 80%. Grey = insufficient data." /></div>
+      {ld.rows.map((row, ri) => (<div key={ri} style={{ display: "flex", gap: 2, marginBottom: 2, paddingLeft: ri * 8 }}>{row.map((k) => (<div key={k} style={{ width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 2, fontSize: 8, fontFamily: "'JetBrains Mono', monospace", color: "#c9d1d9", background: kc(k), border: "1px solid rgba(255,255,255,0.06)" }}>{k}</div>))}</div>))}
       <div style={{ display: "flex", gap: 8, marginTop: 5, fontSize: 9, color: "#6e7681" }}>
         <span><span style={{ display: "inline-block", width: 7, height: 7, background: "rgba(63,185,80,0.25)", borderRadius: 1, marginRight: 2, verticalAlign: "middle" }} />good</span>
         <span><span style={{ display: "inline-block", width: 7, height: 7, background: "rgba(210,153,34,0.35)", borderRadius: 1, marginRight: 2, verticalAlign: "middle" }} />weak</span>
@@ -442,7 +390,7 @@ function KeyboardHeatmap({ layout, ngramData }) {
   );
 }
 
-function LivePanel({ keystrokes, errors, startTime, cursorPos, text, currentStreak, bestStreak, wpmHistory, sessionHistory }) {
+function LivePanel({ keystrokes, errors, startTime, cursorPos, text, currentStreak, bestStreak, wpmHistory, sessionHistory, bandSetting, currentBand, progRunsAtBand, progAccAtBand }) {
   const elapsed = startTime ? (Date.now() - startTime) / 60000 : 0;
   const wpm = elapsed > 0 ? Math.round((cursorPos / 5) / elapsed) : 0;
   const rawWpm = elapsed > 0 ? Math.round((keystrokes / 5) / elapsed) : 0;
@@ -450,48 +398,38 @@ function LivePanel({ keystrokes, errors, startTime, cursorPos, text, currentStre
   const progress = text.length > 0 ? (cursorPos / text.length * 100).toFixed(0) : 0;
   const L = { fontSize: 10, color: "#8b949e", letterSpacing: "0.05em", display: "flex", alignItems: "center" };
   const V = { fontSize: 22, fontWeight: 700, color: "#e6edf3", fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.2 };
+  const isProg = bandSetting === "progressive";
   return (
     <div>
+      <div style={{ marginBottom: 10 }}><div style={L}>WPM<Tip text="Words per minute. (characters typed / 5) / minutes elapsed. Raw counts all keystrokes including errors." /></div><div style={V}>{wpm}</div><div style={{ fontSize: 10, color: "#6e7681" }}>raw: {rawWpm}</div></div>
+      <div style={{ marginBottom: 10 }}><div style={L}>ACCURACY<Tip text="(total keystrokes - errors) / total keystrokes. Green above 95%, yellow 85-95%, red below 85%." /></div><div style={{ ...V, color: parseFloat(accuracy) > 95 ? "#3fb950" : parseFloat(accuracy) > 85 ? "#d29922" : "#f85149" }}>{accuracy}%</div></div>
+      <div style={{ marginBottom: 10 }}><div style={L}>ERRORS<Tip text="Total mistyped keystrokes in the current text." /></div><div style={{ ...V, fontSize: 16 }}>{errors}</div></div>
+      <div style={{ marginBottom: 10 }}><div style={L}>STREAK<Tip text="Consecutive correct keystrokes. Resets on any error. Best is the longest run this session." /></div><div style={{ ...V, fontSize: 16 }}>{currentStreak}</div><div style={{ fontSize: 10, color: "#6e7681" }}>best: {bestStreak}</div></div>
       <div style={{ marginBottom: 10 }}>
-        <div style={L}>WPM<Tip text="Words per minute. Calculated as (characters typed / 5) / minutes elapsed. Only counts characters at or before the cursor position, so backspaced characters reduce this." /></div>
-        <div style={V}>{wpm}</div>
-        <div style={{ fontSize: 10, color: "#6e7681" }}>raw: {rawWpm}</div>
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div style={L}>ACCURACY<Tip text="Percentage of keystrokes that matched the target character. Formula: (total keystrokes - errors) / total keystrokes. Backspace does not count as a keystroke." /></div>
-        <div style={{ ...V, color: parseFloat(accuracy) > 95 ? "#3fb950" : parseFloat(accuracy) > 85 ? "#d29922" : "#f85149" }}>{accuracy}%</div>
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div style={L}>ERRORS<Tip text="Total number of keystrokes where the typed character did not match the expected character." /></div>
-        <div style={{ ...V, fontSize: 16 }}>{errors}</div>
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div style={L}>STREAK<Tip text="Current consecutive correct keystrokes. Resets to zero on any error. Best streak is the longest run across the current page session." /></div>
-        <div style={{ ...V, fontSize: 16 }}>{currentStreak}</div>
-        <div style={{ fontSize: 10, color: "#6e7681" }}>best: {bestStreak}</div>
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div style={L}>PROGRESS<Tip text="How far through the current text. Characters typed / total characters." /></div>
-        <div style={{ width: "100%", height: 3, background: "rgba(255,255,255,0.08)", borderRadius: 2, marginTop: 4 }}>
-          <div style={{ width: `${progress}%`, height: "100%", background: "#58a6ff", borderRadius: 2, transition: "width 0.15s" }} />
-        </div>
+        <div style={L}>PROGRESS<Tip text="Characters typed / total characters." /></div>
+        <div style={{ width: "100%", height: 3, background: "rgba(255,255,255,0.08)", borderRadius: 2, marginTop: 4 }}><div style={{ width: `${progress}%`, height: "100%", background: "#58a6ff", borderRadius: 2, transition: "width 0.15s" }} /></div>
         <div style={{ fontSize: 10, color: "#6e7681" }}>{cursorPos}/{text.length}</div>
       </div>
       {wpmHistory.length > 3 && (
-        <div style={{ marginTop: 6 }}>
-          <div style={L}>WPM TREND<Tip text="WPM sampled every 2 seconds during the current text." /></div>
-          <div style={{ height: 42, marginTop: 4 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={wpmHistory}><YAxis hide domain={["dataMin - 5", "dataMax + 5"]} /><Line type="monotone" dataKey="wpm" stroke="#58a6ff" strokeWidth={1.5} dot={false} /></LineChart>
-            </ResponsiveContainer>
-          </div>
+        <div style={{ marginTop: 6 }}><div style={L}>WPM TREND<Tip text="WPM sampled every 2 seconds during the current text." /></div>
+          <div style={{ height: 42, marginTop: 4 }}><ResponsiveContainer width="100%" height="100%"><LineChart data={wpmHistory}><YAxis hide domain={["dataMin - 5", "dataMax + 5"]} /><Line type="monotone" dataKey="wpm" stroke="#58a6ff" strokeWidth={1.5} dot={false} /></LineChart></ResponsiveContainer></div>
+        </div>
+      )}
+      {isProg && (
+        <div style={{ marginTop: 10, padding: "6px 8px", background: "rgba(255,255,255,0.03)", borderRadius: 3 }}>
+          <div style={{ ...L, marginBottom: 4 }}>PROGRESSIVE<Tip text="Auto-advances bands. Promotes after 2 runs at >= 95% average accuracy. Demotes if a run drops below 85%." /></div>
+          <div style={{ fontSize: 11, color: "#e6edf3" }}>{getBandLabel(currentBand)}</div>
+          <div style={{ fontSize: 10, color: "#6e7681", marginTop: 2 }}>Runs at band: {progRunsAtBand}</div>
+          {progRunsAtBand > 0 && <div style={{ fontSize: 10, color: "#6e7681" }}>Avg accuracy: {(progAccAtBand / progRunsAtBand).toFixed(1)}%</div>}
+          <div style={{ fontSize: 10, color: "#484f58", marginTop: 2 }}>Promote: 2 runs at 95%+</div>
+          <div style={{ fontSize: 10, color: "#484f58" }}>Demote: any run below 85%</div>
         </div>
       )}
       {sessionHistory.length > 0 && (
         <div style={{ marginTop: 12 }}>
-          <div style={{ ...L, marginBottom: 4 }}>SESSION LOG<Tip text="History of completed texts in this page session. Persists across auto-loads. Can be saved to JSON and reloaded later." /></div>
+          <div style={{ ...L, marginBottom: 4 }}>SESSION LOG<Tip text="History of completed texts. Persists across auto-loads. Can be saved to JSON." /></div>
           {sessionHistory.slice(-6).reverse().map((s, i) => (
-            <div key={i} style={{ fontSize: 10, color: "#6e7681", marginBottom: 2 }}>{s.time} / {s.mode} / {s.wpm}wpm / {s.accuracy}% / {s.chars}ch</div>
+            <div key={i} style={{ fontSize: 10, color: "#6e7681", marginBottom: 2 }}>{s.time} / {s.mode}{s.band ? " B" + s.band : ""} / {s.wpm}wpm / {s.accuracy}%</div>
           ))}
         </div>
       )}
@@ -506,33 +444,17 @@ function WeakPanel({ ngramData, wordErrors }) {
   const HL = { fontSize: 10, color: "#8b949e", marginBottom: 4, letterSpacing: "0.05em", display: "flex", alignItems: "center" };
   return (
     <div>
-      {wn.length > 0 && (
-        <div style={{ marginBottom: 12 }}>
-          <div style={HL}>WEAK SEQUENCES<Tip text="N-grams (2-5 characters) with the highest error rates. Minimum 3 attempts to appear. Underscore represents space. This data persists across texts and can be used by Adaptive Practice mode." /></div>
-          {wn.map(({ ngram, rate, attempts, errors }) => (
-            <div key={ngram} style={{ display: "flex", justifyContent: "space-between", marginBottom: 2, fontSize: 11 }}>
-              <code style={{ fontFamily: "'JetBrains Mono', monospace", background: "rgba(255,255,255,0.06)", padding: "0 4px", borderRadius: 2, color: "#e6edf3", fontSize: 11 }}>{ngram.replace(/ /g, "_")}</code>
-              <span style={{ color: rate > 0.3 ? "#f85149" : "#d29922", fontSize: 10 }}>{(rate * 100).toFixed(0)}% ({errors}/{attempts})</span>
-            </div>
-          ))}
-        </div>
-      )}
-      {ww.length > 0 && (
-        <div>
-          <div style={HL}>WEAK WORDS<Tip text="Words where at least one character was mistyped. Sorted by error rate. Minimum 2 attempts to appear." /></div>
-          {ww.map(({ w, rate, attempts, errors }) => (
-            <div key={w} style={{ display: "flex", justifyContent: "space-between", marginBottom: 2, fontSize: 11 }}>
-              <span style={{ color: "#e6edf3", fontFamily: "'JetBrains Mono', monospace" }}>{w}</span>
-              <span style={{ color: rate > 0.3 ? "#f85149" : "#d29922", fontSize: 10 }}>{(rate * 100).toFixed(0)}% ({errors}/{attempts})</span>
-            </div>
-          ))}
-        </div>
-      )}
+      {wn.length > 0 && (<div style={{ marginBottom: 12 }}><div style={HL}>WEAK SEQUENCES<Tip text="N-grams (2-5 chars) with highest error rates. XX% (Y/Z) = Y errors in Z attempts. Min 3 attempts. Underscore = space." /></div>
+        {wn.map(({ ngram, rate, attempts, errors }) => (<div key={ngram} style={{ display: "flex", justifyContent: "space-between", marginBottom: 2, fontSize: 11 }}><code style={{ fontFamily: "'JetBrains Mono', monospace", background: "rgba(255,255,255,0.06)", padding: "0 4px", borderRadius: 2, color: "#e6edf3", fontSize: 11 }}>{ngram.replace(/ /g, "_")}</code><span style={{ color: rate > 0.3 ? "#f85149" : "#d29922", fontSize: 10 }}>{(rate * 100).toFixed(0)}% ({errors}/{attempts})</span></div>))}
+      </div>)}
+      {ww.length > 0 && (<div><div style={HL}>WEAK WORDS<Tip text="Words with errors. XX% (Y/Z) = Y attempts with at least one error out of Z total attempts. Min 2 attempts." /></div>
+        {ww.map(({ w, rate, attempts, errors }) => (<div key={w} style={{ display: "flex", justifyContent: "space-between", marginBottom: 2, fontSize: 11 }}><span style={{ color: "#e6edf3", fontFamily: "'JetBrains Mono', monospace" }}>{w}</span><span style={{ color: rate > 0.3 ? "#f85149" : "#d29922", fontSize: 10 }}>{(rate * 100).toFixed(0)}% ({errors}/{attempts})</span></div>))}
+      </div>)}
     </div>
   );
 }
 
-function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSpeeds }) {
+function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSpeeds, bandPerf }) {
   const fingerStats = computeFingerStats(charAccuracy, layout);
   const handStats = computeHandStats(fingerStats);
   const rowStats = computeRowStats(charAccuracy, layout);
@@ -540,16 +462,11 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSp
   const slowAlpha2 = getSlowestAlphaNgrams(alphaSpeeds, 2, 8);
   const slowAlpha3 = getSlowestAlphaNgrams(alphaSpeeds, 3, 6);
   const slowAlpha4 = getSlowestAlphaNgrams(alphaSpeeds, 4, 5);
-
-  const consistency = wpmHistory.length > 3 ? (() => {
-    const v = wpmHistory.map(h => h.wpm);
-    const m = v.reduce((a, b) => a + b, 0) / v.length;
-    const sd = Math.sqrt(v.reduce((s, x) => s + (x - m) ** 2, 0) / v.length);
-    return { mean: m.toFixed(0), sd: sd.toFixed(1), cv: m > 0 ? (sd / m * 100).toFixed(0) : "0" };
-  })() : null;
+  const consistency = wpmHistory.length > 3 ? (() => { const v = wpmHistory.map(h => h.wpm); const m = v.reduce((a, b) => a + b, 0) / v.length; const sd = Math.sqrt(v.reduce((s, x) => s + (x - m) ** 2, 0) / v.length); return { mean: m.toFixed(0), sd: sd.toFixed(1), cv: m > 0 ? (sd / m * 100).toFixed(0) : "0" }; })() : null;
 
   const hasData = Object.keys(fingerStats).length > 0 || worstChars.length > 0 || slowAlpha2.length > 0;
-  if (!hasData) return <div style={{ fontSize: 11, color: "#6e7681" }}>Detailed analytics appear after typing begins.</div>;
+  const hasBandPerf = Object.keys(bandPerf).length > 0;
+  if (!hasData && !hasBandPerf) return <div style={{ fontSize: 11, color: "#6e7681" }}>Detailed analytics appear after typing begins.</div>;
 
   const pct = (c, t) => t > 0 ? (c / t * 100).toFixed(1) + "%" : "n/a";
   const pc = (c, t) => { if (t === 0) return "#6e7681"; const r = c / t; return r > 0.95 ? "#3fb950" : r > 0.85 ? "#d29922" : "#f85149"; };
@@ -561,59 +478,44 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSp
 
   return (
     <div>
-      {Object.keys(handStats).length > 0 && (
-        <div style={SM}><div style={HL}>PER HAND<Tip text="Accuracy broken down by left vs right hand, based on which finger is assigned to each key in the selected layout." /></div>
-          {Object.entries(handStats).map(([h, d]) => (<div key={h} style={SR}><span style={{ color: "#c9d1d9" }}>{h}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>))}
+      {hasBandPerf && (
+        <div style={SM}>
+          <div style={HL}>BAND PERFORMANCE<Tip text="Average WPM and accuracy per frequency band per language. Tracks your progress across difficulty levels. More runs = more reliable averages." /></div>
+          {Object.entries(bandPerf).map(([lang, bands]) => (
+            <div key={lang} style={{ marginBottom: 8 }}>
+              <div style={{ fontSize: 10, color: "#58a6ff", marginBottom: 3 }}>{lang}</div>
+              {Object.entries(bands).sort((a, b) => Number(a[0]) - Number(b[0])).map(([bid, d]) => {
+                const avgWpm = Math.round(d.wpmSum / d.runs);
+                const avgAcc = (d.accSum / d.runs).toFixed(1);
+                return (<div key={bid} style={SR}><span style={{ color: "#c9d1d9" }}>Band {bid}</span><span style={{ color: "#8b949e" }}>{avgWpm} wpm / {avgAcc}% ({d.runs})</span></div>);
+              })}
+            </div>
+          ))}
         </div>
       )}
-      {Object.keys(fingerStats).length > 0 && (
-        <div style={SM}><div style={HL}>PER FINGER<Tip text="Accuracy per finger. L4 = left pinky, R1 = right index, etc. Based on the standard touch-typing finger assignments for the selected layout." /></div>
-          {["L4", "L3", "L2", "L1", "R1", "R2", "R3", "R4"].map(f => { const d = fingerStats[f]; if (!d) return null; return <div key={f} style={SR}><span style={{ color: "#c9d1d9" }}>{FINGER_LABELS[f]}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>; })}
-        </div>
-      )}
-      {Object.entries(rowStats).some(([_, d]) => d.total > 0) && (
-        <div style={SM}><div style={HL}>PER ROW<Tip text="Accuracy per keyboard row. Number row is the top, then Top (QWERTY), Home (ASDF), Bottom (ZXCV)." /></div>
-          {Object.entries(rowStats).filter(([_, d]) => d.total > 0).map(([r, d]) => (<div key={r} style={SR}><span style={{ color: "#c9d1d9" }}>{r}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>))}
-        </div>
-      )}
-      {worstChars.length > 0 && (
-        <div style={SM}><div style={HL}>WEAKEST CHARACTERS<Tip text="Individual characters with the lowest accuracy. Minimum 3 attempts to appear. Includes letters, numbers, and symbols." /></div>
-          {worstChars.map(({ ch, rate, total }) => (<div key={ch} style={SR}><code style={gc}>{ch === " " ? "space" : ch}</code><span style={{ color: pc(rate, 1) }}>{(rate * 100).toFixed(0)}% ({total})</span></div>))}
-        </div>
-      )}
-      {slowAlpha2.length > 0 && (
-        <div style={SM}><div style={HL}>SLOWEST ALPHA 2-GRAMS<Tip text="Slowest letter-only bigrams by average inter-key time in milliseconds. Only a-z characters. Excludes numbers, symbols, space. Minimum 3 occurrences. This isolates pure typing fluency from symbol-reaching overhead." /></div>
-          {slowAlpha2.map(({ gram, avg, count }) => (<div key={gram} style={SR}><code style={gc}>{gram}</code><span style={{ color: mc(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>))}
-        </div>
-      )}
-      {slowAlpha3.length > 0 && (
-        <div style={SM}><div style={HL}>SLOWEST ALPHA 3-GRAMS<Tip text="Slowest 3-letter sequences. Total time from first to last character. Only a-z. Helps identify awkward hand transitions and finger rolls." /></div>
-          {slowAlpha3.map(({ gram, avg, count }) => (<div key={gram} style={SR}><code style={gc}>{gram}</code><span style={{ color: mc(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>))}
-        </div>
-      )}
-      {slowAlpha4.length > 0 && (
-        <div style={SM}><div style={HL}>SLOWEST ALPHA 4-GRAMS<Tip text="Slowest 4-letter sequences. Useful for spotting problematic word fragments and common suffixes (-tion, -ness, -ment) that slow you down." /></div>
-          {slowAlpha4.map(({ gram, avg, count }) => (<div key={gram} style={SR}><code style={gc}>{gram}</code><span style={{ color: mc(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>))}
-        </div>
-      )}
-      {consistency && (
-        <div style={SM}><div style={HL}>CONSISTENCY<Tip text="Statistical consistency of your WPM over the current text. Lower CV (coefficient of variation) means more consistent speed. CV below 15% is very consistent." /></div>
-          <div style={{ fontSize: 11, color: "#c9d1d9" }}>Mean: {consistency.mean} wpm</div>
-          <div style={{ fontSize: 11, color: "#c9d1d9" }}>Std dev: {consistency.sd}</div>
-          <div style={{ fontSize: 11, color: "#c9d1d9" }}>CV: {consistency.cv}%</div>
-        </div>
-      )}
+      {Object.keys(handStats).length > 0 && (<div style={SM}><div style={HL}>PER HAND<Tip text="Accuracy by hand. XX% (N) = N keystrokes attributed to that hand. Based on touch-typing finger assignments." /></div>{Object.entries(handStats).map(([h, d]) => (<div key={h} style={SR}><span style={{ color: "#c9d1d9" }}>{h}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>))}</div>)}
+      {Object.keys(fingerStats).length > 0 && (<div style={SM}><div style={HL}>PER FINGER<Tip text="Accuracy per finger. (N) = total keystrokes for that finger." /></div>{["L4", "L3", "L2", "L1", "R1", "R2", "R3", "R4"].map(f => { const d = fingerStats[f]; if (!d) return null; return <div key={f} style={SR}><span style={{ color: "#c9d1d9" }}>{FINGER_LABELS[f]}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>; })}</div>)}
+      {Object.entries(rowStats).some(([_, d]) => d.total > 0) && (<div style={SM}><div style={HL}>PER ROW<Tip text="Accuracy per keyboard row. Number, Top, Home, Bottom." /></div>{Object.entries(rowStats).filter(([_, d]) => d.total > 0).map(([r, d]) => (<div key={r} style={SR}><span style={{ color: "#c9d1d9" }}>{r}</span><span style={{ color: pc(d.correct, d.total) }}>{pct(d.correct, d.total)} ({d.total})</span></div>))}</div>)}
+      {worstChars.length > 0 && (<div style={SM}><div style={HL}>WEAKEST CHARACTERS<Tip text="Characters with lowest accuracy. XX% (N) = correct rate across N attempts. Min 3 attempts." /></div>{worstChars.map(({ ch, rate, total }) => (<div key={ch} style={SR}><code style={gc}>{ch === " " ? "space" : ch}</code><span style={{ color: pc(rate, 1) }}>{(rate * 100).toFixed(0)}% ({total})</span></div>))}</div>)}
+      {slowAlpha2.length > 0 && (<div style={SM}><div style={HL}>SLOWEST ALPHA 2-GRAMS<Tip text="Slowest letter-only bigrams. Only a-z. Nms (C) = average N milliseconds across C occurrences. Min 3." /></div>{slowAlpha2.map(({ gram, avg, count }) => (<div key={gram} style={SR}><code style={gc}>{gram}</code><span style={{ color: mc(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>))}</div>)}
+      {slowAlpha3.length > 0 && (<div style={SM}><div style={HL}>SLOWEST ALPHA 3-GRAMS<Tip text="Slowest 3-letter sequences. Total time from first to last keypress. Only a-z. Min 3 occurrences." /></div>{slowAlpha3.map(({ gram, avg, count }) => (<div key={gram} style={SR}><code style={gc}>{gram}</code><span style={{ color: mc(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>))}</div>)}
+      {slowAlpha4.length > 0 && (<div style={SM}><div style={HL}>SLOWEST ALPHA 4-GRAMS<Tip text="Slowest 4-letter sequences. Identifies problematic word fragments (-tion, -ness). Only a-z. Min 3." /></div>{slowAlpha4.map(({ gram, avg, count }) => (<div key={gram} style={SR}><code style={gc}>{gram}</code><span style={{ color: mc(avg) }}>{avg}ms <span style={{ color: "#6e7681" }}>({count})</span></span></div>))}</div>)}
+      {consistency && (<div style={SM}><div style={HL}>CONSISTENCY<Tip text="WPM stability. CV = (std dev / mean) * 100. Below 15% = very consistent. Above 25% = significant fluctuation." /></div><div style={{ fontSize: 11, color: "#c9d1d9" }}>Mean: {consistency.mean} wpm</div><div style={{ fontSize: 11, color: "#c9d1d9" }}>Std dev: {consistency.sd}</div><div style={{ fontSize: 11, color: "#c9d1d9" }}>CV: {consistency.cv}%</div></div>)}
     </div>
   );
 }
 
-// -- MAIN --
+//  MAIN 
 export default function MarkTwain() {
+  const [loadedWordCount, setLoadedWordCount] = useState(0);
   const [mode, setMode] = useState("wikipedia");
   const [layout, setLayout] = useState("qwerty");
   const [codeLang, setCodeLang] = useState("python");
   const [wordsLang, setWordsLang] = useState("English (UK)");
-  const [wordsCount, setWordsCount] = useState(100);
+  const [bandSetting, setBandSetting] = useState("1");
+  const [currentBand, setCurrentBand] = useState(1);
+  const [progRunsAtBand, setProgRunsAtBand] = useState(0);
+  const [progAccAtBand, setProgAccAtBand] = useState(0);
   const [lineCount, setLineCount] = useState(10);
   const [autoLoad, setAutoLoad] = useState(false);
   const [text, setText] = useState("");
@@ -628,6 +530,7 @@ export default function MarkTwain() {
   const [wordErrors, setWordErrors] = useState({});
   const [charAccuracy, setCharAccuracy] = useState({});
   const [alphaSpeeds, setAlphaSpeeds] = useState({});
+  const [bandPerf, setBandPerf] = useState({});
   const [isComplete, setIsComplete] = useState(false);
   const [loading, setLoading] = useState(false);
   const [wpmHistory, setWpmHistory] = useState([]);
@@ -649,7 +552,16 @@ export default function MarkTwain() {
 
   useEffect(() => { cursorPosRef.current = cursorPos; }, [cursorPos]);
 
-  const doLoadText = useCallback(async (forceMode, lc, ml, wl, wc, cl, ct, nd) => {
+  // sync bandSetting to currentBand for fixed bands
+  useEffect(() => {
+    if (bandSetting !== "progressive") {
+      setCurrentBand(parseInt(bandSetting));
+      setProgRunsAtBand(0);
+      setProgAccAtBand(0);
+    }
+  }, [bandSetting]);
+
+  const doLoadText = useCallback(async (forceMode, lc, ml, wl, cl, ct, nd, cb) => {
     const m = forceMode || ml;
     setLoading(true);
     setIsComplete(false);
@@ -671,15 +583,21 @@ export default function MarkTwain() {
       newText = r.text;
       setCodeSource(r.source);
     } else if (m === "adaptive") {
-      const raw = generateAdaptiveText(nd);
+      const words = await loadWordList(wl);
+      const raw = generateAdaptiveText(nd, words);
       const lines = wrapToLines(raw, 65);
       newText = lines.slice(0, lc).join("\n");
     } else if (m === "custom") {
       const raw = ct || "Type your custom text here.";
-      const lines = raw.split("\n");
-      newText = lines.slice(0, lc).join("\n");
+      newText = raw.split("\n").slice(0, lc).join("\n");
     } else if (m === "common-words") {
-      newText = generateCommonWordsText(wl, wc, lc);
+      // const words = await loadWordList(wl);
+      // const pool = getWordsForBand(words, cb);
+      // newText = generateBandText(pool, lc);
+      const words = await loadWordList(wl);
+      setLoadedWordCount(words.length);
+      const pool = getWordsForBand(words, cb);
+      newText = generateBandText(pool, lc);
     } else if (m === "special-chars") {
       newText = generateSpecialCharText(lc);
     }
@@ -691,14 +609,11 @@ export default function MarkTwain() {
     setLoading(false);
   }, []);
 
-  // wrapper that captures current state for doLoadText
   const loadText = useCallback((forceMode) => {
-    return doLoadText(forceMode, lineCount, mode, wordsLang, wordsCount, codeLang, customText, ngramData);
-  }, [doLoadText, lineCount, mode, wordsLang, wordsCount, codeLang, customText, ngramData]);
+    return doLoadText(forceMode, lineCount, mode, wordsLang, codeLang, customText, ngramData, currentBand);
+  }, [doLoadText, lineCount, mode, wordsLang, codeLang, customText, ngramData, currentBand]);
 
-  // keep a ref to loadText for auto-load timer
   useEffect(() => { loadTextRef.current = loadText; }, [loadText]);
-
   useEffect(() => { loadText(); }, []);
   useEffect(() => { if (cursorRef.current) cursorRef.current.scrollIntoView({ block: "center", behavior: "smooth" }); }, [cursorPos]);
 
@@ -712,12 +627,9 @@ export default function MarkTwain() {
     return () => clearInterval(wpmIntervalRef.current);
   }, [startTime, isComplete]);
 
-  // auto-load: uses ref to avoid stale closure / effect cancellation
   useEffect(() => {
     if (isComplete && autoLoad) {
-      autoLoadTimerRef.current = setTimeout(() => {
-        if (loadTextRef.current) loadTextRef.current();
-      }, 2200);
+      autoLoadTimerRef.current = setTimeout(() => { if (loadTextRef.current) loadTextRef.current(); }, 2200);
     }
     return () => { if (autoLoadTimerRef.current) clearTimeout(autoLoadTimerRef.current); };
   }, [isComplete, autoLoad]);
@@ -731,23 +643,22 @@ export default function MarkTwain() {
 
   const handleSave = useCallback(() => {
     const data = {
-      version: 2,
+      version: 3,
       savedAt: new Date().toISOString(),
-      ngramData, wordErrors, charAccuracy, alphaSpeeds, sessionHistory, bestStreak, layout,
-      settings: { mode, codeLang, wordsLang, wordsCount, lineCount, autoLoad }
+      ngramData, wordErrors, charAccuracy, alphaSpeeds, bandPerf, sessionHistory, bestStreak, layout,
+      settings: { mode, codeLang, wordsLang, bandSetting, currentBand, lineCount, autoLoad }
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    // a.download = "shauryashaurya-twain-typing-session-" + new Date().toISOString().slice(0, 10) + ".json";
     const now = new Date();
     const date = now.toISOString().slice(0, 10);
     const time = now.toTimeString().slice(0, 8).replace(/:/g, "");
     a.download = "Shaurya_Mark_Twain_Typing_Run_" + date + "_" + time + ".json";
     a.click();
     URL.revokeObjectURL(url);
-  }, [ngramData, wordErrors, charAccuracy, alphaSpeeds, sessionHistory, bestStreak, layout, mode, codeLang, wordsLang, wordsCount, lineCount, autoLoad]);
+  }, [ngramData, wordErrors, charAccuracy, alphaSpeeds, bandPerf, sessionHistory, bestStreak, layout, mode, codeLang, wordsLang, bandSetting, currentBand, lineCount, autoLoad]);
 
   const handleFileLoad = useCallback((e) => {
     const file = e.target.files[0];
@@ -760,6 +671,7 @@ export default function MarkTwain() {
         if (d.wordErrors) setWordErrors(d.wordErrors);
         if (d.charAccuracy) setCharAccuracy(d.charAccuracy);
         if (d.alphaSpeeds) setAlphaSpeeds(d.alphaSpeeds);
+        if (d.bandPerf) setBandPerf(d.bandPerf);
         if (d.sessionHistory) setSessionHistory(d.sessionHistory);
         if (d.bestStreak) setBestStreak(d.bestStreak);
         if (d.layout) setLayout(d.layout);
@@ -767,7 +679,8 @@ export default function MarkTwain() {
           if (d.settings.mode) setMode(d.settings.mode);
           if (d.settings.codeLang) setCodeLang(d.settings.codeLang);
           if (d.settings.wordsLang) setWordsLang(d.settings.wordsLang);
-          if (d.settings.wordsCount) setWordsCount(d.settings.wordsCount);
+          if (d.settings.bandSetting) setBandSetting(d.settings.bandSetting);
+          if (d.settings.currentBand) setCurrentBand(d.settings.currentBand);
           if (d.settings.lineCount) setLineCount(d.settings.lineCount);
           if (d.settings.autoLoad !== undefined) setAutoLoad(d.settings.autoLoad);
         }
@@ -821,12 +734,47 @@ export default function MarkTwain() {
       const fwpm = el > 0 ? Math.round((text.length / 5) / el) : 0;
       const totalKs = keystrokes + 1;
       const totalErr = errors + (ok ? 0 : 1);
-      const facc = totalKs > 0 ? ((totalKs - totalErr) / totalKs * 100).toFixed(1) : "100.0";
-      const entry = { wpm: fwpm, accuracy: facc, mode, time: new Date().toLocaleTimeString(), chars: text.length, elapsed: el.toFixed(1), errors: totalErr };
+      const faccNum = totalKs > 0 ? (totalKs - totalErr) / totalKs * 100 : 100;
+      const facc = faccNum.toFixed(1);
+
+      const entry = { wpm: fwpm, accuracy: facc, mode, time: new Date().toLocaleTimeString(), chars: text.length, elapsed: el.toFixed(1), errors: totalErr, band: mode === "common-words" ? currentBand : null, lang: wordsLang };
       setLastRunStats(entry);
       setSessionHistory(prev => [...prev, entry]);
+
+      // band performance tracking (common-words mode only)
+      if (mode === "common-words") {
+        setBandPerf(prev => {
+          const langKey = wordsLang;
+          const bid = currentBand;
+          const existing = prev[langKey]?.[bid] || { runs: 0, wpmSum: 0, accSum: 0 };
+          return { ...prev, [langKey]: { ...(prev[langKey] || {}), [bid]: { runs: existing.runs + 1, wpmSum: existing.wpmSum + fwpm, accSum: existing.accSum + faccNum } } };
+        });
+
+        // progressive difficulty logic
+        if (bandSetting === "progressive") {
+          const newRuns = progRunsAtBand + 1;
+          const newAccSum = progAccAtBand + faccNum;
+          const avgAcc = newAccSum / newRuns;
+
+          if (faccNum < 85 && currentBand > 1) {
+            // demote: this run was below 85%
+            setCurrentBand(prev => prev - 1);
+            setProgRunsAtBand(0);
+            setProgAccAtBand(0);
+          } else if (newRuns >= 2 && avgAcc >= 95 && currentBand < 5) {
+            // promote: 2+ runs at this band with average >= 95%
+            setCurrentBand(prev => prev + 1);
+            setProgRunsAtBand(0);
+            setProgAccAtBand(0);
+          } else {
+            // stay: update counters
+            setProgRunsAtBand(newRuns);
+            setProgAccAtBand(newAccSum);
+          }
+        }
+      }
     }
-  }, [cursorPos, text, isComplete, loading, startTime, mode, getCurrentWord, keystrokes, errors]);
+  }, [cursorPos, text, isComplete, loading, startTime, mode, getCurrentWord, keystrokes, errors, currentBand, bandSetting, progRunsAtBand, progAccAtBand, wordsLang]);
 
   useEffect(() => { if (containerRef.current) containerRef.current.focus(); }, [text, loading]);
 
@@ -848,6 +796,8 @@ export default function MarkTwain() {
   }, [text, charStates, cursorPos]);
 
   const isCode = mode === "github" || mode === "special-chars";
+  const showLangSelector = mode === "common-words" || mode === "adaptive";
+  const showBandSelector = mode === "common-words";
   const tabSt = (a) => ({ padding: "4px 0", fontSize: 10, letterSpacing: "0.05em", cursor: "pointer", color: a ? "#58a6ff" : "#6e7681", background: "none", border: "none", borderBottom: a ? "1px solid #58a6ff" : "1px solid transparent", fontFamily: "inherit" });
 
   return (
@@ -869,10 +819,10 @@ export default function MarkTwain() {
 
       <input type="file" ref={fileInputRef} accept=".json" style={{ display: "none" }} onChange={handleFileLoad} />
 
-      {/* row 1 */}
+      {/* row 1: mode, language, band, layout */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px", borderBottom: "1px solid #161b22", flexShrink: 0, flexWrap: "wrap" }}>
         <span style={{ fontSize: 13, fontWeight: 700, color: "#e6edf3", marginRight: 4 }}>MARK TWAIN</span>
-        <Tip text="Typing practice tool. Pick a mode, set line count, and start typing. Text appears dim; correct keystrokes turn white, errors turn red. Backspace to correct. All analytics persist across texts in a session." />
+        <Tip text="Typing practice tool. Pick a mode, set line count, and start typing. All analytics persist across texts in a session." />
         <select className="ts" value={mode} onChange={e => { setMode(e.target.value); if (e.target.value === "custom") setShowCustomInput(true); }}>
           <option value="wikipedia">Wikipedia</option>
           <option value="github">Code (GitHub)</option>
@@ -881,49 +831,57 @@ export default function MarkTwain() {
           <option value="adaptive">Adaptive Practice</option>
           <option value="custom">Custom Text</option>
         </select>
-        <Tip text="Wikipedia: random article summaries (multiple fetched to fill lines). Code: files from popular GitHub repos. Common Words: frequent words in 5 languages. Special Characters: punctuation and symbol drills. Adaptive: words targeting your weakest n-grams. Custom: paste your own text." />
+        <Tip text="Wikipedia: random articles. Code: GitHub repos. Common Words: frequency-ranked words by band. Special Characters: symbol drills. Adaptive: targets your weak n-grams. Custom: paste your own." />
         {mode === "github" && (
           <select className="ts" value={codeLang} onChange={e => setCodeLang(e.target.value)}>
             <option value="python">Python</option><option value="javascript">JavaScript</option>
             <option value="typescript">TypeScript</option><option value="rust">Rust</option><option value="go">Go</option>
           </select>
         )}
-        {mode === "common-words" && (
+        {showLangSelector && (
+          <select className="ts" value={wordsLang} onChange={e => setWordsLang(e.target.value)}>
+            {Object.keys(LANG_CONFIG).map(l => <option key={l} value={l}>{l}</option>)}
+          </select>
+        )}
+        {showBandSelector && (
           <>
-            <select className="ts" value={wordsLang} onChange={e => setWordsLang(e.target.value)}>
-              {Object.keys(WORD_LISTS).map(l => <option key={l} value={l}>{l}</option>)}
+            <select className="ts" value={bandSetting} onChange={e => setBandSetting(e.target.value)}>
+              {BANDS.map(b => {
+                const available = loadedWordCount === 0 || b.start < loadedWordCount;
+                const suffix = !available ? " [needs JSON]" : "";
+                return <option key={b.id} value={String(b.id)} disabled={!available}>{b.label} ({b.start + 1}-{Math.min(b.end, loadedWordCount || b.end)}){suffix}</option>;
+              })}
+              <option value="progressive" disabled={loadedWordCount > 0 && loadedWordCount <= 500}>Progressive</option>
             </select>
-            <select className="ts" value={wordsCount} onChange={e => setWordsCount(Number(e.target.value))}>
-              <option value={50}>Top 50</option><option value={100}>Top 100</option><option value={200}>Top 200</option><option value={500}>Top 500</option>
-            </select>
+            <Tip text="Band 1: most common 100 words. Band 2: 101-500. Band 3: 501-1500. Band 4: 1501-3000. Band 5: 3001-5000. Progressive: auto-advances based on accuracy. Requires JSON word lists built by build_wordlists.py for bands 3-5." />
           </>
         )}
         <select className="ts" value={layout} onChange={e => setLayout(e.target.value)}>
           <option value="qwerty">QWERTY</option><option value="dvorak">Dvorak</option><option value="colemak">Colemak</option>
         </select>
-        <Tip text="Keyboard layout affects finger/hand/row analytics and the heatmap. Does not change what you type, only how stats are attributed." />
+        <Tip text="Keyboard layout for finger/hand/row analytics and heatmap." />
       </div>
 
-      {/* row 2 */}
+      {/* row 2: lines, auto-load, actions */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 12px", borderBottom: "1px solid #21262d", flexShrink: 0, flexWrap: "wrap" }}>
         <label style={{ fontSize: 11, color: "#8b949e", display: "flex", alignItems: "center", gap: 4 }}>
           Lines: <input type="number" className="tsp" min={1} max={100} value={lineCount} onChange={e => { const v = parseInt(e.target.value, 10); if (v > 0 && v <= 100) setLineCount(v); }} />
         </label>
-        <Tip text="Target number of lines to load. For Wikipedia, multiple summaries are fetched to reach this count. For GitHub, multiple files may be concatenated. Range: 1 to 100." />
+        <Tip text="Target lines to load. Multiple sources fetched if needed. 1-100." />
         <label style={{ fontSize: 11, color: "#8b949e", display: "flex", alignItems: "center", gap: 4, cursor: "pointer" }}>
           <input type="checkbox" checked={autoLoad} onChange={e => setAutoLoad(e.target.checked)} style={{ accentColor: "#58a6ff", width: 13, height: 13, cursor: "pointer" }} />
           Auto-load
         </label>
-        <Tip text="When enabled, a new text loads automatically 2 seconds after you finish the current one. Stats for each completed text are logged to the session history. N-gram, word, and character data persists across auto-loads." />
+        <Tip text="Auto-loads next text 2s after completion. Stats logged each time. Analytics persist." />
         <div style={{ borderLeft: "1px solid #30363d", height: 16, margin: "0 2px" }} />
         <button className="tb tp" onClick={() => { setShowCustomInput(false); loadText(); }}>{loading ? "Loading..." : "New Text"}</button>
         {mode === "adaptive" && <button className="tb" onClick={() => loadText("adaptive")}>Refresh</button>}
         {mode === "custom" && <button className="tb" onClick={() => setShowCustomInput(!showCustomInput)}>{showCustomInput ? "Hide" : "Edit"}</button>}
         <div style={{ borderLeft: "1px solid #30363d", height: 16, margin: "0 2px" }} />
         <button className="tb" onClick={handleSave}>Save</button>
-        <Tip text="Download all session data as a JSON file: n-gram stats, word errors, character accuracy, alpha speed data, session history, and current settings." />
+        <Tip text="Download all session data as JSON including band performance." />
         <button className="tb" onClick={() => fileInputRef.current && fileInputRef.current.click()}>Load</button>
-        <Tip text="Load a previously saved JSON session file. Restores all analytics and settings. Does not clear existing data, it overwrites with the file contents." />
+        <Tip text="Load a previously saved JSON session file." />
       </div>
 
       {showCustomInput && mode === "custom" && (
@@ -954,19 +912,29 @@ export default function MarkTwain() {
                 <div><div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em" }}>ERRORS</div><div style={{ fontSize: 20, fontWeight: 700, color: lastRunStats.errors > 0 ? "#f85149" : "#3fb950", fontFamily: "'JetBrains Mono', monospace" }}>{lastRunStats.errors}</div></div>
                 <div><div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em" }}>TIME</div><div style={{ fontSize: 20, fontWeight: 700, color: "#e6edf3", fontFamily: "'JetBrains Mono', monospace" }}>{lastRunStats.elapsed}m</div></div>
               </div>
+              {lastRunStats.band && (
+                <div style={{ fontSize: 11, color: "#8b949e", marginBottom: 12 }}>
+                  {getBandLabel(lastRunStats.band)} / {lastRunStats.lang}
+                  {bandSetting === "progressive" && lastRunStats.band !== currentBand && (
+                    <span style={{ color: currentBand > lastRunStats.band ? "#3fb950" : "#d29922", marginLeft: 8 }}>
+                      {currentBand > lastRunStats.band ? "Promoted to Band " + currentBand : "Moved to Band " + currentBand}
+                    </span>
+                  )}
+                </div>
+              )}
               {wpmHistory.length > 3 && (
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em", marginBottom: 6 }}>WPM OVER SESSION</div>
-                  <div style={{ height: 60 }}>
-                    <ResponsiveContainer width="100%" height="100%"><LineChart data={wpmHistory}><YAxis hide domain={["dataMin - 5", "dataMax + 5"]} /><Line type="monotone" dataKey="wpm" stroke="#58a6ff" strokeWidth={2} dot={false} /></LineChart></ResponsiveContainer>
-                  </div>
+                  <div style={{ height: 60 }}><ResponsiveContainer width="100%" height="100%"><LineChart data={wpmHistory}><YAxis hide domain={["dataMin - 5", "dataMax + 5"]} /><Line type="monotone" dataKey="wpm" stroke="#58a6ff" strokeWidth={2} dot={false} /></LineChart></ResponsiveContainer></div>
                 </div>
               )}
               {sessionHistory.length > 1 && (
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ fontSize: 10, color: "#8b949e", letterSpacing: "0.05em", marginBottom: 6 }}>RECENT RUNS</div>
                   {sessionHistory.slice(-6).reverse().map((s, i) => (
-                    <div key={i} style={{ fontSize: 10, color: i === 0 ? "#e6edf3" : "#6e7681", marginBottom: 2, fontWeight: i === 0 ? 500 : 400 }}>{s.time} / {s.mode} / {s.wpm}wpm / {s.accuracy}% / {s.chars}ch / {s.elapsed}m</div>
+                    <div key={i} style={{ fontSize: 10, color: i === 0 ? "#e6edf3" : "#6e7681", marginBottom: 2, fontWeight: i === 0 ? 500 : 400 }}>
+                      {s.time} / {s.mode}{s.band ? " B" + s.band : ""} / {s.wpm}wpm / {s.accuracy}%
+                    </div>
                   ))}
                 </div>
               )}
@@ -991,9 +959,9 @@ export default function MarkTwain() {
             <button style={tabSt(sideTab === "detail")} onClick={() => setSideTab("detail")}>DETAIL</button>
           </div>
           <div style={{ flex: 1, overflowY: "auto", padding: "10px 12px" }}>
-            {sideTab === "live" && <LivePanel keystrokes={keystrokes} errors={errors} startTime={startTime} cursorPos={cursorPos} text={text} currentStreak={currentStreak} bestStreak={bestStreak} wpmHistory={wpmHistory} sessionHistory={sessionHistory} />}
+            {sideTab === "live" && <LivePanel keystrokes={keystrokes} errors={errors} startTime={startTime} cursorPos={cursorPos} text={text} currentStreak={currentStreak} bestStreak={bestStreak} wpmHistory={wpmHistory} sessionHistory={sessionHistory} bandSetting={bandSetting} currentBand={currentBand} progRunsAtBand={progRunsAtBand} progAccAtBand={progAccAtBand} />}
             {sideTab === "weak" && <><WeakPanel ngramData={ngramData} wordErrors={wordErrors} /><KeyboardHeatmap layout={layout} ngramData={ngramData} /></>}
-            {sideTab === "detail" && <DetailPanel charAccuracy={charAccuracy} keystrokeTimes={ksTimesRef.current} wpmHistory={wpmHistory} layout={layout} alphaSpeeds={alphaSpeeds} />}
+            {sideTab === "detail" && <DetailPanel charAccuracy={charAccuracy} keystrokeTimes={ksTimesRef.current} wpmHistory={wpmHistory} layout={layout} alphaSpeeds={alphaSpeeds} bandPerf={bandPerf} />}
           </div>
         </div>
       </div>
