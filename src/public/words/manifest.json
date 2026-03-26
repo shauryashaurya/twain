@@ -1,0 +1,27 @@
+{
+  "en": {
+    "name": "English",
+    "file": "en.json",
+    "count": 7501
+  },
+  "fr": {
+    "name": "French",
+    "file": "fr.json",
+    "count": 7501
+  },
+  "de": {
+    "name": "German",
+    "file": "de.json",
+    "count": 7501
+  },
+  "es": {
+    "name": "Spanish",
+    "file": "es.json",
+    "count": 7501
+  },
+  "pt": {
+    "name": "Portuguese",
+    "file": "pt.json",
+    "count": 7501
+  }
+}
