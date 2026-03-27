@@ -16,7 +16,8 @@ const LAYOUTS = {
       q: "L4", w: "L3", e: "L2", r: "L1", t: "L1", y: "R1", u: "R1", i: "R2", o: "R3", p: "R4", "[": "R4", "]": "R4", "\\": "R4",
       a: "L4", s: "L3", d: "L2", f: "L1", g: "L1", h: "R1", j: "R1", k: "R2", l: "R3", ";": "R4", "'": "R4",
       z: "L4", x: "L3", c: "L2", v: "L1", b: "L1", n: "R1", m: "R1", ",": "R2", ".": "R3", "/": "R4", " ": "T0"
-    }
+    },
+    accentCapable: false
   },
   dvorak: {
     name: "Dvorak",
@@ -31,7 +32,8 @@ const LAYOUTS = {
       "'": "L4", ",": "L3", ".": "L2", p: "L1", y: "L1", f: "R1", g: "R1", c: "R2", r: "R3", l: "R4", "/": "R4", "=": "R4", "\\": "R4",
       a: "L4", o: "L3", e: "L2", u: "L1", i: "L1", d: "R1", h: "R1", t: "R2", n: "R3", s: "R4", "-": "R4",
       ";": "L4", q: "L3", j: "L2", k: "L1", x: "L1", b: "R1", m: "R1", w: "R2", v: "R3", z: "R4", " ": "T0"
-    }
+    },
+    accentCapable: false
   },
   colemak: {
     name: "Colemak",
@@ -46,7 +48,8 @@ const LAYOUTS = {
       q: "L4", w: "L3", f: "L2", p: "L1", g: "L1", j: "R1", l: "R1", u: "R2", y: "R3", ";": "R4", "[": "R4", "]": "R4", "\\": "R4",
       a: "L4", r: "L3", s: "L2", t: "L1", d: "L1", h: "R1", n: "R1", e: "R2", i: "R3", o: "R4", "'": "R4",
       z: "L4", x: "L3", c: "L2", v: "L1", b: "L1", k: "R1", m: "R1", ",": "R2", ".": "R3", "/": "R4", " ": "T0"
-    }
+    },
+    accentCapable: false
   }
 };
 
@@ -165,6 +168,24 @@ function shuffle(arr) {
 }
 
 const ALPHA_RE = /^[a-z]+$/;
+
+function normaliseChar(ch) {
+  return ch.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function shouldNormalise(layout, mode, wordsLang) {
+  // if the keyboard layout supports accents and the user has
+  // chosen a matching non-English language, require exact input
+  if (LAYOUTS[layout].accentCapable) {
+    if ((mode === "common-words" || mode === "adaptive") && wordsLang !== "English (UK)") {
+      return false;
+    }
+  }
+  // all current layouts (QWERTY, Dvorak, Colemak) are English-only,
+  // so normalisation is on by default. future accent-capable layouts
+  // (AZERTY, QWERTZ) will reach the check above.
+  return true;
+}
 
 function updateNgramData(prev, text, pos, isError) {
   const updated = { ...prev };
@@ -505,6 +526,32 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSp
   );
 }
 
+// loads the banner image from ./images/banner.png. falls back to plain text if missing.
+function BannerOrTitle() {
+  const [imgOk, setImgOk] = useState(true);
+  if (!imgOk) return <span style={{ fontSize: 15, fontWeight: 700, color: "#e6edf3" }}>MARK TWAIN</span>;
+  return (
+    <img
+      src="./images/banner.png"
+      alt="MARK TWAIN"
+      onError={() => setImgOk(false)}
+      style={{ maxWidth: "100%", height: "auto", display: "block" }}
+    />
+  );
+}
+// function BannerOrTitle() {
+//   const [imgOk, setImgOk] = useState(true);
+//   if (!imgOk) return <span style={{ fontSize: 13, fontWeight: 700, color: "#e6edf3", marginRight: 4 }}>Touch Type with MARK TWAIN</span>;
+//   return (
+//     <img
+//       src="./images/banner.png"
+//       alt="Touch Type with MARK TWAIN"
+//       onError={() => setImgOk(false)}
+//       style={{ height: 256, marginRight: 8, display: "block" }}
+//     />
+//   );
+// }
+
 //  MAIN 
 export default function MarkTwain() {
   const [loadedWordCount, setLoadedWordCount] = useState(0);
@@ -705,10 +752,17 @@ export default function MarkTwain() {
     if (startTime === null) setStartTime(Date.now());
 
     const target = text[cursorPos];
-    const ok = inputChar === target;
+    // const ok = inputChar === target;
+    const doNorm = shouldNormalise(layout, mode, wordsLang);
+    const ok = doNorm
+      ? (inputChar === target || normaliseChar(inputChar) === normaliseChar(target))
+      : inputChar === target;
     ksTimesRef.current.push({ char: inputChar, time: Date.now() });
     setKeystrokes(prev => prev + 1);
-    setCharAccuracy(prev => { const ex = prev[target] || { correct: 0, total: 0 }; return { ...prev, [target]: { correct: ex.correct + (ok ? 1 : 0), total: ex.total + 1 } }; });
+    // setCharAccuracy(prev => { const ex = prev[target] || { correct: 0, total: 0 }; return { ...prev, [target]: { correct: ex.correct + (ok ? 1 : 0), total: ex.total + 1 } }; });
+    // fixing the special char issue - when wikipedia loads an accented char (that cannot be easily typed in a QWERTY keyboard)
+    const accKey = doNorm ? normaliseChar(target) : target;
+    setCharAccuracy(prev => { const ex = prev[accKey] || { correct: 0, total: 0 }; return { ...prev, [accKey]: { correct: ex.correct + (ok ? 1 : 0), total: ex.total + 1 } }; });
     setAlphaSpeeds(prev => updateAlphaSpeeds(prev, ksTimesRef.current));
 
     if (!ok) { setErrors(prev => prev + 1); wordErrRef.current = true; setCurrentStreak(0); }
@@ -774,7 +828,8 @@ export default function MarkTwain() {
         }
       }
     }
-  }, [cursorPos, text, isComplete, loading, startTime, mode, getCurrentWord, keystrokes, errors, currentBand, bandSetting, progRunsAtBand, progAccAtBand, wordsLang]);
+    // }, [cursorPos, text, isComplete, loading, startTime, mode, getCurrentWord, keystrokes, errors, currentBand, bandSetting, progRunsAtBand, progAccAtBand, wordsLang]);
+  }, [cursorPos, text, isComplete, loading, startTime, mode, getCurrentWord, keystrokes, errors, currentBand, bandSetting, progRunsAtBand, progAccAtBand, wordsLang, layout]);
 
   useEffect(() => { if (containerRef.current) containerRef.current.focus(); }, [text, loading]);
 
@@ -819,9 +874,12 @@ export default function MarkTwain() {
 
       <input type="file" ref={fileInputRef} accept=".json" style={{ display: "none" }} onChange={handleFileLoad} />
 
+
       {/* row 1: mode, language, band, layout */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px", borderBottom: "1px solid #161b22", flexShrink: 0, flexWrap: "wrap" }}>
-        <span style={{ fontSize: 13, fontWeight: 700, color: "#e6edf3", marginRight: 4 }}>MARK TWAIN</span>
+        {/* <span style={{ fontSize: 13, fontWeight: 700, color: "#e6edf3", marginRight: 4 }}>MARK TWAIN</span> */}
+        <BannerOrTitle />
+        <br />
         <Tip text="Typing practice tool. Pick a mode, set line count, and start typing. All analytics persist across texts in a session." />
         <select className="ts" value={mode} onChange={e => { setMode(e.target.value); if (e.target.value === "custom") setShowCustomInput(true); }}>
           <option value="wikipedia">Wikipedia</option>
