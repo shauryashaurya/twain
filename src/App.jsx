@@ -532,8 +532,9 @@ function BannerOrTitle() {
   if (!imgOk) return <span style={{ fontSize: 15, fontWeight: 700, color: "#e6edf3" }}>TOUCH TYPE with MARK TWAIN <br />shauryashaurya</span>;
   return (
     <img
-      src="./images/banner.png"
-      alt="MARK TWAIN"
+      // src="./images/banner.png"
+      src={`${import.meta.env.BASE_URL}images/banner.png`}
+      alt="TOUCH TYPE with MARK TWAIN"
       onError={() => setImgOk(false)}
       style={{ maxWidth: "100%", height: "auto", display: "block" }}
     />
