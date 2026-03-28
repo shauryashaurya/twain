@@ -539,18 +539,6 @@ function BannerOrTitle() {
     />
   );
 }
-// function BannerOrTitle() {
-//   const [imgOk, setImgOk] = useState(true);
-//   if (!imgOk) return <span style={{ fontSize: 13, fontWeight: 700, color: "#e6edf3", marginRight: 4 }}>Touch Type with MARK TWAIN</span>;
-//   return (
-//     <img
-//       src="./images/banner.png"
-//       alt="Touch Type with MARK TWAIN"
-//       onError={() => setImgOk(false)}
-//       style={{ height: 256, marginRight: 8, display: "block" }}
-//     />
-//   );
-// }
 
 //  MAIN 
 export default function MarkTwain() {
@@ -874,14 +862,15 @@ export default function MarkTwain() {
 
       <input type="file" ref={fileInputRef} accept=".json" style={{ display: "none" }} onChange={handleFileLoad} />
 
+      {/* banner */}
+      <div style={{ padding: "6px 12px", borderBottom: "1px solid #161b22", flexShrink: 0 }}>
+        <BannerOrTitle />
+      </div>
 
       {/* row 1: mode, language, band, layout */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px", borderBottom: "1px solid #161b22", flexShrink: 0, flexWrap: "wrap" }}>
-        {/* <span style={{ fontSize: 13, fontWeight: 700, color: "#e6edf3", marginRight: 4 }}>MARK TWAIN</span> */}
-        <BannerOrTitle />
-        <br />
         <Tip text="Typing practice tool. Pick a mode, set line count, and start typing. All analytics persist across texts in a session." />
-        <select className="ts" value={mode} onChange={e => { setMode(e.target.value); if (e.target.value === "custom") setShowCustomInput(true); }}>
+        <select className="ts" value={mode}>
           <option value="wikipedia">Wikipedia</option>
           <option value="github">Code (GitHub)</option>
           <option value="common-words">Common Words</option>
@@ -942,12 +931,14 @@ export default function MarkTwain() {
         <Tip text="Load a previously saved JSON session file." />
       </div>
 
-      {showCustomInput && mode === "custom" && (
-        <div style={{ padding: "6px 12px", borderBottom: "1px solid #21262d", flexShrink: 0 }}>
-          <textarea className="tta" rows={3} value={customText} onChange={e => setCustomText(e.target.value)} placeholder="Paste or type custom text..." />
-          <div style={{ marginTop: 4 }}><button className="tb tp" onClick={() => { setShowCustomInput(false); loadText("custom"); }}>Start</button></div>
-        </div>
-      )}
+      {
+        showCustomInput && mode === "custom" && (
+          <div style={{ padding: "6px 12px", borderBottom: "1px solid #21262d", flexShrink: 0 }}>
+            <textarea className="tta" rows={3} value={customText} onChange={e => setCustomText(e.target.value)} placeholder="Paste or type custom text..." />
+            <div style={{ marginTop: 4 }}><button className="tb tp" onClick={() => { setShowCustomInput(false); loadText("custom"); }}>Start</button></div>
+          </div>
+        )
+      }
 
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
         <div ref={containerRef} tabIndex={0} onKeyDown={handleKeyDown} style={{
@@ -1023,6 +1014,6 @@ export default function MarkTwain() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
