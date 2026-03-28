@@ -71,6 +71,7 @@ const BANDS = [
   { id: 5, label: "Band 5: Expert", start: 3000, end: 5000 }
 ];
 
+// look up the human name for a band id, because numbers alone lack character (in Twain's words, sucks)
 function getBandLabel(id) {
   const b = BANDS.find(x => x.id === id);
   return b ? b.label : "Band " + id;
@@ -139,6 +140,7 @@ const FALLBACK_TEXTS = {
 };
 
 //  TOOLTIP 
+// a hovering "i" circle that reveals wisdom on mouseenter. fixed-position tooltip.
 function Tip({ text }) {
   const [show, setShow] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -159,6 +161,7 @@ function Tip({ text }) {
 }
 
 //  UTILITIES 
+// fisher-yates shuffle. rearranges an array in place with fair randomness...jyada technical hai? google karo pls...
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
