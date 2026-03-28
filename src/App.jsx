@@ -529,7 +529,7 @@ function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSp
 // loads the banner image from ./images/banner.png. falls back to plain text if missing.
 function BannerOrTitle() {
   const [imgOk, setImgOk] = useState(true);
-  if (!imgOk) return <span style={{ fontSize: 15, fontWeight: 700, color: "#e6edf3" }}>MARK TWAIN</span>;
+  if (!imgOk) return <span style={{ fontSize: 15, fontWeight: 700, color: "#e6edf3" }}>TOUCH TYPE with MARK TWAIN <br />shauryashaurya</span>;
   return (
     <img
       src="./images/banner.png"
