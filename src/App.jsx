@@ -52,6 +52,70 @@ const LAYOUTS = {
       z: "L4", x: "L3", c: "L2", v: "L1", b: "L1", k: "R1", m: "R1", ",": "R2", ".": "R3", "/": "R4", " ": "T0"
     },
     accentCapable: false
+  },
+  azerty: {
+    name: "AZERTY (French)",
+    rows: [
+      ["\u00b2", "&", "\u00e9", "\"", "'", "(", "-", "\u00e8", "_", "\u00e7", "\u00e0", ")", "="],
+      ["a", "z", "e", "r", "t", "y", "u", "i", "o", "p", "^", "$"],
+      ["q", "s", "d", "f", "g", "h", "j", "k", "l", "m", "\u00f9", "*"],
+      ["w", "x", "c", "v", "b", "n", ",", ";", ":", "!"]
+    ],
+    fingerMap: {
+      "\u00b2": "L4", "&": "L4", "\u00e9": "L3", "\"": "L2", "'": "L1", "(": "L1", "-": "R1", "\u00e8": "R1", "_": "R2", "\u00e7": "R3", "\u00e0": "R4", ")": "R4", "=": "R4",
+      a: "L4", z: "L3", e: "L2", r: "L1", t: "L1", y: "R1", u: "R1", i: "R2", o: "R3", p: "R4", "^": "R4", "$": "R4",
+      q: "L4", s: "L3", d: "L2", f: "L1", g: "L1", h: "R1", j: "R1", k: "R2", l: "R3", m: "R4", "\u00f9": "R4", "*": "R4",
+      w: "L4", x: "L3", c: "L2", v: "L1", b: "L1", n: "R1", ",": "R1", ";": "R2", ":": "R3", "!": "R4", " ": "T0"
+    },
+    accentCapable: true
+  },
+  qwertz: {
+    name: "QWERTZ (German)",
+    rows: [
+      ["^", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "\u00df", "\u00b4"],
+      ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "\u00fc", "+"],
+      ["a", "s", "d", "f", "g", "h", "j", "k", "l", "\u00f6", "\u00e4", "#"],
+      ["y", "x", "c", "v", "b", "n", "m", ",", ".", "-"]
+    ],
+    fingerMap: {
+      "^": "L4", "1": "L4", "2": "L3", "3": "L2", "4": "L1", "5": "L1", "6": "R1", "7": "R1", "8": "R2", "9": "R3", "0": "R4", "\u00df": "R4", "\u00b4": "R4",
+      q: "L4", w: "L3", e: "L2", r: "L1", t: "L1", z: "R1", u: "R1", i: "R2", o: "R3", p: "R4", "\u00fc": "R4", "+": "R4",
+      a: "L4", s: "L3", d: "L2", f: "L1", g: "L1", h: "R1", j: "R1", k: "R2", l: "R3", "\u00f6": "R4", "\u00e4": "R4", "#": "R4",
+      y: "L4", x: "L3", c: "L2", v: "L1", b: "L1", n: "R1", m: "R1", ",": "R2", ".": "R3", "-": "R4", " ": "T0"
+    },
+    accentCapable: true
+  },
+  qwerty_es: {
+    name: "QWERTY (Spanish)",
+    rows: [
+      ["\u00ba", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "'", "\u00a1"],
+      ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "`", "+"],
+      ["a", "s", "d", "f", "g", "h", "j", "k", "l", "\u00f1", "\u00b4", "\u00e7"],
+      ["z", "x", "c", "v", "b", "n", "m", ",", ".", "-"]
+    ],
+    fingerMap: {
+      "\u00ba": "L4", "1": "L4", "2": "L3", "3": "L2", "4": "L1", "5": "L1", "6": "R1", "7": "R1", "8": "R2", "9": "R3", "0": "R4", "'": "R4", "\u00a1": "R4",
+      q: "L4", w: "L3", e: "L2", r: "L1", t: "L1", y: "R1", u: "R1", i: "R2", o: "R3", p: "R4", "`": "R4", "+": "R4",
+      a: "L4", s: "L3", d: "L2", f: "L1", g: "L1", h: "R1", j: "R1", k: "R2", l: "R3", "\u00f1": "R4", "\u00b4": "R4", "\u00e7": "R4",
+      z: "L4", x: "L3", c: "L2", v: "L1", b: "L1", n: "R1", m: "R1", ",": "R2", ".": "R3", "-": "R4", " ": "T0"
+    },
+    accentCapable: true
+  },
+  qwerty_pt: {
+    name: "QWERTY (Portuguese)",
+    rows: [
+      ["\\", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "'", "\u00ab"],
+      ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "+", "\u00b4"],
+      ["a", "s", "d", "f", "g", "h", "j", "k", "l", "\u00e7", "\u00ba", "~"],
+      ["z", "x", "c", "v", "b", "n", "m", ",", ".", "-"]
+    ],
+    fingerMap: {
+      "\\": "L4", "1": "L4", "2": "L3", "3": "L2", "4": "L1", "5": "L1", "6": "R1", "7": "R1", "8": "R2", "9": "R3", "0": "R4", "'": "R4", "\u00ab": "R4",
+      q: "L4", w: "L3", e: "L2", r: "L1", t: "L1", y: "R1", u: "R1", i: "R2", o: "R3", p: "R4", "+": "R4", "\u00b4": "R4",
+      a: "L4", s: "L3", d: "L2", f: "L1", g: "L1", h: "R1", j: "R1", k: "R2", l: "R3", "\u00e7": "R4", "\u00ba": "R4", "~": "R4",
+      z: "L4", x: "L3", c: "L2", v: "L1", b: "L1", n: "R1", m: "R1", ",": "R2", ".": "R3", "-": "R4", " ": "T0"
+    },
+    accentCapable: true
   }
 };
 
@@ -62,6 +126,14 @@ const LANG_CONFIG = {
   "German": { code: "de", file: "de.json" },
   "Spanish": { code: "es", file: "es.json" },
   "Portuguese": { code: "pt", file: "pt.json" }
+};
+
+const WIKI_LANG = {
+  "English (UK)": "en",
+  "French": "fr",
+  "German": "de",
+  "Spanish": "es",
+  "Portuguese": "pt"
 };
 
 //  BANDS 
@@ -307,13 +379,16 @@ function generateAdaptiveText(ngramData, words) {
   return text.trim();
 }
 
-async function fetchWikipediaLines(targetLines) {
+async function fetchWikipediaLines(targetLines, lang) {
+  const wikiCode = WIKI_LANG[lang] || "en";
   const collected = [];
   const maxFetches = Math.min(Math.ceil(targetLines / 3), 8);
   let fi = 0;
   for (let attempt = 0; attempt < maxFetches; attempt++) {
     try {
-      const res = await fetch("https://en.wikipedia.org/api/rest_v1/page/random/summary");
+      // adding support for other languages...
+      // const res = await fetch("https://en.wikipedia.org/api/rest_v1/page/random/summary");
+      const res = await fetch(`https://${wikiCode}.wikipedia.org/api/rest_v1/page/random/summary`);
       if (!res.ok) throw new Error("fail");
       const data = await res.json();
       const extract = (data.extract || "").trim();
@@ -558,7 +633,7 @@ export default function MarkTwain() {
   const [currentBand, setCurrentBand] = useState(1);
   const [progRunsAtBand, setProgRunsAtBand] = useState(0);
   const [progAccAtBand, setProgAccAtBand] = useState(0);
-  const [lineCount, setLineCount] = useState(10);
+  const [lineCount, setLineCount] = useState(5);
   const [autoLoad, setAutoLoad] = useState(false);
   const [text, setText] = useState("");
   const [charStates, setCharStates] = useState([]);
@@ -591,6 +666,7 @@ export default function MarkTwain() {
   const fileInputRef = useRef(null);
   const loadTextRef = useRef(null);
   const autoLoadTimerRef = useRef(null);
+  const hasMountedRef = useRef(false);
 
   useEffect(() => { cursorPosRef.current = cursorPos; }, [cursorPos]);
 
@@ -619,7 +695,8 @@ export default function MarkTwain() {
 
     let newText = "";
     if (m === "wikipedia") {
-      newText = await fetchWikipediaLines(lc);
+      // wl is wordsLang
+      newText = await fetchWikipediaLines(lc, wl);
     } else if (m === "github") {
       const r = await fetchGithubCodeLines(cl, lc);
       newText = r.text;
@@ -656,7 +733,16 @@ export default function MarkTwain() {
   }, [doLoadText, lineCount, mode, wordsLang, codeLang, customText, ngramData, currentBand]);
 
   useEffect(() => { loadTextRef.current = loadText; }, [loadText]);
-  useEffect(() => { loadText(); }, []);
+  // In development mode, StrictMode deliberately mounts, unmounts, and remounts every component to help catch bugs.
+  // this means useEffect() fires twice...
+  // useEffect(() => { loadText(); }, []);
+  // Block this behaviour using the hasMountedRef mount guard...
+  // fall back to previous line if you need to debug.
+  useEffect(() => {
+    if (hasMountedRef.current) return;
+    hasMountedRef.current = true;
+    loadText();
+  }, []);
   useEffect(() => { if (cursorRef.current) cursorRef.current.scrollIntoView({ block: "center", behavior: "smooth" }); }, [cursorPos]);
 
   useEffect(() => {
@@ -846,7 +932,9 @@ export default function MarkTwain() {
   }, [text, charStates, cursorPos]);
 
   const isCode = mode === "github" || mode === "special-chars";
-  const showLangSelector = mode === "common-words" || mode === "adaptive";
+  // const showLangSelector = mode === "common-words" || mode === "adaptive";
+  // language selector works for wikipedia and general text too... so you can practice typing German, French, Spanish and Portugese too...!
+  const showLangSelector = mode === "common-words" || mode === "adaptive" || mode === "wikipedia";
   const showBandSelector = mode === "common-words";
   const tabSt = (a) => ({ padding: "4px 0", fontSize: 10, letterSpacing: "0.05em", cursor: "pointer", color: a ? "#58a6ff" : "#6e7681", background: "none", border: "none", borderBottom: a ? "1px solid #58a6ff" : "1px solid transparent", fontFamily: "inherit" });
 
@@ -877,7 +965,7 @@ export default function MarkTwain() {
       {/* row 1: mode, language, band, layout */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 12px", borderBottom: "1px solid #161b22", flexShrink: 0, flexWrap: "wrap" }}>
         <Tip text="Typing practice tool. Pick a mode, set line count, and start typing. All analytics persist across texts in a session." />
-        <select className="ts" value={mode}>
+        <select className="ts" value={mode} onChange={e => { setMode(e.target.value); if (e.target.value === "custom") setShowCustomInput(true); }}>
           <option value="wikipedia">Wikipedia</option>
           <option value="github">Code (GitHub)</option>
           <option value="common-words">Common Words</option>
@@ -911,7 +999,9 @@ export default function MarkTwain() {
           </>
         )}
         <select className="ts" value={layout} onChange={e => setLayout(e.target.value)}>
-          <option value="qwerty">QWERTY</option><option value="dvorak">Dvorak</option><option value="colemak">Colemak</option>
+          {Object.entries(LAYOUTS).map(([key, val]) => (
+            <option key={key} value={key}>{val.name}</option>
+          ))}
         </select>
         <Tip text="Keyboard layout for finger/hand/row analytics and heatmap." />
       </div>
