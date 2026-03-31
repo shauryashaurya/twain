@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { LineChart, Line, ResponsiveContainer, YAxis } from "recharts";
+
+// 
 // make banner image render locally as well as on GitHub pages
 import bannerSrc from "./images/banner.png";
 
@@ -264,6 +266,10 @@ function shouldNormalise(layout, mode, wordsLang) {
   return true;
 }
 
+
+// 
+// record every 2-to-5 character sequence at the cursor
+// tally attempts and errors
 function updateNgramData(prev, text, pos, isError) {
   const updated = { ...prev };
   for (let n = 2; n <= 5; n++) {
@@ -277,6 +283,8 @@ function updateNgramData(prev, text, pos, isError) {
   return updated;
 }
 
+// track inter-key timing for letter-only 2/3/4-grams. 
+// ignore symbols and outliers.
 function updateAlphaSpeeds(prev, times) {
   if (times.length < 2) return prev;
   const updated = { ...prev };
@@ -297,6 +305,7 @@ function updateAlphaSpeeds(prev, times) {
   return updated;
 }
 
+// obvs sort n-grams by error rate...
 function getWeakNgrams(ngramData, minAttempts, limit) {
   return Object.entries(ngramData)
     .filter(([_, d]) => d.attempts >= (minAttempts || 3))
@@ -308,6 +317,9 @@ function getWeakNgrams(ngramData, minAttempts, limit) {
 //  WORD LIST LOADER 
 const wordListCache = {};
 
+// 
+// fetch a language's JSON word list, caches it
+// fall back to inline if the network disappoints.
 async function loadWordList(lang) {
   if (wordListCache[lang]) return wordListCache[lang];
   const config = LANG_CONFIG[lang];
@@ -323,6 +335,8 @@ async function loadWordList(lang) {
   }
 }
 
+// slice the word list by band range. 
+// if the band is empty, retreats to a lower one
 function getWordsForBand(words, bandId) {
   const band = BANDS.find(b => b.id === bandId);
   if (!band) return words.slice(0, 100);
@@ -338,6 +352,8 @@ function getWordsForBand(words, bandId) {
 }
 
 //  TEXT GENERATORS 
+
+// word-wraps prose to a target width. no hyphenation (who knew we needed this function...)
 function wrapToLines(text, charsPerLine) {
   const words = text.split(/\s+/);
   const lines = []; let current = "";
@@ -349,6 +365,7 @@ function wrapToLines(text, charsPerLine) {
   return lines;
 }
 
+// fill N lines with random words from a pool.
 function generateBandText(pool, lineCount) {
   const needed = lineCount * 12;
   const selected = [];
@@ -357,12 +374,16 @@ function generateBandText(pool, lineCount) {
   return lines.slice(0, lineCount).join("\n");
 }
 
+// shuffle symbol exercises and takes N. recycles if you ask for more than exist.
 function generateSpecialCharText(lineCount) {
   const pool = [...SPECIAL_CHAR_SETS]; const result = [];
   while (result.length < lineCount) { shuffle(pool); for (const s of pool) { result.push(s); if (result.length >= lineCount) break; } }
   return result.slice(0, lineCount).join("\n");
 }
 
+// 
+// worst n-grams, hunts for real words containing them, unlocks differentiated practice, customized for each individual
+// [todo] - maybe helps track the unique finger print of each user...
 function generateAdaptiveText(ngramData, words) {
   const weakNgrams = getWeakNgrams(ngramData, 3, 10);
   if (weakNgrams.length === 0) return "Keep practising to build your weakness profile. The system needs more typing data to generate targeted exercises for you.";
@@ -379,6 +400,8 @@ function generateAdaptiveText(ngramData, words) {
   return text.trim();
 }
 
+// 
+// random wikipedia summaries until we have enough lines
 async function fetchWikipediaLines(targetLines, lang) {
   const wikiCode = WIKI_LANG[lang] || "en";
   const collected = [];
@@ -402,6 +425,8 @@ async function fetchWikipediaLines(targetLines, lang) {
   return wrapToLines(collected.join(" "), 65).slice(0, targetLines).join("\n");
 }
 
+// 
+// peek popular repos for source files. concatenate until line target met.
 async function fetchGithubCodeLines(language, targetLines) {
   const ext = { python: "py", javascript: "js", typescript: "ts", rust: "rs", go: "go" };
   const fileExt = ext[language] || "py";
@@ -446,35 +471,49 @@ async function fetchGithubCodeLines(language, targetLines) {
   }
 }
 
-//  ANALYTICS 
+// ANALYTICS 
+// NGL, real happy this stuff worked out!
+// .
 const FINGER_LABELS = { L4: "L Pinky", L3: "L Ring", L2: "L Middle", L1: "L Index", R1: "R Index", R2: "R Middle", R3: "R Ring", R4: "R Pinky", T0: "Thumb" };
 
+// groups character accuracy data by finger using the layout's key-to-finger map
 function computeFingerStats(ca, layout) {
   const fm = LAYOUTS[layout].fingerMap; const s = {};
   for (const [ch, d] of Object.entries(ca)) { const f = fm[ch.toLowerCase()] || fm[ch]; if (!f) continue; if (!s[f]) s[f] = { correct: 0, total: 0 }; s[f].correct += d.correct; s[f].total += d.total; }
   return s;
 }
+
+// finger stats into left vs right. thumbs abstain from the contest.
 function computeHandStats(fs) {
   const h = { Left: { correct: 0, total: 0 }, Right: { correct: 0, total: 0 } };
   for (const [f, d] of Object.entries(fs)) { if (f === "T0") continue; const side = f.startsWith("L") ? "Left" : "Right"; h[side].correct += d.correct; h[side].total += d.total; }
   return h;
 }
+
+// character accuracy to keyboard rows: number, top, home, bottom.
 function computeRowStats(ca, layout) {
   const rows = LAYOUTS[layout].rows; const labels = ["Number", "Top", "Home", "Bottom"]; const s = {};
   for (const l of labels) s[l] = { correct: 0, total: 0 };
   for (const [ch, data] of Object.entries(ca)) { const lower = ch.toLowerCase(); let ri = -1; for (let i = 0; i < rows.length; i++) { if (rows[i].includes(lower)) { ri = i; break; } } if (ri >= 0 && ri < labels.length) { s[labels[ri]].correct += data.correct; s[labels[ri]].total += data.total; } }
   return s;
 }
+
+// per-key error rates from the 2-gram data. fuel for the heatmap
 function getKeyErrorRates(ngramData) {
   const kd = {};
   for (const [ngram, d] of Object.entries(ngramData)) { if (ngram.length !== 2) continue; const ch = ngram[1]; if (!kd[ch]) kd[ch] = { attempts: 0, errors: 0 }; kd[ch].attempts += d.attempts; kd[ch].errors += d.errors; }
   return kd;
 }
+
+// letter-only n-grams where your fingers dawdle most. sorted by sluggishness
 function getSlowestAlphaNgrams(alphaSpeeds, n, limit) {
   return Object.entries(alphaSpeeds).filter(([g, d]) => g.length === n && d.count >= 3).map(([g, d]) => ({ gram: g, avg: Math.round(d.totalMs / d.count), count: d.count })).sort((a, b) => b.avg - a.avg).slice(0, limit || 8);
 }
 
 //  SUB-COMPONENTS 
+
+// bruh...you've got to admit this is cool.
+// miniature keyboard coloured by error rate. green is good, red not so much, I like Red.
 function KeyboardHeatmap({ layout, ngramData }) {
   const ld = LAYOUTS[layout]; const ke = getKeyErrorRates(ngramData);
   const kc = (key) => { const d = ke[key]; if (!d || d.attempts < 2) return "rgba(255,255,255,0.06)"; const r = d.errors / d.attempts; if (r > 0.4) return "rgba(248,81,73,0.6)"; if (r > 0.2) return "rgba(248,81,73,0.35)"; if (r > 0.1) return "rgba(210,153,34,0.35)"; return "rgba(63,185,80,0.25)"; };
@@ -491,6 +530,8 @@ function KeyboardHeatmap({ layout, ngramData }) {
   );
 }
 
+// .
+// wpm, accuracy, streak, progress, trend, and session log.
 function LivePanel({ keystrokes, errors, startTime, cursorPos, text, currentStreak, bestStreak, wpmHistory, sessionHistory, bandSetting, currentBand, progRunsAtBand, progAccAtBand }) {
   const elapsed = startTime ? (Date.now() - startTime) / 60000 : 0;
   const wpm = elapsed > 0 ? Math.round((cursorPos / 5) / elapsed) : 0;
@@ -538,6 +579,8 @@ function LivePanel({ keystrokes, errors, startTime, cursorPos, text, currentStre
   );
 }
 
+// where the fudge did you fudge up?
+// show worst n-gram sequences and words
 function WeakPanel({ ngramData, wordErrors }) {
   const wn = getWeakNgrams(ngramData, 3, 10);
   const ww = Object.entries(wordErrors).filter(([_, d]) => d.attempts >= 2).map(([w, d]) => ({ w, ...d, rate: d.errors / d.attempts })).sort((a, b) => b.rate - a.rate).slice(0, 8);
@@ -555,6 +598,8 @@ function WeakPanel({ ngramData, wordErrors }) {
   );
 }
 
+// fingers, hands, rows, characters, alpha speed grams, band performance...
+// kinda fun looking at all the numbers blink.
 function DetailPanel({ charAccuracy, keystrokeTimes, wpmHistory, layout, alphaSpeeds, bandPerf }) {
   const fingerStats = computeFingerStats(charAccuracy, layout);
   const handStats = computeHandStats(fingerStats);
@@ -622,7 +667,9 @@ function BannerOrTitle() {
   );
 }
 
-//  MAIN 
+// MAIN 
+// shit gets real...
+// state, effects, keystroke handler, text loading, and the full layout.
 export default function MarkTwain() {
   const [loadedWordCount, setLoadedWordCount] = useState(0);
   const [mode, setMode] = useState("wikipedia");
