@@ -4,8 +4,10 @@ A comprehensive typing tutor - named for Mark Twain, who was the first author to
 	     
 <html>
 	<br/> <br/>  
-	<img src="./images/TwainCoverImage.png" width="95%" align="center" alt="Touch type with Mark Twain Â© Shaurya Agarwal, 2026" />            
+	<img src="./images/TwainCoverImage.png" width="95%" align="center" alt="Touch type with Mark Twain © Shaurya Agarwal, 2026" />            
 </html>    
-             
+       
+---	   
 Run offline with `npm run dev`            
-or check out the online version here: [https://shauryashaurya.github.io/twain/](https://shauryashaurya.github.io/twain/)                         
+or check out the online version here: [https://shauryashaurya.github.io/twain/](https://shauryashaurya.github.io/twain/)                          
+---
